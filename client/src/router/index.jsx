@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-import ProtectedRoute from "../components/auth/ProtectedRoute";
 import RootLayout from "../components/layouts/RootLayout";
 import EmailVerify from "../pages/Authentication/EmailVerify";
 import ForgotPassword from "../pages/Authentication/ForgotPassword";

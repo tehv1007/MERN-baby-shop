@@ -22,6 +22,7 @@ const BlogPage = () => {
 
   return (
     <div className="max-w-screen-xl mx-auto px-4">
+      <h2 className="font-bold m-8 text-center capitalize text-4xl">News</h2>
       <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {posts.map((post) => (
           <PostCardItem

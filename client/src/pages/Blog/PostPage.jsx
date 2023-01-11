@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { InlineShareButtons } from "sharethis-reactjs";
 // import useBlogPost from "../../components/hooks/usePost";
 import fetchImage from "../../services/fetchImage";
 import axios from "axios";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 
 const SocialSharing = ({ post, postId }) => {
   return (
@@ -34,7 +35,7 @@ const SocialSharing = ({ post, postId }) => {
 
           // OPTIONAL PARAMETERS
           url: `${import.meta.env.VITE_CLIENT_URL}/blog/${postId}`, // (defaults to current url)
-          image: ``, // (defaults to og:image or twitter:image)
+          image: `https://heyfarming.com/wp-content/uploads/2023/01/3.webp`, // (defaults to og:image or twitter:image)
           description: `${post.excerpt.rendered}`, // (defaults to og:description or twitter:description)
           title: `${post.title.rendered}`, // (defaults to og:title or twitter:title)
           message: "custom email text", // (only for email sharing)
@@ -91,7 +92,7 @@ const PostPage = () => {
   return (
     <section>
       {/* Container */}
-      <div className="max-w-screen-xl mx-auto px-4">
+      <div className="max-w-screen-xl mx-auto p-4">
         {/* Layout */}
         <div className="text-center">
           <h1
@@ -126,6 +127,16 @@ const PostPage = () => {
           {/* Share */}
           <div className="">
             <SocialSharing post={post} postId={postId} />
+          </div>
+
+          {/* Navigation */}
+          <div className="mt-10 text-indigo-900 flex text-lg justify-center leading-7 text-center">
+            <Link
+              to="/blog"
+              className="flex items-center gap-2 justify-center text-lg">
+              <AiOutlineArrowLeft />
+              <span className="w-full">Back to blog</span>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,13 +1,14 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Logo from "../../../assets/img/Logo.webp";
 import { BiUser } from "react-icons/bi";
 import { BsCartPlus } from "react-icons/bs";
 import DropMenu from "./DropMenu";
 import subNavLink from "./link";
+import NavLink from "./NavLink";
 
 const Navbar = () => {
   return (
-    <div className="bg-white md:fixed w-full z-10 border-b-2">
+    <div className="bg-white  border-b-2">
       {/* Containier */}
       <div className="max-w-screen-xl mx-auto px-4 relative">
         {/* Layout */}

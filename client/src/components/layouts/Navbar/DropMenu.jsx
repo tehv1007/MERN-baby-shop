@@ -1,7 +1,7 @@
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { useState } from "react";
 import subNavLink from "./link";
-import { NavLink } from "react-router-dom";
+import NavLink from "./NavLink";
 
 const DropMenu = () => {
   const [open, setOpen] = useState(false);
