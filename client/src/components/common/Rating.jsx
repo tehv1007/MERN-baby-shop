@@ -1,4 +1,4 @@
-import Star from "./Star";
+import Star from "./icons/StarIcon";
 
 const Rating = ({ rating = 5 }) => {
   return (

@@ -17,7 +17,8 @@ const Banner = () => {
             {/* Shop button */}
             <Link
               to="/products"
-              className="bg-[#212529] text-white py-3 px-8 rounded-md hover:bg-white hover:text-black transition-all">
+              className="bg-[#212529] text-white py-3 px-8 rounded-md hover:bg-white hover:text-black transition-all"
+            >
               Shop Now
             </Link>
           </div>

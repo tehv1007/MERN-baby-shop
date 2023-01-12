@@ -8,7 +8,7 @@ import NavLink from "./NavLink";
 
 const Navbar = () => {
   return (
-    <div className="bg-white  border-b-2">
+    <div className="bg-white  shadow-md">
       {/* Containier */}
       <div className="max-w-screen-xl mx-auto px-4 relative">
         {/* Layout */}
@@ -44,10 +44,12 @@ const Navbar = () => {
             </Link>
             <div className="">
               <button className="relative">
-                <BsCartPlus className="text-3xl text-[#212529]" />
+                <Link to="/viewcart">
+                  <BsCartPlus className="text-3xl text-[#212529]" />
+                </Link>
               </button>
               <span className="absolute  top-3 right-2 sm:right-[7px]  lg:right-[8px] xl:right-[8px] bg-[#212529] text-white w-5 h-5 text-center rounded-full">
-                0
+                1
               </span>
             </div>
           </div>

@@ -8,7 +8,7 @@ const DropMenu = () => {
   return (
     <>
       {/* Drop Menu */}
-      <button className="md:hidden" onClick={() => setOpen(!open)}>
+      <button className="0 md:hidden" onClick={() => setOpen(!open)}>
         {open ? (
           <AiOutlineClose className="md:hidden text-2xl text-black cursor-pointer" />
         ) : (
@@ -17,8 +17,9 @@ const DropMenu = () => {
       </button>
       {/* Menu Mobile */}
       <div
-        className={`absolute top-16 left-0 bg-white w-full h-screen sm:h-[400px] transition duration-500 md:hidden 
-        ${open ? "left-0" : "left-[-100%]"}`}>
+        className={`z-10 absolute top-16 left-0 bg-white w-full h-screen sm:h-[400px] transition duration-500 md:hidden 
+        ${open ? "left-0" : "left-[-100%]"}`}
+      >
         <p className="text-center pt-6 text-2xl text-black font-bold">Menu</p>
         <nav className="flex flex-col" onClick={() => setOpen(false)}>
           {subNavLink.map((item) => {

@@ -8,8 +8,13 @@ import Signup from "../pages/Authentication/Signup";
 import BlogPage from "../pages/Blog/BlogPage";
 import PostPage from "../pages/Blog/PostPage";
 import Home from "../pages/Home/Home";
-import NotFound from "../pages/NotFound/NotFound";
+import NotFound from "../pages/NotFound";
 import Profile from "../pages/User/Profile";
+import ViewCart from "../pages/ViewCart";
+import Products from "../pages/Products/Products";
+import CheckOut from "../pages/CheckOut/CheckOut";
+import ProductDetail from "../pages/Products/product-detail/ProductDetail";
+
 // import ProductDetail from "../views/product/ProductDetail";
 // import Products from "../views/product/Products";
 // const [isConnected, setIsconnected] = useState(false);
@@ -45,14 +50,22 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
-      // {
-      //   path: "products",
-      //   element: <Products />,
-      // },
-      // {
-      //   path: "products/:productId",
-      //   element: <ProductDetail />,
-      // },
+      {
+        path: "/products",
+        element: <Products />,
+      },
+      {
+        path: "/products/:productId",
+        element: <ProductDetail />,
+      },
+      {
+        path: "/viewcart",
+        element: <ViewCart />,
+      },
+      {
+        path: "/checkout",
+        element: <CheckOut />,
+      },
       {
         path: "/blog",
         element: <BlogPage />,
@@ -65,27 +78,27 @@ const router = createBrowserRouter([
         path: "/profile",
         element: <Profile />,
       },
+      {
+        path: "/signin",
+        element: <Signin />,
+      },
+      {
+        path: "/signup",
+        element: <Signup />,
+      },
+      {
+        path: "/auth/:id/verify/:token",
+        element: <EmailVerify />,
+      },
+      {
+        path: "/forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "/password-reset/:id/:token",
+        element: <PasswordReset />,
+      },
     ],
-  },
-  {
-    path: "/signin",
-    element: <Signin />,
-  },
-  {
-    path: "/signup",
-    element: <Signup />,
-  },
-  {
-    path: "/auth/:id/verify/:token",
-    element: <EmailVerify />,
-  },
-  {
-    path: "/forgot-password",
-    element: <ForgotPassword />,
-  },
-  {
-    path: "/password-reset/:id/:token",
-    element: <PasswordReset />,
   },
 ]);
 
