@@ -1,6 +1,5 @@
 const Product = require("../models/Product");
 
-// GET all products
 // exports.getAllProduct = async (req, res) => {
 //   const page = +req.query.page || 1;
 //   const category = req.query.category || "all";
@@ -34,6 +33,7 @@ const Product = require("../models/Product");
 //   });
 // };
 
+// GET all products
 exports.getAllProduct = async (req, res) => {
   const products = await Product.find(req.query);
   res.json(products);
@@ -41,7 +41,7 @@ exports.getAllProduct = async (req, res) => {
 
 // GET product by id
 exports.getProductById = async (req, res) => {
-  const selectedItem = await Product.findById(req.params.productId);
+  const selectedItem = await Product.findById({ _id: req.params.productId });
   if (!selectedItem)
     res.json({
       message: `Product with id '${req.params.productId}' not found`,

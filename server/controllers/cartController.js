@@ -1,40 +1,67 @@
 const Cart = require("../models/Cart");
+const Product = require("../models/Product");
 
 //CREATE a cart
 exports.addCart = async (req, res) => {
-  const newCart = new Cart(req.body);
+  const userId = req.params.userId;
+  const { productId, quantity } = req.body;
 
   try {
-    const savedCart = await newCart.save();
-    res.status(200).json(savedCart);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-};
+    let cart = await Cart.findOne({ userId });
+    let item = await Product.findOne({ _id: productId });
+    if (!item) {
+      res.status(404).send("Item not found!");
+    }
+    const price = item.price;
+    const name = item.title;
 
-//UPDATE cart by ID
-exports.updateCart = async (req, res) => {
-  try {
-    const updatedCart = await Cart.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: req.body,
-      },
-      { new: true }
-    );
-    res.status(200).json(updatedCart);
+    if (cart) {
+      // if cart exists for the user
+      let itemIndex = cart.products.findIndex((p) => p.productId == productId);
+
+      // Check if product exists or not
+      if (itemIndex > -1) {
+        let productItem = cart.products[itemIndex];
+        productItem.quantity += quantity;
+        cart.products[itemIndex] = productItem;
+      } else {
+        cart.products.push({ productId, name, quantity, price });
+      }
+      cart.totalPrice += quantity * price;
+      cart = await cart.save();
+      return res.status(201).json(cart);
+    } else {
+      // no cart exists, create one
+      const newCart = await Cart.create({
+        userId,
+        products: [{ productId, name, quantity, price }],
+        totalPrice: quantity * price,
+      });
+      return res.status(201).json(newCart);
+    }
   } catch (err) {
-    res.status(500).json(err);
+    console.log(err);
+    res.status(500).send("Something went wrong");
   }
 };
 
 //DELETE cart by ID
 exports.deleteCart = async (req, res) => {
+  const userId = req.params.userId;
+  const productId = req.params.productId;
   try {
-    await Cart.findByIdAndDelete(req.params.id);
-    res.status(200).json("Cart has been deleted...");
+    let cart = await Cart.findOne({ userId });
+    let itemIndex = cart.products.findIndex((p) => p.productId == productId);
+    if (itemIndex > -1) {
+      let productItem = cart.products[itemIndex];
+      cart.totalPrice -= productItem.quantity * productItem.price;
+      cart.products.splice(itemIndex, 1);
+    }
+    cart = await cart.save();
+    return res.status(201).json(cart);
   } catch (err) {
-    res.status(500).json(err);
+    console.log(err);
+    res.status(500).send("Something went wrong");
   }
 };
 
@@ -43,16 +70,6 @@ exports.getCartByUser = async (req, res) => {
   try {
     const cart = await Cart.findOne({ userId: req.params.userId });
     res.status(200).json(cart);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-};
-
-//GET ALL carts
-exports.getAllCart = async (req, res) => {
-  try {
-    const carts = await Cart.find();
-    res.status(200).json(carts);
   } catch (err) {
     res.status(500).json(err);
   }

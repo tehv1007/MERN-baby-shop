@@ -9,16 +9,13 @@ const {
 } = require("../controllers/orderController");
 
 //CREATE an order
-router.post("/", addOrder);
-
-//UPDATE an order by ID
-router.put("/:id", updateOrder);
+router.post("/:userId", addOrder);
 
 //DELETE an order by ID
-router.delete("/:id", deleteOrder);
+router.delete("/:userId", deleteOrder);
 
 //GET user orders
-router.get("/find/:userId", getOrdersByUser);
+router.get("/:userId", getOrdersByUser);
 
 //GET ALL orders
 router.get("/", getAllOrders);

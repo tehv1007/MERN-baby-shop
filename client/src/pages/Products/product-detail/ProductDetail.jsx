@@ -1,31 +1,12 @@
-import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 import MinusIcon from "../../../components/common/icons/MinusIcon";
 import PlusIcon from "../../../components/common/icons/PlusIcon";
 // import Rating from "../../components/common/Rating";
 import ImageSlider from "./ImageSlider";
+import axios from "axios";
 
-const imageList = [
-  {
-    id: 1,
-    imageUrl:
-      "https://cdn.shopify.com/s/files/1/0623/7578/8783/products/7.jpg?v=1644400528",
-  },
-  {
-    id: 2,
-    imageUrl:
-      "https://cdn.shopify.com/s/files/1/0623/7578/8783/products/5.jpg?v=1644402251",
-  },
-  {
-    id: 3,
-    imageUrl:
-      "https://cdn.shopify.com/s/files/1/0623/7578/8783/products/21_176c53aa-e69d-4a0c-a63a-828e5ff904ba.jpg?v=1644402251",
-  },
-  {
-    id: 4,
-    imageUrl:
-      "https://cdn.shopify.com/s/files/1/0623/7578/8783/products/7.jpg?v=1644400528",
-  },
-];
 const ProductDetail = () => {
   const [imageIndex, setImageIndex] = useState(0);
 
@@ -43,6 +24,15 @@ const ProductDetail = () => {
     setQuantity(quantity + 1);
   };
 
+  const { productId } = useParams();
+  const { data, isLoading } = useQuery({
+    queryKey: ["products", productId],
+    queryFn: () => axios.get(`/products/${productId}`),
+  });
+
+  if (isLoading) return <h1>Loading...</h1>;
+  const { data: product } = data;
+
   return (
     <section className="max-w-screen-lg mx-auto px-5 py-4">
       {/* Container */}
@@ -52,14 +42,14 @@ const ProductDetail = () => {
           {/* === Image === */}
           <div>
             {/* main img */}
-            <img src={imageList[imageIndex].imageUrl} className="rounded-md" />
+            <img src={product.photos[imageIndex]} className="rounded-md" />
           </div>
           {/*slider images */}
           <div>
             <span className="lg:mt-2 flex rounded-md md:gap-4 gap-5 py-2">
               <ImageSlider
                 imageIndex={imageIndex}
-                imageList={imageList}
+                imageList={product.photos}
                 setImageIndex={setImageIndex}
               />
             </span>
@@ -72,15 +62,15 @@ const ProductDetail = () => {
             {/* Product info */}
             <span>
               {/* title */}
-              <h4 className="mb-[10px] text-sm text-gray-500">
-                Birthblessing-Toys
+              <h4 className="mb-[10px] text-sm text-gray-500 uppercase">
+                {product.category}
               </h4>
               <h2 className="mb-[10px] font-medium sm:text-lg md:text-xl lg:text-2xl">
-                Babyhug Bear Face Rattle Cum Soft Toy
+                {product.title}
               </h2>
               <div className="flex gap-1.5">
                 <p className="mb-[10px] font-bold sm:text-xl lg:text-3xl">
-                  $300.00
+                  ${product.price}
                 </p>
               </div>
             </span>
@@ -91,23 +81,7 @@ const ProductDetail = () => {
             <div>
               {/* description */}
               <p className="mb-[10px] font-[2px] text-gray-500">
-                Praesent suscipit quis ante sit amet mollis. Pellentesque nec
-                fermentum lacus. Donec a tellus metus. Fusce eu mollis velit.
-                Maecenas eu gravida ex. Praesent vitae auctor ligula. Morbi eget
-                ipsum nisi. Maecenas feugiat lacinia nunc at laoreet. Integer
-                efficitur, tellus ac pellentesque accumsan, diam diam rhoncus
-                ante, ut molestie est tortor id tortor. Quisque vitae rutrum
-                metus.
-                <br />
-                <br />
-                Nam lacinia tempor urna in sodales. Suspendisse mollis nisl
-                dictum velit dignissim pulvinar. Quisque ex ipsum, feugiat eu
-                pulvinar eu, facilisis eget risus. Sed auctor dolor in ante
-                facilisis, non mollis quam dictum. Fusce sit amet ipsum tellus.
-                Morbi sit amet nulla at justo gravida volutpat id sed orci.
-                Class aptent taciti sociosqu ad litora torquent per conubia
-                nostra, per inceptos himenaeos. Sed non augue erat. Curabitur et
-                fringilla ex.
+                {product.description}
               </p>
             </div>
             <div>
@@ -126,8 +100,7 @@ const ProductDetail = () => {
                 <button
                   onClick={decrease}
                   className={` ${quantity <= 0 && "opacity-50"}`}
-                  disabled={quantity <= 0}
-                >
+                  disabled={quantity <= 0}>
                   <MinusIcon />
                 </button>
                 <p>{quantity}</p>
@@ -161,8 +134,7 @@ const ProductDetail = () => {
               <span>
                 <button
                   onClick={() => showFormHandle(true)}
-                  className="my-2 text-center rounded-xl px-3.5 py-2.5 text-sm bg-slate-700 hover:bg-black hover:cursor-pointer text-white"
-                >
+                  className="my-2 text-center rounded-xl px-3.5 py-2.5 text-sm bg-slate-700 hover:bg-black hover:cursor-pointer text-white">
                   Write a review
                 </button>
               </span>
@@ -170,7 +142,7 @@ const ProductDetail = () => {
             {showForm && (
               <div>
                 <hr className="mt-5" />
-                <form className="mt-5 lg:pl-[30%]" showFormHandle={showForm}>
+                <form className="mt-5 lg:pl-[30%]">
                   {/* review form */}
                   <h5>Write a review</h5>
                   <fieldset>
@@ -196,11 +168,11 @@ const ProductDetail = () => {
                   </fieldset>
                   <fieldset>
                     {/* rating&review */}
-                    <div>
-                      {/* rating */}
+                    {/* rating */}
+                    {/* <div>
                       <p className="text-sm mt-2.5">Rating</p>
                       <Rating className="flex justify-center my-1.5" />
-                    </div>
+                    </div> */}
                     <div>
                       <p className="text-sm mt-2.5">Review Title</p>
                       <input
@@ -216,8 +188,7 @@ const ProductDetail = () => {
                         id="message"
                         rows="4"
                         className="mt-2 p-2.5 w-full lg:w-[70%] text-sm border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Write your comments here"
-                      ></textarea>
+                        placeholder="Write your comments here"></textarea>
                     </div>
                   </fieldset>
                   <div className="">
