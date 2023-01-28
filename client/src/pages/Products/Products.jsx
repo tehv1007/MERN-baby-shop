@@ -2,18 +2,21 @@ import { useState } from "react";
 import FilterIcon from "../../components/common/icons/FilterIcon";
 import Pagination from "../../components/layouts/Pagination";
 import ProductGrid from "./ProductGrid";
+import ColumnDisplayIcon from "../../components/common/icons/ColumnDisplayIcon";
+import RowDisplayIcon from "../../components/common/icons/RowDisplayIcon";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import {
   sortNumbers,
   sortNames,
   paginate,
-} from "../../services/productsSevice";
+} from "../../services/productsService";
 
 const Products = () => {
   const [category, setCategory] = useState("all");
   const [sortType, setsortType] = useState("");
   const [page, setPage] = useState(1);
+  const [display, setDisplay] = useState(true);
   const ITEMS_PER_PAGE = 8;
 
   const handleSelect = (e) => {
@@ -71,7 +74,23 @@ const Products = () => {
               </h3>
               <div className="mt-6  py-2 px-3 lg:py-3 flex justify-between border border-gray-200 rounded-lg w-full">
                 {/* Layout */}
+
                 <div className="flex items-center gap-3">
+                  {/*  */}
+                  <button
+                    onClick={() => {
+                      setDisplay(true);
+                    }}
+                    className={`${display ? "bg-sky-500/30 rounded-md" : ""}`}>
+                    <ColumnDisplayIcon />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setDisplay(false);
+                    }}
+                    className={`${!display ? "bg-sky-500/30 rounded-md" : ""}`}>
+                    <RowDisplayIcon />
+                  </button>
                   <p>Category:</p>
                   <select
                     name="Sorting"
@@ -114,7 +133,7 @@ const Products = () => {
           </div>
 
           {/* Cards */}
-          <ProductGrid products={paginatedArr} />
+          <ProductGrid products={paginatedArr} display={display} />
           <Pagination setPage={setPage} paginationParams={paginationParams} />
         </div>
       </div>

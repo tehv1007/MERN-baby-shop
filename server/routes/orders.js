@@ -8,6 +8,9 @@ const {
   getIncome,
 } = require("../controllers/orderController");
 
+//GET ALL orders
+router.get("/", getAllOrders);
+
 //CREATE an order
 router.post("/:userId", addOrder);
 
@@ -16,9 +19,6 @@ router.delete("/:userId", deleteOrder);
 
 //GET user orders
 router.get("/:userId", getOrdersByUser);
-
-//GET ALL orders
-router.get("/", getAllOrders);
 
 // GET monthly income
 router.get("/income", getIncome);

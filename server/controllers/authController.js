@@ -26,7 +26,8 @@ exports.signup = async (req, res) => {
 
     const token = await new Token({
       userId: user._id,
-      token: crypto.randomBytes(32).toString("hex"),
+      token: User.generateToken(),
+      // token: crypto.randomBytes(32).toString("hex"),
     }).save();
 
     const url = `${process.env.CLIENT_URL_DEV}/auth/${user.id}/verify/${token.token}`;
@@ -100,7 +101,8 @@ exports.signin = async (req, res) => {
       if (!token) {
         token = await new Token({
           userId: user._id,
-          token: crypto.randomBytes(32).toString("hex"),
+          // token: crypto.randomBytes(32).toString("hex"),
+          token: user.generateToken(),
         }).save();
         const url = `${process.env.SERVER_URL_DEV}/auth/${user._id}/verify/${token.token}`;
         await sendEmail(user.email, "Verify Email", url);

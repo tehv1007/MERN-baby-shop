@@ -1,19 +1,19 @@
 import ProductCard from "./ProductCard";
-// import productsList from "./ProductsList";
-const ProductGrid = ({ products }) => {
-  return (
+import ProdudctCardRow from "./ProdudctCardRow";
+
+const ProductGrid = ({ products, display }) => {
+  return display === true ? (
     <div className="grid grid-cols-2 gap-6 pt-4 lg:grid-cols-4">
       {/* Product Card */}
       {products.map((item) => {
-        return (
-          <ProductCard
-            key={item._id}
-            title={item.title}
-            imageUrl={item.photos[0]}
-            price={item.price}
-            id={item._id}
-          />
-        );
+        return <ProductCard product={item} key={item._id} />;
+      })}
+    </div>
+  ) : (
+    <div>
+      {/* Product Rows */}
+      {products.map((item) => {
+        return <ProdudctCardRow product={item} key={item._id} />;
       })}
     </div>
   );

@@ -6,6 +6,7 @@ const {
   addProduct,
   updateProduct,
   deleteProduct,
+  listRelated,
 } = require("../controllers/productController");
 
 // GET all products
@@ -16,6 +17,9 @@ router.get("/:productId", getProductById);
 
 // Search product
 router.get("/search", searchProduct);
+
+// Get related products
+router.get("/related/:category/:productId", listRelated);
 
 // CREATE a new product
 router.post("/new", addProduct);

@@ -37,25 +37,14 @@ router.get(
   }),
   async (req, res) => {
     console.log(req.user);
-    let token = await Token.findOne({ userId: req.user.id });
-    if (!token) {
-      token = await new Token({
-        userId: req.user.id,
-        token: crypto.randomBytes(32).toString("hex"),
-      }).save();
-    }
 
-    const user = await User.findOne({ googleId: req.user.id });
-    // const { password, ...others } = user._doc;
-    res.status(200).send({
+    const token = req.user.generateAuthToken();
+    const { email, name, username, image } = req.user;
+    res.cookie("access_token", token).status(200).json({
       user_token: token,
-      user: user,
+      user: { email, name, username, image },
       message: "logged in successfully",
     });
-
-    // const token = req.user.generateAuthToken();
-    // res.cookie("x-auth-cookie", token);
-    // res.redirect("http://localhost:5173");
   }
 );
 
@@ -86,7 +75,7 @@ router.get(
       }).save();
     }
 
-    const user = await User.findOne({ facebookId: req.user.id });
+    const user = await User.findOne({ email: req.user.email });
     // const { password, ...others } = user._doc;
     res.status(200).send({
       user_token: token,
@@ -95,7 +84,7 @@ router.get(
     });
 
     // const token = req.user.generateAuthToken();
-    // res.cookie("x-auth-cookie", token);
+    // res.cookie("access_token", token);
     // res.redirect("http://localhost:5173");
   }
 );

@@ -24,7 +24,8 @@ const ImageSlider = ({ imageList, setImageIndex, imageIndex }) => {
         }}
         navigation={true}
         modules={[Pagination, Navigation]}
-        className="px-8">
+        className="px-8"
+      >
         <div>
           {imageList.map((item, index) => {
             return (

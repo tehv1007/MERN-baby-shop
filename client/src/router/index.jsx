@@ -12,11 +12,10 @@ import NotFound from "../pages/NotFound";
 import Profile from "../pages/User/Profile";
 import ViewCart from "../pages/ViewCart";
 import Products from "../pages/Products/Products";
-import CheckOut from "../pages/CheckOut/CheckOut";
+import OrderInfomation from "../pages/CheckOut/OrderInfomation";
 import ProductDetail from "../pages/Products/product-detail/ProductDetail";
+import OrderShipping from "../pages/CheckOut/OrderShipping";
 
-// import ProductDetail from "../views/product/ProductDetail";
-// import Products from "../views/product/Products";
 // const [isConnected, setIsconnected] = useState(false);
 
 // const checkUserToken = () => {
@@ -63,8 +62,12 @@ const router = createBrowserRouter([
         element: <ViewCart />,
       },
       {
-        path: "/checkout",
-        element: <CheckOut />,
+        path: "/checkout/:userId/infomation",
+        element: <OrderInfomation />,
+      },
+      {
+        path: "/checkout/:userId/shipping",
+        element: <OrderShipping />,
       },
       {
         path: "/blog",

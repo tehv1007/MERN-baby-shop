@@ -5,6 +5,7 @@ import { BsCartPlus } from "react-icons/bs";
 import DropMenu from "./DropMenu";
 import subNavLink from "./link";
 import NavLink from "./NavLink";
+import { itemTotal } from "../../../services/cartService";
 
 const Navbar = () => {
   return (
@@ -49,7 +50,7 @@ const Navbar = () => {
                 </Link>
               </button>
               <span className="absolute  top-3 right-2 sm:right-[7px]  lg:right-[8px] xl:right-[8px] bg-[#212529] text-white w-5 h-5 text-center rounded-full">
-                1
+                {itemTotal()}
               </span>
             </div>
           </div>

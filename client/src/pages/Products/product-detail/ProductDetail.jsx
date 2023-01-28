@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import MinusIcon from "../../../components/common/icons/MinusIcon";
-import PlusIcon from "../../../components/common/icons/PlusIcon";
+
 // import Rating from "../../components/common/Rating";
 import ImageSlider from "./ImageSlider";
 import axios from "axios";
+import AddToCart from "./AddToCart";
+import RelatedProduct from "./RelatedProduct";
 
 const ProductDetail = () => {
   const [imageIndex, setImageIndex] = useState(0);
@@ -13,15 +14,6 @@ const ProductDetail = () => {
   const [showForm, setShowForm] = useState(false);
   const showFormHandle = () => {
     setShowForm(!showForm);
-  };
-
-  const [quantity, setQuantity] = useState(0);
-  const decrease = () => {
-    setQuantity(quantity - 1);
-  };
-
-  const increase = () => {
-    setQuantity(quantity + 1);
   };
 
   const { productId } = useParams();
@@ -93,31 +85,7 @@ const ProductDetail = () => {
                 <button className="rounded-md p-4 shadow-sm border hover:border-black text-xs bg-gray-400"></button>
               </div>
             </div>
-            <div className="mt-3">
-              {/* quantity */}
-              <h5 className="pb-2">Quantity</h5>
-              <div className="flex border gap-5 p-1.5 rounded-md w-1/4">
-                <button
-                  onClick={decrease}
-                  className={` ${quantity <= 0 && "opacity-50"}`}
-                  disabled={quantity <= 0}>
-                  <MinusIcon />
-                </button>
-                <p>{quantity}</p>
-                <button onClick={increase}>
-                  <PlusIcon />
-                </button>
-              </div>
-            </div>
-            <div className="mt-4">
-              {/* cart and buy buttons */}
-              <div className="mb-3 text-center rounded-md py-2 bg-slate-700 hover:bg-black hover:cursor-pointer text-white">
-                <button>Add To Cart</button>
-              </div>
-              <div className="border border-black mb-3 text-center rounded-md py-2  hover:bg-black hover:cursor-pointer hover:text-white">
-                <button>Buy It Now</button>
-              </div>
-            </div>
+            <AddToCart product={product} />
           </div>
         </div>
       </div>
@@ -204,6 +172,7 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
+      <RelatedProduct product={product} />
     </section>
   );
 };

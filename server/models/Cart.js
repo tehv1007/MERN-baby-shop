@@ -3,16 +3,26 @@ const Schema = mongoose.Schema;
 
 const cartSchema = new Schema(
   {
-    userId: { type: String, required: true, unique: true },
+    userId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+      unique: true,
+    },
     products: [
       {
-        productId: { type: String },
+        productId: {
+          type: Schema.Types.ObjectId,
+          required: true,
+          ref: "Product",
+          unique: true,
+        },
         name: { type: String },
         quantity: { type: Number, default: 1 },
         price: { type: Number },
       },
     ],
-    totalPrice: { type: Number },
+    subPrice: { type: Number },
   },
   { timestamps: true }
 );

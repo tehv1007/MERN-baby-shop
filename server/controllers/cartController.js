@@ -27,7 +27,7 @@ exports.addCart = async (req, res) => {
       } else {
         cart.products.push({ productId, name, quantity, price });
       }
-      cart.totalPrice += quantity * price;
+      cart.subPrice += quantity * price;
       cart = await cart.save();
       return res.status(201).json(cart);
     } else {
@@ -35,7 +35,7 @@ exports.addCart = async (req, res) => {
       const newCart = await Cart.create({
         userId,
         products: [{ productId, name, quantity, price }],
-        totalPrice: quantity * price,
+        subPrice: quantity * price,
       });
       return res.status(201).json(newCart);
     }
@@ -54,7 +54,7 @@ exports.deleteCart = async (req, res) => {
     let itemIndex = cart.products.findIndex((p) => p.productId == productId);
     if (itemIndex > -1) {
       let productItem = cart.products[itemIndex];
-      cart.totalPrice -= productItem.quantity * productItem.price;
+      cart.subPrice -= productItem.quantity * productItem.price;
       cart.products.splice(itemIndex, 1);
     }
     cart = await cart.save();
