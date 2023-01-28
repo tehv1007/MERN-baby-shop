@@ -15,29 +15,7 @@ import Products from "../pages/Products/Products";
 import OrderInfomation from "../pages/CheckOut/OrderInfomation";
 import ProductDetail from "../pages/Products/product-detail/ProductDetail";
 import OrderShipping from "../pages/CheckOut/OrderShipping";
-
-// const [isConnected, setIsconnected] = useState(false);
-
-// const checkUserToken = () => {
-//   if (typeof window !== "undefined") {
-//     const user = JSON.parse(localStorage.getItem("token"));
-//     if (user) {
-//       setIsconnected(true);
-//     } else {
-//       setIsconnected(false);
-//     }
-//   }
-// };
-// useEffect(() => {
-//   checkUserToken();
-// }, [isConnected]);
-
-// const Logout = () => {
-//   if (localStorage.getItem("token")) {
-//     localStorage.clear();
-//     setIsconnected(false);
-//   }
-// };
+import CheckOut from "../pages/CheckOut/CheckOut";
 
 const router = createBrowserRouter([
   {
@@ -68,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "/checkout/:userId/shipping",
         element: <OrderShipping />,
+      },
+      {
+        path: "/checkout/:userId/payment",
+        element: <CheckOut />,
       },
       {
         path: "/blog",

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useState } from "react";
 import { updateItem } from "../../../services/cartService";
 
@@ -14,6 +13,7 @@ const AddToCart = ({ product }) => {
     if (quantity >= 1) {
       updateItem(product._id, quantity);
     }
+    window.location.reload(true);
   };
 
   return (

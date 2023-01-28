@@ -18,7 +18,7 @@ const RelatedProduct = ({ product }) => {
   const relatedProducts = getRandom(products, 4);
   return (
     <>
-      <h2 className="font-bold capitalize relative mb-8 text-center">
+      <h2 className="font-bold capitalize mb-8 text-center text-4xl">
         <span>You may also like</span>
       </h2>
       <div className="grid grid-cols-2 gap-6 pt-4 lg:grid-cols-4">

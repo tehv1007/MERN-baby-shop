@@ -63,7 +63,7 @@ const ViewCart = () => {
                 Tax included and shipping calculated at checkout
               </p>
             </div>
-            <Link to={`/checkout/${user._id}/infomation`}>
+            <Link to={user ? `/checkout/${user._id}/infomation` : "/signin"}>
               <button className="w-1/2 md:w-1/3 border rounded-xl bg-[#3d405b] hover:bg-black text-white text-sm py-2 px-3 transition duration-500">
                 Check Out
               </button>

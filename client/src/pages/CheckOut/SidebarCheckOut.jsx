@@ -6,6 +6,7 @@ import { getCart, getTotal } from "../../services/cartService";
 const shippingFee = 5;
 const items = getCart();
 const subTotal = getTotal(items);
+localStorage.setItem("total", Number((shippingFee + subTotal).toFixed(2)));
 
 const CartSummary = () => {
   return (

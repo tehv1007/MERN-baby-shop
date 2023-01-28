@@ -7,8 +7,8 @@ const {
 } = require("../controllers/paymentController");
 const { verifyToken } = require("../utility/verifyToken");
 
-router.get("/getToken/:userId", verifyToken, generateToken);
-router.post("/payment/:userId", verifyToken, processPayment);
+router.get("/getToken/:userId", generateToken);
+router.post("/payment/:userId", processPayment);
 
 // router.param("userId", userById);
 

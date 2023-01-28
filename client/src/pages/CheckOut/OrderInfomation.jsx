@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 import LocationForm from "../../components/location/LocationForm";
 import FormCheckOut from "./FormCheckOut";
 import SidebarCheckOut from "./SidebarCheckOut";
@@ -8,7 +9,8 @@ import SidebarCheckOut from "./SidebarCheckOut";
 const OrderInfomation = () => {
   const [subData, setSubData] = useState({});
   // console.log(subData);
-  // localStorage.setItem("shippingInfo2", JSON.stringify(subData));
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const {
     register,
@@ -20,6 +22,7 @@ const OrderInfomation = () => {
     // console.log(data);
     localStorage.setItem("shippingInfo", JSON.stringify(data));
     localStorage.setItem("shippingInfo2", JSON.stringify(subData));
+    navigate(`/checkout/${user._id}/shipping`);
   };
 
   return (

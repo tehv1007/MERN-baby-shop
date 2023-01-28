@@ -3,8 +3,8 @@ import { addItem } from "../../services/cartService";
 
 const ProdudctCardRow = ({ product }) => {
   const addToCart = () => {
-    // console.log('added');
     addItem(product);
+    window.location.reload(true);
   };
   return (
     <Link to={`/products/${product._id}`}>

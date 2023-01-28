@@ -1,8 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-
-// import Rating from "../../components/common/Rating";
 import ImageSlider from "./ImageSlider";
 import axios from "axios";
 import AddToCart from "./AddToCart";
@@ -26,9 +24,9 @@ const ProductDetail = () => {
   const { data: product } = data;
 
   return (
-    <section className="max-w-screen-lg mx-auto px-5 py-4">
+    <section className="max-w-screen-xl mx-auto px-5 py-4">
       {/* Container */}
-      <div className="md:flex lg:max-w-md gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Layout */}
         <div className="w-full">
           {/* === Image === */}
@@ -90,7 +88,7 @@ const ProductDetail = () => {
         </div>
       </div>
       {/* ========= */}
-      <div className="px-4 mt-7">
+      <div className=" mt-7">
         <div className="border p-4 rounded-xl mb-7">
           {/* Review */}
           <div>

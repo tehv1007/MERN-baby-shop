@@ -1,0 +1,264 @@
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
+import SidebarCheckOut from "./SidebarCheckOut";
+import DropIn from "braintree-web-drop-in-react";
+import { useNavigate } from "react-router-dom";
+import {
+  createOrder,
+  getBraintreeClientToken,
+  processPayment,
+} from "../../services/paymentService";
+import { isAuthenticated } from "../../services/authService";
+import { useEffect, useState } from "react";
+import { emptyCart } from "../../services/cartService";
+
+const CheckOut = ({ setRun = (f) => f, run = undefined }) => {
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
+  const info = JSON.parse(localStorage.getItem("shippingInfo"));
+  const address = JSON.parse(localStorage.getItem("shippingInfo2"));
+  const fullAddress = JSON.parse(localStorage.getItem("shippingAddress"));
+  const total = JSON.parse(localStorage.getItem("total"));
+  const products = JSON.parse(localStorage.getItem("cart"));
+
+  const [data, setData] = useState({
+    loading: false,
+    success: false,
+    clientToken: null,
+    error: "",
+    instance: {},
+    address: fullAddress,
+  });
+
+  //   const userId = isAuthenticated() && isAuthenticated().user._id;
+  //   const token = isAuthenticated() && isAuthenticated().token;
+  const userId = user._id;
+  const token = localStorage.getItem("token");
+
+  const getToken = (userId, token) => {
+    getBraintreeClientToken(userId, token).then((data) => {
+      if (data.error) {
+        console.log(data.error);
+        setData({ ...data, error: data.error });
+      } else {
+        console.log(data);
+        setData({ clientToken: data.clientToken });
+      }
+    });
+  };
+
+  useEffect(() => {
+    getToken(userId, token);
+  }, []);
+
+  const showCheckout = () => {
+    return isAuthenticated() ? (
+      <div>{showDropIn()}</div>
+    ) : (
+      <Link to="/signin">
+        <button className="btn btn-primary">Sign in to checkout</button>
+      </Link>
+    );
+  };
+
+  let deliveryAddress = data.address;
+
+  const buy = () => {
+    setData({ loading: true });
+    // send the nonce to server
+    // nonce = data.instance.requestPaymentMethod()
+    let nonce;
+    let getNonce = data.instance
+      .requestPaymentMethod()
+      .then((data) => {
+        // console.log(data);
+        nonce = data.nonce;
+        const paymentData = {
+          paymentMethodNonce: nonce,
+          amount: total,
+        };
+
+        processPayment(userId, token, paymentData)
+          .then((response) => {
+            console.log(response);
+            // empty cart
+            // create order
+
+            const createOrderData = {
+              products: products,
+              transaction_id: response.transaction.id,
+              amount: response.transaction.amount,
+              address: deliveryAddress,
+            };
+
+            createOrder(userId, token, createOrderData)
+              .then((response) => {
+                emptyCart(() => {
+                  setRun(!run); // run useEffect in parent Cart
+                  console.log("payment success and empty cart");
+                  setData({
+                    loading: false,
+                    success: true,
+                  });
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+                setData({ loading: false });
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+            setData({ loading: false });
+          });
+      })
+      .catch((error) => {
+        // console.log("dropin error: ", error);
+        setData({ ...data, error: error.message });
+      });
+  };
+
+  const showDropIn = () => (
+    <div onBlur={() => setData({ ...data, error: "" })}>
+      {data.clientToken !== null && products.length > 0 ? (
+        <div>
+          <DropIn
+            options={{
+              authorization: data.clientToken,
+              paypal: {
+                flow: "vault",
+              },
+            }}
+            onInstance={(instance) => (data.instance = instance)}
+          />
+          <button onClick={buy} className="btn btn-success btn-block">
+            Pay Now
+          </button>
+        </div>
+      ) : null}
+    </div>
+  );
+
+  const showError = (error) => (
+    <div
+      className="alert alert-danger"
+      style={{ display: error ? "" : "none" }}>
+      {error}
+    </div>
+  );
+
+  const showSuccess = (success) => (
+    <div
+      className="alert alert-info"
+      style={{ display: success ? "" : "none" }}>
+      Thanks! Your payment was successful!
+    </div>
+  );
+
+  const showLoading = (loading) =>
+    loading && <h2 className="text-danger">Loading...</h2>;
+
+  return (
+    <section>
+      {/* container */}
+      <div className="">
+        {/* layout */}
+        <div className="lg:grid">
+          {/* Sidebar */}
+          <SidebarCheckOut />
+
+          {/* main */}
+          <div className="max-w-screen-sm mx-auto px-4 lg:row-start-1 lg:col-span-3">
+            <div className="flex items-center gap-2 mt-4 text-xs max-w-screen-sm mx-auto">
+              <p>Cart</p>
+              <HiChevronRight />
+              <p>Information</p>
+              <HiChevronRight />
+              <p>Shipping</p>
+              <HiChevronRight />
+              <p className="font-bold">Payment</p>
+              <HiChevronRight />
+            </div>
+            {/* Shipping address */}
+            <div
+              role="table"
+              aria-label="Review your information"
+              className="bg-white border-gray-400 rounded border-solid border text-gray-700 text-sm leading-5 my-10">
+              <div
+                role="row"
+                className="items-baseline mx-4 py-3 flex justify-between">
+                <div className="pr-3 flex justify-between gap-10">
+                  <div role="cell" className="">
+                    <span className="text-gray-600">Contact</span>
+                  </div>
+                  <div role="cell" className="">
+                    <bdo className="" dir="ltr">
+                      {info.name}, {info.phoneNumber}, {info.email}
+                    </bdo>
+                  </div>
+                </div>
+                <div className="pr-3" role="cell">
+                  <a
+                    href={`/checkout/${user._id}/infomation`}
+                    className=""
+                    aria-label="Change contact information">
+                    <span className="text-indigo-900 inline text-xs leading-4">
+                      Change
+                    </span>
+                  </a>
+                </div>
+              </div>
+              <div
+                role="row"
+                className="items-baseline border-gray-400 border-t mx-4 py-3 flex justify-between ">
+                <div className="pr-3 flex justify-between gap-10 ">
+                  <div role="cell" className="">
+                    <span className="text-gray-600">Ship to</span>
+                  </div>
+                  <div role="cell" className="">
+                    <div className="">
+                      <address className="">
+                        {info.detailAddress}, {address.ward}, {address.district}
+                        , {address.city}
+                      </address>
+                    </div>
+                  </div>
+                </div>
+                <div className="pr-3" role="cell">
+                  <a
+                    href={`/checkout/${user._id}/infomation`}
+                    className=""
+                    aria-label="Change contact information">
+                    <span className="text-indigo-900 inline text-xs leading-4">
+                      Change
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Payment */}
+            <div className="my-4">
+              {/* <p className="mb-4 capitalize">Choose a way to pay</p> */}
+              <div className="mx-auto border w-full rounded gap-2 items-center py-3">
+                {showLoading(data.loading)}
+                {showSuccess(data.success)}
+                {showError(data.error)}
+                {showCheckout()}
+              </div>
+            </div>
+            <div className="max-w-screen-sm mx-auto my-11 pb-5 md:flex justify-between items-center ">
+              <a
+                href={`/checkout/${user._id}/shipping`}
+                className="flex justify-center items-center text-md py-3">
+                <HiChevronLeft size={30} />
+                Return to infomation
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default CheckOut;

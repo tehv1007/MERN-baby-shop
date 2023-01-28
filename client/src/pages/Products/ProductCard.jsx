@@ -4,6 +4,7 @@ import { addItem } from "../../services/cartService";
 const ProductCard = ({ product }) => {
   const addToCart = () => {
     addItem(product);
+    window.location.reload(true);
   };
   return (
     <div className="group relative">

@@ -8,6 +8,8 @@ import NavLink from "./NavLink";
 import { itemTotal } from "../../../services/cartService";
 
 const Navbar = () => {
+  const user = JSON.parse(localStorage.getItem("token"));
+
   return (
     <div className="bg-white  shadow-md">
       {/* Containier */}
@@ -40,7 +42,7 @@ const Navbar = () => {
           </div>
           {/* Button */}
           <div className="flex gap-4 md:gap-9">
-            <Link to="/signin">
+            <Link to={user ? "/profile" : "/signin"}>
               <BiUser className="text-3xl text-[#212529]" />
             </Link>
             <div className="">
