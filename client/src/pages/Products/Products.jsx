@@ -12,7 +12,7 @@ import {
   paginate,
 } from "../../services/productsService";
 
-const Products = () => {
+const Products = ({ user }) => {
   const [category, setCategory] = useState("all");
   const [sortType, setsortType] = useState("");
   const [page, setPage] = useState(1);
@@ -133,7 +133,7 @@ const Products = () => {
           </div>
 
           {/* Cards */}
-          <ProductGrid products={paginatedArr} display={display} />
+          <ProductGrid products={paginatedArr} display={display} user={user} />
           <Pagination setPage={setPage} paginationParams={paginationParams} />
         </div>
       </div>

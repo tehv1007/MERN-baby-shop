@@ -44,7 +44,7 @@ require("./services/googleStrategy");
 app.use("/auth", authRoutes);
 app.use("/users", usersRoutes);
 app.use("/products", productsRoutes);
-app.use("/carts", cartsRoutes);
+app.use("/cart", cartsRoutes);
 app.use("/orders", ordersRoutes);
 app.use("/password-reset", pwResetRoutes);
 app.use("/braintree", paymentRoutes);

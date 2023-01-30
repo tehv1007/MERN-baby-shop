@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-import { addItem } from "../../services/cartService";
+import { addItemToCart } from "../../services/cartService";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, user }) => {
   const addToCart = () => {
-    addItem(product);
-    window.location.reload(true);
+    addItemToCart(user, 1, product);
   };
   return (
     <div className="group relative">

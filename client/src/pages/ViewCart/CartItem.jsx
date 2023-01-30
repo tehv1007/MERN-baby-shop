@@ -1,31 +1,37 @@
 import { useEffect, useState } from "react";
-import { removeItem, updateItem } from "../../services/cartService";
+import { removeCartItem, updateCartItem } from "../../services/cartService";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const CartItem = ({ product, run, setRun }) => {
-  const [quantity, setQuantity] = useState(product.count);
+const CartItem = ({ product, user }) => {
+  const [quantity, setQuantity] = useState(product.quantity);
+  const queryClient = useQueryClient();
 
-  const handleChange = (e) => {
-    setRun(!run);
-    setQuantity(e.target.value);
-  };
+  const deleteItem = useMutation({
+    mutationFn: (product) => removeCartItem(user, product),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+    },
+  });
 
   useEffect(() => {
-    updateItem(product._id, quantity - product.count);
+    quantity > 0
+      ? updateCartItem(user, product, quantity)
+      : removeCartItem(user, product);
   }, [quantity]);
 
   return (
     <>
       <tr>
         <td className="flex gap-3 mt-3">
-          <a href="">
+          <a href={`/products/${product.productId}`}>
             <img
               className="border aspect-square w-[150px] rounded-md md:py-4 md:pr-8 md:border-0"
-              src={product.photos[0]}
+              src={product.product.photos[0]}
             />
           </a>
           <div className="">
             <a href="" className="text-sm md:text-base">
-              {product.tittle}
+              {product.product.tittle}
             </a>
             <p className="text-2xl my-3 md:text">${product.price}</p>
             <p className="text-xs">Color: Yellow</p>
@@ -43,7 +49,7 @@ const CartItem = ({ product, run, setRun }) => {
                   fill="currentColor"></path>
               </svg>
 
-              <span className="text-base">{product.category}</span>
+              <span className="text-base">{product.product.category}</span>
             </div>
           </div>
         </td>
@@ -55,15 +61,13 @@ const CartItem = ({ product, run, setRun }) => {
                 type="number"
                 min={0}
                 value={quantity}
-                onChange={handleChange}
+                onChange={(e) => {
+                  setQuantity(e.target.value);
+                }}
                 className="border rounded-md inline-block h-10 w-20 text-center"
               />
             </div>
-            <button
-              onClick={() => {
-                removeItem(product._id);
-                setRun(!run); // run useEffect in parent Cart
-              }}>
+            <button onClick={() => deleteItem.mutate(product)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

@@ -1,3 +1,43 @@
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+export const getTotalPrice = (items) => {
+  return items.reduce((currentValue, nextValue) => {
+    return currentValue + nextValue.quantity * nextValue.price;
+  }, 0);
+};
+export const getTotalQuantity = (items) => {
+  return items.reduce((currentValue, nextValue) => {
+    return currentValue + nextValue.quantity;
+  }, 0);
+};
+
+export const addItemToCart = async (user, quantity, product) => {
+  const cart = await axios.post(`/cart/${user._id}`, {
+    quantity: quantity,
+    productId: product._id,
+  });
+  console.log(cart);
+};
+
+export const removeCartItem = async (user, product) => {
+  const cart = await axios.delete(`/cart/${user._id}/${product._id}`);
+  console.log(cart);
+};
+
+export const updateCartItem = async (user, product, quantity) => {
+  const cart = await axios.put(`/cart/${user._id}/${product._id}`, {
+    quantity: quantity,
+  });
+  console.log(cart);
+};
+
+export const emptyCart = async (user) => {
+  const cart = await axios.delete(`/cart/${user._id}`);
+  console.log(cart);
+};
+// Another way to handle cart
+/*
 export const addItem = (item, quantity = 1, next = (f) => f) => {
   let cart = [];
   if (typeof window !== "undefined") {
@@ -80,9 +120,4 @@ export const removeItem = (productId) => {
   }
   return cart;
 };
-
-export const getTotal = (items) => {
-  return items.reduce((currentValue, nextValue) => {
-    return currentValue + nextValue.count * nextValue.price;
-  }, 0);
-};
+*/

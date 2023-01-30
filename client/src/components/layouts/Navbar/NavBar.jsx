@@ -5,10 +5,17 @@ import { BsCartPlus } from "react-icons/bs";
 import DropMenu from "./DropMenu";
 import subNavLink from "./link";
 import NavLink from "./NavLink";
-import { itemTotal } from "../../../services/cartService";
+import { getTotalQuantity } from "../../../services/cartService";
+import { getCartItems } from "../../../pages/ViewCart/useCart";
 
-const Navbar = () => {
-  const user = JSON.parse(localStorage.getItem("token"));
+const Navbar = ({ user }) => {
+  let totalQuantity = 0;
+  let items;
+  if (!user) items = [];
+  const { data, isLoading } = getCartItems();
+  if (isLoading) return <h1>Loading...</h1>;
+  items = data.data.products;
+  totalQuantity = getTotalQuantity(items);
 
   return (
     <div className="bg-white  shadow-md">
@@ -45,6 +52,7 @@ const Navbar = () => {
             <Link to={user ? "/profile" : "/signin"}>
               <BiUser className="text-3xl text-[#212529]" />
             </Link>
+            <Link to="/signout">Signout</Link>
             <div className="">
               <button className="relative">
                 <Link to="/viewcart">
@@ -52,7 +60,7 @@ const Navbar = () => {
                 </Link>
               </button>
               <span className="absolute  top-3 right-2 sm:right-[7px]  lg:right-[8px] xl:right-[8px] bg-[#212529] text-white w-5 h-5 text-center rounded-full">
-                {itemTotal()}
+                {totalQuantity}
               </span>
             </div>
           </div>

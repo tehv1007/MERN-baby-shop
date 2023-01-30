@@ -39,12 +39,9 @@ router.get(
     console.log(req.user);
 
     const token = req.user.generateAuthToken();
-    const { email, name, username, image } = req.user;
-    res.cookie("access_token", token).status(200).json({
-      user_token: token,
-      user: { email, name, username, image },
-      message: "logged in successfully",
-    });
+    const { password, ...others } = req.user;
+    res.cookie("access_token", { token: token, user: others });
+    res.redirect("http://localhost:5173");
   }
 );
 
@@ -66,26 +63,11 @@ router.get(
   }),
   async (req, res) => {
     console.log(req.user);
-    let token = await Token.findOne({ userId: req.user.id });
 
-    if (!token) {
-      token = await new Token({
-        userId: req.user.id,
-        token: crypto.randomBytes(32).toString("hex"),
-      }).save();
-    }
-
-    const user = await User.findOne({ email: req.user.email });
-    // const { password, ...others } = user._doc;
-    res.status(200).send({
-      user_token: token,
-      user: user,
-      message: "logged in successfully",
-    });
-
-    // const token = req.user.generateAuthToken();
-    // res.cookie("access_token", token);
-    // res.redirect("http://localhost:5173");
+    const token = req.user.generateAuthToken();
+    const { password, ...others } = req.user;
+    res.cookie("access_token", { token: token, user: others });
+    res.redirect("http://localhost:5173");
   }
 );
 

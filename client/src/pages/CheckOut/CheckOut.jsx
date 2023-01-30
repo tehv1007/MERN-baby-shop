@@ -1,7 +1,6 @@
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import SidebarCheckOut from "./SidebarCheckOut";
 import DropIn from "braintree-web-drop-in-react";
-import { useNavigate } from "react-router-dom";
 import {
   createOrder,
   getBraintreeClientToken,
@@ -10,17 +9,22 @@ import {
 import { isAuthenticated } from "../../services/authService";
 import { useEffect, useState } from "react";
 import { emptyCart } from "../../services/cartService";
+import { getCartItems } from "../ViewCart/useCart";
+import { useNavigate } from "react-router-dom";
 
-const CheckOut = ({ setRun = (f) => f, run = undefined }) => {
+const CheckOut = ({ user }) => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
   const info = JSON.parse(localStorage.getItem("shippingInfo"));
   const address = JSON.parse(localStorage.getItem("shippingInfo2"));
   const fullAddress = JSON.parse(localStorage.getItem("shippingAddress"));
   const total = JSON.parse(localStorage.getItem("total"));
-  const products = JSON.parse(localStorage.getItem("cart"));
+  let products;
+  if (!user) products = [];
+  const { data, isLoading } = getCartItems();
+  if (isLoading) return <h1>Loading...</h1>;
+  products = data.data.products;
 
-  const [data, setData] = useState({
+  const [datas, setDatas] = useState({
     loading: false,
     success: false,
     clientToken: null,
@@ -29,8 +33,6 @@ const CheckOut = ({ setRun = (f) => f, run = undefined }) => {
     address: fullAddress,
   });
 
-  //   const userId = isAuthenticated() && isAuthenticated().user._id;
-  //   const token = isAuthenticated() && isAuthenticated().token;
   const userId = user._id;
   const token = localStorage.getItem("token");
 
@@ -38,10 +40,10 @@ const CheckOut = ({ setRun = (f) => f, run = undefined }) => {
     getBraintreeClientToken(userId, token).then((data) => {
       if (data.error) {
         console.log(data.error);
-        setData({ ...data, error: data.error });
+        setDatas({ ...data, error: data.error });
       } else {
         console.log(data);
-        setData({ clientToken: data.clientToken });
+        setDatas({ clientToken: data.clientToken });
       }
     });
   };
@@ -60,18 +62,18 @@ const CheckOut = ({ setRun = (f) => f, run = undefined }) => {
     );
   };
 
-  let deliveryAddress = data.address;
+  let deliveryAddress = datas.address;
 
   const buy = () => {
-    setData({ loading: true });
+    setDatas({ loading: true });
     // send the nonce to server
     // nonce = data.instance.requestPaymentMethod()
     let nonce;
-    let getNonce = data.instance
+    let getNonce = datas.instance
       .requestPaymentMethod()
-      .then((data) => {
+      .then((datas) => {
         // console.log(data);
-        nonce = data.nonce;
+        nonce = datas.nonce;
         const paymentData = {
           paymentMethodNonce: nonce,
           amount: total,
@@ -92,45 +94,46 @@ const CheckOut = ({ setRun = (f) => f, run = undefined }) => {
 
             createOrder(userId, token, createOrderData)
               .then((response) => {
-                emptyCart(() => {
-                  setRun(!run); // run useEffect in parent Cart
-                  console.log("payment success and empty cart");
-                  setData({
-                    loading: false,
-                    success: true,
-                  });
+                emptyCart(user);
+                console.log("payment success and empty cart");
+                setDatas({
+                  loading: false,
+                  success: true,
                 });
+                navigate("/");
               })
               .catch((error) => {
                 console.log(error);
-                setData({ loading: false });
+                setDatas({ loading: false });
               });
           })
           .catch((error) => {
             console.log(error);
-            setData({ loading: false });
+            setDatas({ loading: false });
           });
       })
       .catch((error) => {
         // console.log("dropin error: ", error);
-        setData({ ...data, error: error.message });
+        setDatas({ ...datas, error: error.message });
       });
   };
 
   const showDropIn = () => (
-    <div onBlur={() => setData({ ...data, error: "" })}>
-      {data.clientToken !== null && products.length > 0 ? (
+    <div onBlur={() => setDatas({ ...datas, error: "" })}>
+      {datas.clientToken !== null && products.length > 0 ? (
         <div>
           <DropIn
             options={{
-              authorization: data.clientToken,
+              authorization: datas.clientToken,
               paypal: {
                 flow: "vault",
               },
             }}
-            onInstance={(instance) => (data.instance = instance)}
+            onInstance={(instance) => (datas.instance = instance)}
           />
-          <button onClick={buy} className="btn btn-success btn-block">
+          <button
+            onClick={buy}
+            className="inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline bg-green-500 text-white hover:green-600 w-full">
             Pay Now
           </button>
         </div>
@@ -164,7 +167,7 @@ const CheckOut = ({ setRun = (f) => f, run = undefined }) => {
         {/* layout */}
         <div className="lg:grid">
           {/* Sidebar */}
-          <SidebarCheckOut />
+          <SidebarCheckOut user={user} />
 
           {/* main */}
           <div className="max-w-screen-sm mx-auto px-4 lg:row-start-1 lg:col-span-3">

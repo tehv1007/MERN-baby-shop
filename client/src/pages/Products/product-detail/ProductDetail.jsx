@@ -6,7 +6,7 @@ import axios from "axios";
 import AddToCart from "./AddToCart";
 import RelatedProduct from "./RelatedProduct";
 
-const ProductDetail = () => {
+const ProductDetail = ({ user }) => {
   const [imageIndex, setImageIndex] = useState(0);
 
   const [showForm, setShowForm] = useState(false);
@@ -83,7 +83,7 @@ const ProductDetail = () => {
                 <button className="rounded-md p-4 shadow-sm border hover:border-black text-xs bg-gray-400"></button>
               </div>
             </div>
-            <AddToCart product={product} />
+            <AddToCart product={product} user={user} />
           </div>
         </div>
       </div>

@@ -1,35 +1,19 @@
 const Order = require("../models/Order");
-const Cart = require("../models/Cart");
-const User = require("../models/User");
 
 //CREATE an order
 exports.addOrder = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const { source } = req.body;
-    let cart = await Cart.findOne({ userId });
-    let user = await User.findOne({ _id: userId });
-    const email = user.email;
-    if (cart) {
-      const charge = await stripe.charges.create({
-        amount: cart.subPrice,
-        currency: "usd",
-        source: source,
-        receipt_email: email,
-      });
-      if (!charge) throw Error("Payment failed");
-      if (charge) {
-        const order = await Order.create({
-          userId,
-          items: cart.products,
-          totalPrice: cart.subPrice,
-        });
-        const data = await Cart.findByIdAndDelete({ _id: cart.id });
-        return res.status(201).json(order);
-      }
-    } else {
-      res.status(500).send("You do not have items in cart");
-    }
+    const data = req.body.order;
+
+    const order = await Order.create({
+      userId: userId,
+      amount: data.amount,
+      address: data.address,
+      transaction_id: data.transaction_id,
+      products: data.products,
+    });
+    return res.status(201).json(order);
   } catch (err) {
     console.log(err);
     res.status(500).send("Something went wrong");

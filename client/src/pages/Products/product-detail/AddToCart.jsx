@@ -1,19 +1,23 @@
 import { useState } from "react";
-import { updateItem } from "../../../services/cartService";
+import { useNavigate } from "react-router-dom";
+import { addItemToCart } from "../../../services/cartService";
 
-const AddToCart = ({ product }) => {
+const AddToCart = ({ product, user }) => {
   const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     console.log(event.target.value);
     setQuantity(event.target.value < 1 ? 1 : event.target.value);
   };
 
-  const addToCart = () => {
-    if (quantity >= 1) {
-      updateItem(product._id, quantity);
-    }
-    window.location.reload(true);
+  const addToCheckout = async () => {
+    addItemToCart(user, Number(quantity), product);
+    navigate(`/viewcart`);
+  };
+
+  const addToCart = async () => {
+    addItemToCart(user, Number(quantity), product);
   };
 
   return (
@@ -35,12 +39,16 @@ const AddToCart = ({ product }) => {
         {/* cart and buy buttons */}
         {product.inStock > 0 ? (
           <div>
-            <div className="mb-3 text-center rounded-md py-2 bg-slate-700 hover:bg-black hover:cursor-pointer text-white">
-              <button onClick={addToCart}>Add To Cart</button>
-            </div>
-            <div className="border border-black mb-3 text-center rounded-md py-2  hover:bg-black hover:cursor-pointer hover:text-white">
-              <button>Buy It Now</button>
-            </div>
+            <button
+              onClick={addToCart}
+              className="block w-full mb-3 text-center rounded-md py-2 bg-slate-700 hover:bg-black hover:cursor-pointer text-white">
+              <span>Add To Cart</span>
+            </button>
+            <button
+              onClick={addToCheckout}
+              className="block w-full border border-black mb-3 text-center rounded-md py-2  hover:bg-black hover:cursor-pointer hover:text-white">
+              <span>Buy It Now</span>
+            </button>
           </div>
         ) : (
           <button

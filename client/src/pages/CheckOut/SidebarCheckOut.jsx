@@ -1,14 +1,20 @@
 import { useState } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { HiChevronDown, HiChevronUp } from "react-icons/hi";
-import { getCart, getTotal } from "../../services/cartService";
+import { getTotalPrice } from "../../services/cartService";
+import { getCartItems } from "../ViewCart/useCart";
 
 const shippingFee = 5;
-const items = getCart();
-const subTotal = getTotal(items);
-localStorage.setItem("total", Number((shippingFee + subTotal).toFixed(2)));
 
-const CartSummary = () => {
+const CartSummary = ({ user }) => {
+  let items;
+  if (!user) items = [];
+  const { data, isLoading } = getCartItems();
+  if (isLoading) return <h1>Loading...</h1>;
+  items = data.data.products;
+  const subTotal = getTotalPrice(items);
+  localStorage.setItem("total", Number((shippingFee + subTotal).toFixed(2)));
+
   return (
     <div className="bg-zinc-100 px-4">
       {items.map((product, index) => (
@@ -18,20 +24,22 @@ const CartSummary = () => {
           <div className="flex justify-between items-center">
             <div className="absolute">
               <button className="relative left-12 top-3 z-10 border bg-zinc-500 text-white rounded-full px-2 ">
-                {product.count}
+                {product.quantity}
               </button>
               <img
                 className=" border border-zinc-300 rounded-lg max-w-[60px]"
-                src={product.photos[0]}
+                src={product.product.photos[0]}
               />
             </div>
             <div className="ml-20 ">
-              <p className="text-sm md:text-base">{product.title}</p>
+              <p className="text-sm md:text-base">{product.product.title}</p>
 
               <p className="text-xs">Color: Yellow</p>
             </div>
           </div>
-          <p className="text-sm my-3 ">${product.price}</p>
+          <p className="text-sm my-3 ">
+            ${(product.price * product.quantity).toFixed(2)}
+          </p>
         </div>
       ))}
       {/* Horizontal line */}
@@ -79,8 +87,9 @@ const Hide = () => {
   );
 };
 
-const SidebarCheckOut = () => {
+const SidebarCheckOut = ({ user }) => {
   const [display, setDisplay] = useState(true);
+  const total = localStorage.getItem("total");
   return (
     <>
       <div className="lg:bg-zinc-100 col-start-4 col-span-2 lg:border lg:border-r-0 lg:px-6">
@@ -93,15 +102,13 @@ const SidebarCheckOut = () => {
                 {display === true ? <Hide /> : <Show />}
               </button>
             </div>
-            <span className="text-lg font-medium">
-              ${(shippingFee + subTotal).toFixed(2)}
-            </span>
+            <span className="text-lg font-medium">${total}</span>
           </div>
-          {display && <CartSummary />}
+          {display && <CartSummary user={user} />}
         </div>
         {/* content */}
         <div className="hidden lg:block">
-          <CartSummary />
+          <CartSummary user={user} />
         </div>
       </div>
     </>

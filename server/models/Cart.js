@@ -11,15 +11,11 @@ const cartSchema = new Schema(
     },
     products: [
       {
-        productId: {
-          type: Schema.Types.ObjectId,
-          required: true,
-          ref: "Product",
-          unique: true,
-        },
+        productId: { type: Schema.Types.ObjectId },
         name: { type: String },
         quantity: { type: Number, default: 1 },
         price: { type: Number },
+        product: { type: Object },
       },
     ],
     subPrice: { type: Number },

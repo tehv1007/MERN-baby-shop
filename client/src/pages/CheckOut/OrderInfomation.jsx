@@ -6,11 +6,9 @@ import LocationForm from "../../components/location/LocationForm";
 import FormCheckOut from "./FormCheckOut";
 import SidebarCheckOut from "./SidebarCheckOut";
 
-const OrderInfomation = () => {
+const OrderInfomation = ({ user }) => {
   const [subData, setSubData] = useState({});
-  // console.log(subData);
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
 
   const {
     register,
@@ -32,7 +30,7 @@ const OrderInfomation = () => {
         {/* layout */}
         <div className="lg:grid">
           {/* Sidebar */}
-          <SidebarCheckOut />
+          <SidebarCheckOut user={user} />
 
           {/* main */}
           <form
@@ -50,9 +48,9 @@ const OrderInfomation = () => {
             </div>
             <h3 className="flex justify-between items-center my-6 lg:text-lg">
               Contact information
-              <span className="lg:text-sm">
+              {/* <span className="lg:text-sm">
                 Already have an account? Log in
-              </span>
+              </span> */}
             </h3>
             {/* Form */}
             <FormCheckOut register={register} errors={errors} />

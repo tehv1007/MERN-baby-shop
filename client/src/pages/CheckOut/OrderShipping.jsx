@@ -2,9 +2,8 @@ import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import SidebarCheckOut from "./SidebarCheckOut";
 import { useNavigate } from "react-router-dom";
 
-const OrderShipping = () => {
+const OrderShipping = ({ user }) => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
   const info = JSON.parse(localStorage.getItem("shippingInfo"));
   const address = JSON.parse(localStorage.getItem("shippingInfo2"));
   const shippingAddress = `${info.name}, ${info.phoneNumber}, ${info.detailAddress}, ${address.ward}, ${address.district}, ${address.city}`;
@@ -21,7 +20,7 @@ const OrderShipping = () => {
         {/* layout */}
         <div className="lg:grid">
           {/* Sidebar */}
-          <SidebarCheckOut />
+          <SidebarCheckOut user={user} />
 
           {/* main */}
           <div className="max-w-screen-sm mx-auto px-4 lg:row-start-1 lg:col-span-3">

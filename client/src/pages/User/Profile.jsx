@@ -1,19 +1,23 @@
 import "./Profile.css";
-function Profile() {
-  const user = JSON.parse(localStorage.getItem("user"));
-
+function Profile({ user }) {
   return (
-    <div class="container mt-4 mb-4 p-3 d-flex justify-content-center">
-      <div class="card p-4">
-        <div class=" image d-flex flex-column justify-content-center align-items-center">
-          <button class="btn btn-secondary">
-            <img src={user.image} alt="user face" height="100" width="100" />
+    <div className="max-w-screen-xl mx-auto mt-4 mb-4 p-6 flex justify-center">
+      <div className="bg-gray-200 p-4">
+        <div className="flex flex-col justify-center items-center">
+          <button className="btn btn-secondary">
+            <img src="{user.image}" alt="user face" height={100} width={100} />
           </button>
-          <span class="name mt-3">{user.name}</span>{" "}
-          <div class="d-flex flex-row justify-content-center align-items-center gap-2"></div>
-          <div class="d-flex flex-row justify-content-center align-items-center mt-3">
-            <span class="number">
-              e-mail 📧 : <span class="follow">{user.email}</span>
+          <span className="name mt-3">
+            {"{"}user.name{"}"}
+          </span>
+          {"{"}" "{"}"}
+          <div className="d-flex flex-row justify-content-center align-items-center gap-2" />
+          <div className="d-flex flex-row justify-content-center align-items-center mt-3">
+            <span className="number">
+              e-mail 📧 :{" "}
+              <span className="follow">
+                {"{"}user.email{"}"}
+              </span>
             </span>
           </div>
         </div>

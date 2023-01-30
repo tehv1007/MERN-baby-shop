@@ -26,15 +26,14 @@ const Signin = () => {
       try {
         // const url = `${import.meta.env.VITE_APP_BASE_URL}/auth/signin`;
         const { data: res } = await axios.post("/auth/signin", loginUser);
-
         localStorage.setItem("token", JSON.stringify(res.user_token));
         localStorage.setItem("user", JSON.stringify(res.user));
-        // window.location = "/";
-        window.location.reload(false);
-        setTimeout(() => {
-          navigate("/");
-          setIsLoading(false);
-        }, 1000);
+        window.location = "/";
+        // window.location.reload(false);
+        // setTimeout(() => {
+        //   navigate("/");
+        //   setIsLoading(false);
+        // }, 1000);
       } catch (error) {
         if (
           error.response &&
@@ -50,6 +49,8 @@ const Signin = () => {
   const onSubmit = async (data) => {
     mutation.mutate(data);
   };
+
+  //parse cookie in browser to get token and user information
 
   const google = () => {
     window.open(`${import.meta.env.VITE_APP_BASE_URL}/auth/google`, "_self");

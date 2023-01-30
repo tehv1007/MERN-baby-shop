@@ -10,7 +10,7 @@ import PostPage from "../pages/Blog/PostPage";
 import Home from "../pages/Home/Home";
 import NotFound from "../pages/NotFound";
 import Profile from "../pages/User/Profile";
-import ViewCart from "../pages/ViewCart";
+import ViewCart from "../pages/ViewCart/Cart";
 import Products from "../pages/Products/Products";
 import OrderInfomation from "../pages/CheckOut/OrderInfomation";
 import ProductDetail from "../pages/Products/product-detail/ProductDetail";

@@ -1,6 +1,3 @@
-import { useForm } from "react-hook-form";
-import LocationForm from "../../components/location/LocationForm";
-
 const FormCheckOut = ({ register, errors }) => {
   return (
     <>

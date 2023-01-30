@@ -1,3 +1,4 @@
+import { getUser } from "../../services/authService";
 import Banner from "./Banner";
 import Brand from "./Brand";
 import Delivery from "./Delivery";
