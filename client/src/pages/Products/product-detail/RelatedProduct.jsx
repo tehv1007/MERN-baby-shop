@@ -5,7 +5,7 @@ import ProductCard from "../ProductCard";
 
 const RelatedProduct = ({ product }) => {
   const { data, isLoading } = useQuery({
-    queryKey: ["relatedProducts", product],
+    queryKey: ["products", product],
     queryFn: () => {
       return axios.get(`/products/related/${product.category}/${product._id}`);
     },

@@ -1,7 +1,23 @@
 // import Rating from "../../../components/common/Rating";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { getRandom } from "../../../services/productsService";
 import ProductGrid from "./ProductGrid";
 
 const TopratedProducts = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["products"],
+    queryFn: () => {
+      return axios.get(`/products`);
+    },
+    // cacheTime: 5 * 60 * 1000,
+  });
+
+  if (isLoading) return <h1>Loading...</h1>;
+  console.log(data);
+  const products = data.data;
+  const topRatedProducts = getRandom(products, 4);
+
   return (
     <div className="mt-8 lg:mt-16">
       {/* Container */}
@@ -22,7 +38,7 @@ const TopratedProducts = () => {
             </div>
           </div>
           {/* Cards */}
-          <ProductGrid />
+          <ProductGrid products={topRatedProducts} />
         </div>
       </div>
     </div>

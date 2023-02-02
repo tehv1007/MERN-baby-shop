@@ -6,6 +6,7 @@ import success from "../../assets/success.svg";
 const EmailVerify = () => {
   const [validUrl, setValidUrl] = useState();
   const param = useParams();
+  console.log(param);
 
   const url = `${import.meta.env.VITE_APP_BASE_URL}/auth/${param.id}/verify/${
     param.token

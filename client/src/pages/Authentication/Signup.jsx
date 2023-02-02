@@ -17,6 +17,7 @@ const Signup = () => {
   };
 
   const [msg, setMsg] = useState("");
+  const [show, setShow] = useState("false");
   const [error, setError] = useState("");
 
   const {

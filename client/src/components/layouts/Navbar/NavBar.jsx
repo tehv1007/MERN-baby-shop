@@ -7,16 +7,20 @@ import subNavLink from "./link";
 import NavLink from "./NavLink";
 import { getTotalQuantity } from "../../../services/cartService";
 import { getCartItems } from "../../../pages/ViewCart/useCart";
+import { useEffect } from "react";
 
 const Navbar = ({ user }) => {
   let totalQuantity = 0;
-  let items;
-  if (!user) items = [];
-  const { data, isLoading } = getCartItems();
-  if (isLoading) return <h1>Loading...</h1>;
-  items = data.data.products;
-  totalQuantity = getTotalQuantity(items);
+  // let items;
+  // if (!user) items = [];
+  // else {
+  //   const { data, isLoading } = getCartItems();
+  //   if (isLoading) return <h1>Loading...</h1>;
+  //   items = data.data.products;
+  //   totalQuantity = getTotalQuantity(items);
+  // }
 
+  // useEffect(() => {}, [user]);
   return (
     <div className="bg-white  shadow-md">
       {/* Containier */}

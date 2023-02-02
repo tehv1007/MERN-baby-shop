@@ -12,4 +12,5 @@ export const getCartItems = () => {
     });
     return { data, isLoading };
   }
+  return { data: [] };
 };
