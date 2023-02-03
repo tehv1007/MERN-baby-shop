@@ -9,8 +9,9 @@ const shippingFee = 5;
 const CartSummary = ({ user }) => {
   let items;
   if (!user) items = [];
-  const { data, isLoading } = getCartItems();
+  const { data, isLoading } = getCartItems(user);
   if (isLoading) return <h1>Loading...</h1>;
+  console.log(data);
   items = data.data.products;
   const subTotal = getTotalPrice(items);
   localStorage.setItem("total", Number((shippingFee + subTotal).toFixed(2)));
@@ -88,6 +89,7 @@ const Hide = () => {
 };
 
 const SidebarCheckOut = ({ user }) => {
+  console.log(user);
   const [display, setDisplay] = useState(true);
   const total = localStorage.getItem("total");
   return (

@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 import { InlineShareButtons } from "sharethis-reactjs";
-// import useBlogPost from "../../components/hooks/usePost";
 import fetchImage from "../../services/fetchImage";
 import axios from "axios";
 import { AiOutlineArrowLeft } from "react-icons/ai";
+import GlobalSpinner from "../../components/common/GlobalSpinner";
+import Loader from "../../components/common/Loader";
 
 const SocialSharing = ({ post, postId }) => {
   return (
@@ -56,7 +57,7 @@ const ImageRender = ({ post }) => {
     queryFn: () => fetchImage(featureMedia),
   });
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <Loader />;
   }
   console.log(imageSrc);
   return (
@@ -72,7 +73,7 @@ const PostPage = () => {
       axios.get(`https://heyfarming.com/wp-json/wp/v2/blog/${postId}`),
   });
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <GlobalSpinner />;
   }
 
   if (isError) {

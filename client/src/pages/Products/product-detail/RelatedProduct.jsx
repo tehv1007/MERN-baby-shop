@@ -3,7 +3,7 @@ import axios from "axios";
 import { getRandom } from "../../../services/productsService";
 import ProductCard from "../ProductCard";
 
-const RelatedProduct = ({ product }) => {
+const RelatedProduct = ({ product, user }) => {
   const { data, isLoading } = useQuery({
     queryKey: ["products", product],
     queryFn: () => {
@@ -14,8 +14,8 @@ const RelatedProduct = ({ product }) => {
 
   if (isLoading) return <h1>Loading...</h1>;
   const { data: products } = data;
-
   const relatedProducts = getRandom(products, 4);
+
   return (
     <>
       <h2 className="font-bold capitalize mb-8 text-center text-4xl">
@@ -24,7 +24,7 @@ const RelatedProduct = ({ product }) => {
       <div className="grid grid-cols-2 gap-6 pt-4 lg:grid-cols-4">
         {/* Product Card */}
         {relatedProducts?.map((item) => {
-          return <ProductCard product={item} key={item._id} />;
+          return <ProductCard product={item} key={item._id} user={user} />;
         })}
       </div>
     </>

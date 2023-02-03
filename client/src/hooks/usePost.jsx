@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import GlobalSpinner from "../components/common/GlobalSpinner";
 
 const useBlogPost = (postId) => {
   const { isLoading, isError, data, error } = useQuery({
@@ -9,7 +10,7 @@ const useBlogPost = (postId) => {
     },
   });
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <GlobalSpinner />;
   }
 
   if (isError) {

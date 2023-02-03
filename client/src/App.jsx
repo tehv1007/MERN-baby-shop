@@ -22,10 +22,27 @@ import Footer from "./components/layouts/Footer";
 import Signout from "./pages/Authentication/Signout";
 import { getUser } from "./services/authService";
 import ForceRedirect from "./components/auth/ForceRedirect";
+import axios from "axios";
+import MyProfile from "./pages/User/MyProfile";
 
 function App() {
+  const [anonymous, setAnonymous] = useState("");
   getUser();
-  const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    axios
+      .get("/users/find/63db79066e5e2b2bc30d6194")
+      .then(function (response) {
+        // handle success
+        setAnonymous(response.data);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+  }, []);
+
+  const user = JSON.parse(localStorage.getItem("user")) || anonymous;
   const [isConnected, setIsconnected] = useState(false);
 
   const checkUserToken = () => {
@@ -45,7 +62,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className="bg-white" style={{ height: "100vh" }}>
-        <Navbar Signout={Signout} user={isConnected} />
+        <Navbar user={user} isConnected={isConnected} />
         <Routes>
           <Route
             path="/profile"
@@ -55,7 +72,15 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/" element={<Home />} />
+          <Route
+            path="/profile/edit"
+            element={
+              <ProtectedRoute user={isConnected}>
+                <MyProfile user={user} />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/" element={<Home user={user} />} />
           <Route
             path="/signin"
             element={

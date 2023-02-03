@@ -1,23 +1,29 @@
-import { addItemToCart } from "../../../services/cartService";
+import { Link } from "react-router-dom";
+import Rating from "../../../components/review/Rating";
+import { addCartItem } from "../../ViewCart/useCart";
 
-const ProductCard = ({ product }) => {
-  const user = JSON.parse(localStorage.getItem("user"));
+const ProductCard = ({ product, user }) => {
+  const mutation = addCartItem(user, 1);
   const addToCart = () => {
-    addItemToCart(user, 1, product);
+    if (user) mutation.mutate(product);
   };
 
   return (
     <div>
       <div className="group relative">
-        <img
-          className="group rounded-t-md"
-          src={product.photos[0]}
-          alt={product.title}
-        />
+        <Link to={`/products/${product._id}`}>
+          <img
+            className="group rounded-t-md"
+            src={product.photos[0]}
+            alt={product.title}
+          />
+        </Link>
         <div className="text-center bg-gray-200 p-4 rounded-b-md relative">
-          <h4 className="pb-2">{product.title}</h4>
+          <Link to={`/products/${product._id}`}>
+            <h4 className="pb-2">{product.title}</h4>
+          </Link>
           <p className="pb-2">${product.price}</p>
-          {/* <Rating rating={5} /> */}
+          <Rating productId={product._id} />
           {/* <button className="bg-[#212529] text-white py-2 px-4 rounded-md  hover:bg-white hover:text-black md:px-6 lg:absolute -top-36 lg:left-[85px] xl:left-[95px] lg:hidden lg:group-hover:block transition duration-500 ">
             Add To Cart
           </button> */}

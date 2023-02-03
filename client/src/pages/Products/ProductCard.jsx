@@ -1,10 +1,18 @@
 import { Link } from "react-router-dom";
-import { addItemToCart } from "../../services/cartService";
+import Rating from "../../components/review/Rating";
+import { addItem } from "../../services/cartService";
+import { addCartItem } from "../ViewCart/useCart";
 
 const ProductCard = ({ product, user }) => {
+  const mutation = addCartItem(user, 1);
   const addToCart = () => {
-    addItemToCart(user, 1, product);
+    if (user) mutation.mutate(product);
+    else {
+      addItem(product);
+      window.location.reload(true);
+    }
   };
+
   return (
     <div className="group relative">
       <Link to={`/products/${product._id}`}>
@@ -19,7 +27,7 @@ const ProductCard = ({ product, user }) => {
           <h4 className="pb-2">{product.title}</h4>
         </Link>
         <p className="pb-2">${product.price}</p>
-        {/* <Rating rating={5} /> */}
+        <Rating productId={product._id} />
         {product.inStock > 0 ? (
           <button
             onClick={addToCart}

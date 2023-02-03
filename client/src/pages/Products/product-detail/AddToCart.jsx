@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { addItemToCart } from "../../../services/cartService";
+import { updateItem } from "../../../services/cartService";
+import { addCartItem } from "../../ViewCart/useCart";
 
 const AddToCart = ({ product, user }) => {
   const [quantity, setQuantity] = useState(1);
@@ -11,13 +12,10 @@ const AddToCart = ({ product, user }) => {
     setQuantity(event.target.value < 1 ? 1 : event.target.value);
   };
 
-  const addToCheckout = async () => {
-    addItemToCart(user, Number(quantity), product);
-    navigate(`/viewcart`);
-  };
+  const mutation = addCartItem(user, Number(quantity));
 
-  const addToCart = async () => {
-    addItemToCart(user, Number(quantity), product);
+  const addToCart = () => {
+    mutation.mutate(product);
   };
 
   return (
@@ -45,7 +43,10 @@ const AddToCart = ({ product, user }) => {
               <span>Add To Cart</span>
             </button>
             <button
-              onClick={addToCheckout}
+              onClick={() => {
+                addToCart();
+                navigate(`/viewcart`);
+              }}
               className="block w-full border border-black mb-3 text-center rounded-md py-2  hover:bg-black hover:cursor-pointer hover:text-white">
               <span>Buy It Now</span>
             </button>

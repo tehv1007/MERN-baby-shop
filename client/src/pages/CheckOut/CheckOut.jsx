@@ -13,6 +13,7 @@ import { getCartItems } from "../ViewCart/useCart";
 import { useNavigate } from "react-router-dom";
 
 const CheckOut = ({ user }) => {
+  console.log(user);
   const navigate = useNavigate();
   const info = JSON.parse(localStorage.getItem("shippingInfo"));
   const address = JSON.parse(localStorage.getItem("shippingInfo2"));
@@ -20,7 +21,7 @@ const CheckOut = ({ user }) => {
   const total = JSON.parse(localStorage.getItem("total"));
   let products;
   if (!user) products = [];
-  const { data, isLoading } = getCartItems();
+  const { data, isLoading } = getCartItems(user);
   if (isLoading) return <h1>Loading...</h1>;
   products = data.data.products;
 

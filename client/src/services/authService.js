@@ -1,3 +1,4 @@
+import axios from "axios";
 export const isAuthenticated = () => {
   if (typeof window == "undefined") {
     return false;

@@ -1,8 +1,7 @@
 import axios from "axios";
 import React, { useState, useRef } from "react";
-import { ROOT_URL } from "../../config";
 
-export default function AddReviewButton({ productName, productId }) {
+export default function AddReviewButton({ product }) {
   const ref = useRef();
   const reviewContentRef = useRef();
   const ratingRef = useRef();
@@ -21,9 +20,9 @@ export default function AddReviewButton({ productName, productId }) {
     try {
       const res = await axios({
         method: "POST",
-        url: `${ROOT_URL}/api/v1/reviews`,
+        url: `/reviews`,
         data: {
-          product: productId,
+          product: product._id,
           review: reviewContentRef.current.value,
           rating: ratingRef.current.value,
         },
@@ -54,7 +53,7 @@ export default function AddReviewButton({ productName, productId }) {
         <h2 className="text-2xl text-cyan-400 font-semibold text-center">
           Write A Review
         </h2>
-        <h3 className="text-lg text-slate-700 ">Product: {productName}</h3>
+        <h3 className="text-lg text-slate-700 ">Product: {product.title}</h3>
         <fieldset className="form-group">
           <label className="form-label" htmlFor="review-rating">
             Rating
@@ -82,7 +81,8 @@ export default function AddReviewButton({ productName, productId }) {
         <button
           className="submit-button disabled:bg-slate-300 disabled:text-slate-500"
           type="submit"
-          disabled={isLoading || message !== ""}>
+          // disabled={isLoading || message !== ""}
+        >
           Submit Review
         </button>
       </form>

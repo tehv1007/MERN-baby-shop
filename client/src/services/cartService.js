@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 export const getTotalPrice = (items) => {
@@ -12,32 +11,30 @@ export const getTotalQuantity = (items) => {
   }, 0);
 };
 
+//ok
 export const addItemToCart = async (user, quantity, product) => {
-  const cart = await axios.post(`/cart/${user._id}`, {
+  return await axios.post(`/cart/${user._id}`, {
     quantity: quantity,
     productId: product._id,
   });
-  console.log(cart);
 };
 
+//ok
 export const removeCartItem = async (user, product) => {
-  const cart = await axios.delete(`/cart/${user._id}/${product._id}`);
-  console.log(cart);
+  return await axios.delete(`/cart/${user._id}/${product._id}`);
 };
 
 export const updateCartItem = async (user, product, quantity) => {
-  const cart = await axios.put(`/cart/${user._id}/${product._id}`, {
+  return await axios.put(`/cart/${user._id}/${product._id}`, {
     quantity: quantity,
   });
-  console.log(cart);
 };
 
 export const emptyCart = async (user) => {
-  const cart = await axios.delete(`/cart/${user._id}`);
-  console.log(cart);
+  return await axios.delete(`/cart/${user._id}`);
 };
-// Another way to handle cart
-/*
+
+// handle cart with local storage
 export const addItem = (item, quantity = 1, next = (f) => f) => {
   let cart = [];
   if (typeof window !== "undefined") {
@@ -61,16 +58,16 @@ export const addItem = (item, quantity = 1, next = (f) => f) => {
   }
 };
 
-export const itemTotal = () => {
-  if (typeof window !== "undefined") {
-    if (localStorage.getItem("cart")) {
-      return JSON.parse(localStorage.getItem("cart")).length;
-    }
-  }
-  return 0;
-};
+// export const itemTotal = () => {
+//   if (typeof window !== "undefined") {
+//     if (localStorage.getItem("cart")) {
+//       return JSON.parse(localStorage.getItem("cart")).length;
+//     }
+//   }
+//   return 0;
+// };
 
-export const emptyCart = (next) => {
+export const emptyCartLocal = (next) => {
   if (typeof window !== "undefined") {
     localStorage.removeItem("cart");
     next();
@@ -120,4 +117,3 @@ export const removeItem = (productId) => {
   }
   return cart;
 };
-*/

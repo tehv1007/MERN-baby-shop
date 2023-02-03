@@ -1,10 +1,21 @@
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { useRef } from "react";
 import Review from "./Review";
 
-export default function Reviews({ reviews, closeReviews }) {
+export default function Reviews({ productId, closeReviews }) {
   const ref = useRef();
+
+  let reviews;
+  const { data } = useQuery({
+    queryKey: ["reviews", "products"],
+    queryFn: () => axios.get(`/reviews/${productId}`),
+  });
+
+  if (!data) reviews = [];
+  else reviews = data.data;
 
   return (
     <div
@@ -17,17 +28,21 @@ export default function Reviews({ reviews, closeReviews }) {
         <FontAwesomeIcon icon={faClose} onClick={closeReviews} />
       </button>
       <div className="mt-4 space-y-4">
-        {reviews.map((review, index) => (
+        {reviews?.map((review, index) => (
           <Review
             key={`review_${index}`}
-            userEmail={review.user.email}
-            rating={review.rating}
-            reviewContent={review.review}
-            ratedAt={new Date(review.createdAt).toLocaleDateString("en-US", {
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-            })}
+            email={review.review.email}
+            name={review.review.name}
+            rating={review.review.rating}
+            reviewContent={review.review.content}
+            ratedAt={new Date(review.review.createdAt).toLocaleDateString(
+              "en-US",
+              {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              }
+            )}
           />
         ))}
       </div>

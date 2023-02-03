@@ -35,6 +35,7 @@ const Signup = () => {
         //   const url = `${import.meta.env.VITE_APP_BASE_URL}/auth/signup`;
         const { data: res } = await axios.post("/auth/signup", newUser);
         setMsg(res.message);
+        setShow(true);
       } catch (error) {
         if (
           error.response &&
@@ -42,6 +43,7 @@ const Signup = () => {
           error.response.status <= 500
         ) {
           setError(error.response.data.message);
+          setShow(false);
         }
       }
     },
@@ -108,12 +110,12 @@ const Signup = () => {
                 register={register}
                 errors={errors.confirmPassword}
               />
-              {error && (
+              {error && !show && (
                 <div className="p-4 text-sm bg-red-600 text-white rounded text-center border my-2">
                   {error}
                 </div>
               )}
-              {msg && (
+              {msg && show && (
                 <div className="p-4 text-sm  bg-green-500  text-white rounded text-center border my-2">
                   {msg}
                 </div>

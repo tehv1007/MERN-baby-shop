@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import PostCardItem from "./PostCardItem";
+import GlobalSpinner from "../../components/common/GlobalSpinner";
 
 const BlogPage = () => {
   const { isLoading, isError, data, error } = useQuery({
@@ -11,7 +12,13 @@ const BlogPage = () => {
   });
 
   if (isLoading) {
+
+    return <GlobalSpinner/>;
+
     return <span>Loading...</span>;
+
+    return <GlobalSpinner />;
+
   }
 
   if (isError) {

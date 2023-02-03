@@ -2,7 +2,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Review(props) {
-  const { reviewContent, rating, userEmail, ratedAt } = props;
+  const { reviewContent, rating, name, ratedAt } = props;
   return (
     <div className="border border-slate-600 p-3 rounded-lg">
       <div className="flex justify-between">
@@ -22,7 +22,7 @@ export default function Review(props) {
         </div>
         <span className="text-slate-700 font-medium">At {ratedAt}</span>
       </div>
-      <h3 className="text-lg text-slate-700 font-medium">By: {userEmail}</h3>
+      <h3 className="text-lg text-slate-700 font-medium">By: {name}</h3>
       <p className="mt-2">{reviewContent}</p>
     </div>
   );

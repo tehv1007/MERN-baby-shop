@@ -5,6 +5,10 @@ import ImageSlider from "./ImageSlider";
 import axios from "axios";
 import AddToCart from "./AddToCart";
 import RelatedProduct from "./RelatedProduct";
+import CustomerReview from "./CustomerReview";
+import AddReviewButton from "../../../components/review/AddReview";
+import Rating from "../../../components/review/Rating";
+import Reviews from "../../../components/review/Reviews";
 
 const ProductDetail = ({ user }) => {
   const [imageIndex, setImageIndex] = useState(0);
@@ -66,7 +70,7 @@ const ProductDetail = ({ user }) => {
             </span>
             <div className="mb-[10px] flex gap-1">
               {/* rating */}
-              {/* <Rating /> */}
+              <Rating productId={productId} />
             </div>
             <div>
               {/* description */}
@@ -105,72 +109,12 @@ const ProductDetail = ({ user }) => {
                 </button>
               </span>
             </div>
-            {showForm && (
-              <div>
-                <hr className="mt-5" />
-                <form className="mt-5 lg:pl-[30%]">
-                  {/* review form */}
-                  <h5>Write a review</h5>
-                  <fieldset>
-                    {/* name&contact */}
-                    <div>
-                      <p className="text-sm mt-2.5">Name</p>
-                      <input
-                        type="text"
-                        name="review[author]"
-                        placeholder="Enter your name"
-                        className="mt-2 border pl-4 py-1.5 text-sm w-full lg:w-[70%]"
-                      />
-                    </div>
-                    <div>
-                      <p className="text-sm mt-2.5">Email</p>
-                      <input
-                        type="email"
-                        name="review[email]"
-                        placeholder="john.smith@example.com"
-                        className="mt-2 border pl-4 py-1.5 text-sm w-full lg:w-[70%]"
-                      />
-                    </div>
-                  </fieldset>
-                  <fieldset>
-                    {/* rating&review */}
-                    {/* rating */}
-                    {/* <div>
-                      <p className="text-sm mt-2.5">Rating</p>
-                      <Rating className="flex justify-center my-1.5" />
-                    </div> */}
-                    <div>
-                      <p className="text-sm mt-2.5">Review Title</p>
-                      <input
-                        type="text"
-                        name="review[reviewtitle]"
-                        placeholder="Give your review a title"
-                        className="mt-2 border pl-4 py-1.5 text-sm w-full lg:w-[70%]"
-                      />
-                    </div>
-                    <div>
-                      <p className="text-sm mt-2.5">Body of Review (1500)</p>
-                      <textarea
-                        id="message"
-                        rows="4"
-                        className="mt-2 p-2.5 w-full lg:w-[70%] text-sm border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Write your comments here"></textarea>
-                    </div>
-                  </fieldset>
-                  <div className="">
-                    <input
-                      type="submit"
-                      value="Submit Review"
-                      className="my-4 text-center rounded-xl px-3.5 py-2.5 text-sm bg-slate-700 hover:bg-black hover:cursor-pointer text-white"
-                    />
-                  </div>
-                </form>
-              </div>
-            )}
+            {showForm && <CustomerReview productId={productId} />}
           </div>
         </div>
       </div>
-      <RelatedProduct product={product} />
+      {/* <Reviews productId={productId} /> */}
+      <RelatedProduct product={product} user={user} />
     </section>
   );
 };

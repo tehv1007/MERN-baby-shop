@@ -9,7 +9,7 @@ const ColumnDisplay = () => {
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="w-7 h-7"
+        className="w-7 h-7 opacity-50"
       >
         <path
           strokeLinecap="round"

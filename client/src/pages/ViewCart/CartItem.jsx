@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { removeCartItem, updateCartItem } from "../../services/cartService";
+import {
+  removeCartItem,
+  removeItem,
+  updateCartItem,
+  updateItem,
+} from "../../services/cartService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const CartItem = ({ product, user }) => {
@@ -9,14 +14,20 @@ const CartItem = ({ product, user }) => {
   const deleteItem = useMutation({
     mutationFn: (product) => removeCartItem(user, product),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      queryClient.invalidateQueries({ queryKey: ["cart", "products"] });
+    },
+  });
+
+  const updateItems = useMutation({
+    mutationFn: (product) => updateCartItem(user, product, quantity),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart", "products"] });
     },
   });
 
   useEffect(() => {
-    quantity > 0
-      ? updateCartItem(user, product, quantity)
-      : removeCartItem(user, product);
+    updateItem(product._id, quantity - product.count);
+    quantity > 0 ? updateItems.mutate(product) : deleteItem.mutate(product);
   }, [quantity]);
 
   return (
@@ -67,7 +78,13 @@ const CartItem = ({ product, user }) => {
                 className="border rounded-md inline-block h-10 w-20 text-center"
               />
             </div>
-            <button onClick={() => deleteItem.mutate(product)}>
+            <button
+              onClick={() => {
+                if (user) deleteItem.mutate(product);
+                else {
+                  removeItem(product._id);
+                }
+              }}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

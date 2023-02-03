@@ -4,7 +4,7 @@ import axios from "axios";
 import { getRandom } from "../../../services/productsService";
 import ProductGrid from "./ProductGrid";
 
-const TopratedProducts = () => {
+const TopratedProducts = ({ user }) => {
   const { data, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: () => {
@@ -38,7 +38,7 @@ const TopratedProducts = () => {
             </div>
           </div>
           {/* Cards */}
-          <ProductGrid products={topRatedProducts} />
+          <ProductGrid products={topRatedProducts} user={user} />
         </div>
       </div>
     </div>

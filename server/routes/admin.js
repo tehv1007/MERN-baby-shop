@@ -3,6 +3,7 @@ const {
   deleteUser,
   getAllUsers,
   getUserStats,
+  addUser,
 } = require("../controllers/userController");
 
 const {
@@ -21,39 +22,41 @@ const {
 
 // Users
 //GET ALL USER
-router.get("/", getAllUsers);
+router.get("/users", getAllUsers);
+
+//Create Anonymous USER
+router.post("/users", addUser);
 
 //DELETE user by ID
-router.delete("/:id", deleteUser);
+router.delete("/users/:id", deleteUser);
 
 //GET USER STATS
-router.get("/stats", getUserStats);
+router.get("/users/stats", getUserStats);
 
 //Order
 //GET ALL orders
-router.get("/", getAllOrders);
+router.get("/orders", getAllOrders);
 
 //DELETE an order by ID
-router.delete("/:userId", deleteOrder);
+router.delete("/orders/:userId", deleteOrder);
 
 // GET monthly income
-router.get("/income", getIncome);
+router.get("/orders/income", getIncome);
 
 //Products
-
 // GET all products
-router.get("/", getAllProduct);
+router.get("/products", getAllProduct);
 
 // UPDATE a product by ID
-router.put("/:productId", updateProduct);
+router.put("/products/:productId", updateProduct);
 
 // DELETE product by ID
-router.delete("/:productId", deleteProduct);
+router.delete("/products/:productId", deleteProduct);
 
 // Search product
-router.get("/search", searchProduct);
+router.get("/products/search", searchProduct);
 
 // CREATE a new product
-router.post("/new", addProduct);
+router.post("/products/new", addProduct);
 
 module.exports = router;

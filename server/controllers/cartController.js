@@ -82,6 +82,7 @@ exports.deleteCart = async (req, res) => {
   }
 };
 
+// Delete user cart
 // exports.deleteCart = async (req, res) => {
 //   try {
 //     const userId = req.params.userId;

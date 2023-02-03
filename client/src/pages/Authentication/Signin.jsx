@@ -50,8 +50,6 @@ const Signin = () => {
     mutation.mutate(data);
   };
 
-  //parse cookie in browser to get token and user information
-
   const google = () => {
     window.open(`${import.meta.env.VITE_APP_BASE_URL}/auth/google`, "_self");
   };

@@ -5,12 +5,12 @@ import Delivery from "./Delivery";
 import Hero from "./Hero";
 import TopratedProducts from "./TopProducts/TopRatedProducts";
 
-const Home = () => {
+const Home = ({ user }) => {
   return (
     <>
       <Banner />
       <Delivery />
-      <TopratedProducts />
+      <TopratedProducts user={user} />
       <Hero />
       <Brand />
     </>

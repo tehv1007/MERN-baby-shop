@@ -1,5 +1,10 @@
-export default function Rating(props) {
-  const { rating, numReviews, caption } = props;
+import { fetchReviews } from "./fetchReviews";
+
+export default function Rating({ caption, productId }) {
+  const data = fetchReviews(productId);
+  const rating = data.rating;
+  const totalReviews = data.totalReviews;
+
   return (
     <div className="rating">
       <span>
@@ -55,7 +60,7 @@ export default function Rating(props) {
       {caption ? (
         <span>{caption}</span>
       ) : (
-        <span>{numReviews + " reviews"}</span>
+        <span>{totalReviews + " reviews"}</span>
       )}
     </div>
   );

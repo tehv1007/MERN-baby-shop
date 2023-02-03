@@ -7,20 +7,21 @@ import subNavLink from "./link";
 import NavLink from "./NavLink";
 import { getTotalQuantity } from "../../../services/cartService";
 import { getCartItems } from "../../../pages/ViewCart/useCart";
-import { useEffect } from "react";
 
-const Navbar = ({ user }) => {
+const Navbar = ({ user, isConnected }) => {
   let totalQuantity = 0;
-  // let items;
-  // if (!user) items = [];
-  // else {
-  //   const { data, isLoading } = getCartItems();
-  //   if (isLoading) return <h1>Loading...</h1>;
-  //   items = data.data.products;
-  //   totalQuantity = getTotalQuantity(items);
+  let items;
+  // if (!user) {
+  //   items = JSON.parse(localStorage.getItem("cart"));
+  //   totalQuantity = items ? getTotalQuantity(items) : 0;
   // }
+  if (user) {
+    const { data, isLoading } = getCartItems(user);
+    if (isLoading) return <h1>Loading...</h1>;
+    items = data.data.products;
+    totalQuantity = getTotalQuantity(items);
+  }
 
-  // useEffect(() => {}, [user]);
   return (
     <div className="bg-white  shadow-md">
       {/* Containier */}
@@ -53,10 +54,24 @@ const Navbar = ({ user }) => {
           </div>
           {/* Button */}
           <div className="flex gap-4 md:gap-9">
-            <Link to={user ? "/profile" : "/signin"}>
-              <BiUser className="text-3xl text-[#212529]" />
-            </Link>
-            <Link to="/signout">Signout</Link>
+            <div className="flex items-center gap-4 md:gap-9 text-xl">
+              {isConnected ? (
+                <div className="flex gap-3 items-center">
+                  <Link to="/profile">
+                    <span className="hidden md:block">My account</span>
+                    <BiUser className="md:hidden text-3xl text-[#212529]" />
+                  </Link>
+                  <span>|</span>
+                  <Link to="/signout">Signout</Link>
+                </div>
+              ) : (
+                <div className="flex gap-3 items-center">
+                  <Link to="/signin">Signin</Link>
+                  <span>|</span>
+                  <Link to="/signup">Signup</Link>
+                </div>
+              )}
+            </div>
             <div className="">
               <button className="relative">
                 <Link to="/viewcart">

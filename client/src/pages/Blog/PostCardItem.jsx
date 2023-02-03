@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import Loader from "../../components/common/Loader";
 import fetchImage from "../../services/fetchImage";
 
 const PostCardItem = ({ featureMedia, title, content, author, url, date }) => {
@@ -16,7 +17,7 @@ const PostCardItem = ({ featureMedia, title, content, author, url, date }) => {
   };
   const dateFormated = new Date(date);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader />;
 
   return (
     <>
