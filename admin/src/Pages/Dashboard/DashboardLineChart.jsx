@@ -23,7 +23,7 @@ const DataChart = [
   {
     id: 4,
     year: 2019,
-    userGain: 87000,
+    userGain: 65000,
     userLost: 4555,
   },
   {

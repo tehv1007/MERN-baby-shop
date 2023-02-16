@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import GlobalSpinner from "../../../components/common/GlobalSpinner";
 import { getRandom } from "../../../services/productsService";
 import ProductCard from "../ProductCard";
 
@@ -12,7 +13,7 @@ const RelatedProduct = ({ product, user }) => {
     // cacheTime: 5 * 60 * 1000,
   });
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <GlobalSpinner />;
   const { data: products } = data;
   const relatedProducts = getRandom(products, 4);
 

@@ -19,13 +19,12 @@ const Sidbar = ({ children }) => {
   return (
     <>
       {/* Container */}
-      <div className="">
+      <div className="h-screen">
         {/* Layout */}
-        <div className="flex">
+        <div className="flex overflow-auto">
           {/* Sidbar */}
           <div
-            className={`${open ? "w-[260px]" : "w-12"} bg-[#3D405B] h-screen`}
-          >
+            className={`${open ? "w-[260px]" : "w-12"} bg-[#3D405B] h-screen`}>
             <div className="mt-2 ml-2 mb-8 flex items-center gap-4">
               <img
                 style={{ display: open ? "block" : "none" }}
@@ -35,39 +34,37 @@ const Sidbar = ({ children }) => {
               />
               <FiMenu
                 onClick={toggle}
-                className="text-white text-3xl cursor-pointer"
+                className="text-white text-lg cursor-pointer"
               />
             </div>
-            {menuItems.map((item) => (
-              <NavLink
-                to={item.path}
-                key={item}
-                activeclassname="bg-blue-200"
-                className="py-[10px] px-[8px] flex items-center gap-2 transition-all duration-500 hover:bg-blue-200"
-              >
-                <p className="text-white text-3xl">{item.icon}</p>
+            <div className="flex flex-col content-between">
+              {menuItems.map((item, index) => (
+                <NavLink
+                  to={item.path}
+                  key={index}
+                  className="py-[10px] px-[8px] flex items-center gap-2 transition-all duration-500 hover:bg-blue-200">
+                  <p className="text-white text-lg">{item.icon}</p>
+                  <p
+                    style={{ display: open ? "block" : "none" }}
+                    className="text-white text-lg">
+                    {item.name}
+                  </p>
+                </NavLink>
+              ))}
+              <div className="mt-20 ml-2 flex items-center gap-2">
+                <FiLogOut className="text-white text-lg" />
                 <p
                   style={{ display: open ? "block" : "none" }}
-                  className="text-white text-2xl"
-                >
-                  {item.name}
+                  className="text-white text-lg">
+                  Log out
                 </p>
-              </NavLink>
-            ))}
-
-            <div className="mt-56 ml-2 flex items-center gap-2">
-              <FiLogOut className="text-white text-3xl" />
-              <p
-                style={{ display: open ? "block" : "none" }}
-                className="text-white text-2xl"
-              >
-                Log out
-              </p>
+              </div>
             </div>
           </div>
           {/* Page */}
-          <div className=" p-5 text-2xl font-semibold">
-            <main className={`${open ? "w-[80%]" : "w-[94%]"} fixed`}>
+          <div className=" p-5 text-lg font-semibold">
+            <main
+              className={`${open ? "w-[80%]" : "w-[94%]"} fixed overflow-auto`}>
               {children}
             </main>
           </div>

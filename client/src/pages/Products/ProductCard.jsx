@@ -1,16 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Rating from "../../components/review/Rating";
-import { addItem } from "../../services/cartService";
 import { addCartItem } from "../ViewCart/useCart";
 
 const ProductCard = ({ product, user }) => {
   const mutation = addCartItem(user, 1);
+  const navigate = useNavigate();
   const addToCart = () => {
     if (user) mutation.mutate(product);
-    else {
-      addItem(product);
-      window.location.reload(true);
-    }
+    else navigate("/signin");
   };
 
   return (
@@ -27,7 +24,11 @@ const ProductCard = ({ product, user }) => {
           <h4 className="pb-2">{product.title}</h4>
         </Link>
         <p className="pb-2">${product.price}</p>
-        <Rating productId={product._id} />
+        <Rating
+          productId={product._id}
+          avgRating={product.avgRating}
+          numReviews={product.numReviews}
+        />
         {product.inStock > 0 ? (
           <button
             onClick={addToCart}

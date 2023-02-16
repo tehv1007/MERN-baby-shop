@@ -17,7 +17,7 @@ const Products = () => {
     queryKey: ["products"],
     queryFn: () => {
       setPage(1);
-      return axios.get("/products");
+      return axios.get("products");
     },
     cacheTime: 5 * 60 * 1000,
   });

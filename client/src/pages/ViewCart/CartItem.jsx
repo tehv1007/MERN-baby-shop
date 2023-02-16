@@ -6,6 +6,9 @@ import {
   updateItem,
 } from "../../services/cartService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import MinusIcon from "../../components/common/icons/MinusIcon";
+import PlusIcon from "../../components/common/icons/PlusIcon";
+import { toast } from "react-toastify";
 
 const CartItem = ({ product, user }) => {
   const [quantity, setQuantity] = useState(product.quantity);
@@ -15,6 +18,7 @@ const CartItem = ({ product, user }) => {
     mutationFn: (product) => removeCartItem(user, product),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart", "products"] });
+      toast.success("Successfully removed product");
     },
   });
 
@@ -26,7 +30,7 @@ const CartItem = ({ product, user }) => {
   });
 
   useEffect(() => {
-    updateItem(product._id, quantity - product.count);
+    // updateItem(product._id, quantity - product.count);
     quantity > 0 ? updateItems.mutate(product) : deleteItem.mutate(product);
   }, [quantity]);
 
@@ -67,16 +71,29 @@ const CartItem = ({ product, user }) => {
         {/* </div> */}
         <td>
           <div className="hidden md:flex gap-2 items-center">
-            <div className="">
+            <div className="flex justify-around items-center border p-1.5 rounded-md w-1/4">
+              <button
+                onClick={() => {
+                  setQuantity(quantity - 1);
+                }}
+                className={` ${quantity <= 0 && "opacity-50"}`}
+                disabled={quantity <= 0}>
+                <MinusIcon />
+              </button>
               <input
                 type="number"
-                min={0}
-                value={quantity}
+                value={product.quantity}
                 onChange={(e) => {
                   setQuantity(e.target.value);
                 }}
-                className="border rounded-md inline-block h-10 w-20 text-center"
+                className="text-center w-8"
               />
+              <button
+                onClick={() => {
+                  setQuantity(quantity + 1);
+                }}>
+                <PlusIcon />
+              </button>
             </div>
             <button
               onClick={() => {

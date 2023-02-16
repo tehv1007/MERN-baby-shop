@@ -1,5 +1,3 @@
-import React from "react";
-
 const MyOrders = ({ order }) => {
   return (
     <div className="w-full mt-4 px-2 lg:px-4">
@@ -23,19 +21,24 @@ const MyOrders = ({ order }) => {
         <section className="flex gap-5 p-2">
           {/* ProductInfo */}
           <ul className="w-5/6">
-            {/* <img
-                  className="w-1/6 rounded-md"
-                  src="https://cdn.shopify.com/s/files/1/0618/2889/0871/products/maxi1_713x.webp?v=1657630686"
-                  alt=""
-                /> */}
             {order.products.map((p, index) => (
-              <li key={index}>
-                <span>
-                  <h4 className="pb-2">{p.productId}</h4>
-                </span>
-                <div className="flex justify-between">
-                  <h1>{p.quantity}</h1>
-                  <p className="pb-4 font-semibold">${p.price}</p>
+              <li key={index} className="flex gap-5">
+                <img
+                  className="w-1/6 rounded-md"
+                  src={
+                    p.image ||
+                    "https://cdn.shopify.com/s/files/1/0618/2889/0871/products/maxi1_713x.webp?v=1657630686"
+                  }
+                  alt=""
+                />
+                <div className="w-full">
+                  <span>
+                    <h4 className="pb-2">{p.name || p.productId}</h4>
+                  </span>
+                  <div className="flex justify-between">
+                    <h1>x{p.quantity}</h1>
+                    <p className="pb-4 font-semibold">${p.price}</p>
+                  </div>
                 </div>
               </li>
             ))}

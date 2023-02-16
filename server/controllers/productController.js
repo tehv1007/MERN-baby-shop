@@ -83,10 +83,22 @@ exports.deleteProduct = async (req, res) => {
   res.json(deletedProduct);
 };
 
+// Get all products categories
+exports.getCategories = async (req, res) => {
+  const categories = await Product.distinct("category");
+  res.json(categories);
+};
+
+// Get products of category
+exports.getProductsByCategory = async (req, res) => {
+  const products = await Product.find({ category: req.params.category });
+  res.json({ products: products, total: 5, skip: 0, limit: 5 });
+};
+
 // GET related products
 exports.listRelated = async (req, res) => {
   const products = await Product.find({
-    _id: { $ne: req.params._id },
+    _id: { $ne: req.params.productId },
     category: req.params.category,
   });
   res.json(products);

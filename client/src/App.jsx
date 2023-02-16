@@ -22,27 +22,13 @@ import Footer from "./components/layouts/Footer";
 import Signout from "./pages/Authentication/Signout";
 import { getUser } from "./services/authService";
 import ForceRedirect from "./components/auth/ForceRedirect";
-import axios from "axios";
 import MyProfile from "./pages/User/MyProfile";
+import { ToastContainer } from "react-toastify";
 
 function App() {
-  const [anonymous, setAnonymous] = useState("");
   getUser();
 
-  useEffect(() => {
-    axios
-      .get("/users/find/63db79066e5e2b2bc30d6194")
-      .then(function (response) {
-        // handle success
-        setAnonymous(response.data);
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      });
-  }, []);
-
-  const user = JSON.parse(localStorage.getItem("user")) || anonymous;
+  const user = JSON.parse(localStorage.getItem("user"));
   const [isConnected, setIsconnected] = useState(false);
 
   const checkUserToken = () => {
@@ -114,11 +100,7 @@ function App() {
           <Route path="/viewcart" element={<ViewCart user={user} />} />
           <Route
             path="/checkout/:userId/infomation"
-            element={
-              <ProtectedRoute user={isConnected}>
-                <OrderInfomation user={user} />
-              </ProtectedRoute>
-            }
+            element={<OrderInfomation user={user} />}
           />
           <Route
             path="/checkout/:userId/shipping"
@@ -130,6 +112,18 @@ function App() {
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss={false}
+          draggable={false}
+          pauseOnHover={false}
+          theme="light"
+        />
         <Footer />
       </div>
     </BrowserRouter>

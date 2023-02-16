@@ -1,6 +1,8 @@
 // import Rating from "../../../components/common/Rating";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import GlobalSpinner from "../../../components/common/GlobalSpinner";
+import Loader from "../../../components/common/Loader";
 import { getRandom } from "../../../services/productsService";
 import ProductGrid from "./ProductGrid";
 
@@ -13,7 +15,7 @@ const TopratedProducts = ({ user }) => {
     // cacheTime: 5 * 60 * 1000,
   });
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <GlobalSpinner />;
   console.log(data);
   const products = data.data;
   const topRatedProducts = getRandom(products, 4);

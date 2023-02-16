@@ -1,14 +1,12 @@
 const router = require("express").Router();
 const {
-  getAllReviews,
   getReviewById,
-  addReview,
   deleteReview,
   editReview,
+  addReviewProduct,
 } = require("../controllers/reviewController");
 
-// router.get("/", getAllReviews);
-router.post("/", addReview);
+router.post("/:productId/:userId", addReviewProduct);
 
 router.get("/:productId", getReviewById);
 

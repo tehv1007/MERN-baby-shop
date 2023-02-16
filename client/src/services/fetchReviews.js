@@ -4,12 +4,14 @@ import axios from "axios";
 export function fetchReviews(productId) {
   let reviews;
   const { data } = useQuery({
-    queryKey: ["reviews"],
+    queryKey: ["reviews", "products"],
     queryFn: () => axios.get(`/reviews/${productId}`),
   });
 
   if (!data) reviews = [];
   else reviews = data.data;
+  console.log(data);
+
   let totalRating = reviews.reduce((acc, review) => acc + review, 0) || 0;
   let totalReviews = reviews.length;
   let rating = 0;

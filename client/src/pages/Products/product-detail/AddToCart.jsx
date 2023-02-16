@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import MinusIcon from "../../../components/common/icons/MinusIcon";
+import PlusIcon from "../../../components/common/icons/PlusIcon";
 import { updateItem } from "../../../services/cartService";
 import { addCartItem } from "../../ViewCart/useCart";
 
@@ -15,7 +17,8 @@ const AddToCart = ({ product, user }) => {
   const mutation = addCartItem(user, Number(quantity));
 
   const addToCart = () => {
-    mutation.mutate(product);
+    if (!user) navigate("/signin");
+    else mutation.mutate(product);
   };
 
   return (
@@ -23,13 +26,22 @@ const AddToCart = ({ product, user }) => {
       <div className="mt-3">
         {/* quantity */}
         <h5 className="pb-2">Quantity</h5>
-        <div>
+        <div className="flex justify-around border gap-2 p-1.5 rounded-md w-1/5">
+          <button
+            onClick={() => setQuantity(quantity - 1)}
+            className={` ${quantity <= 0 && "opacity-50"}`}
+            disabled={quantity <= 0}>
+            <MinusIcon />
+          </button>
           <input
             type="number"
             value={quantity}
             onChange={handleChange}
-            className="border rounded-md inline-block h-10 w-20 text-center"
+            className="w-10 text-center"
           />
+          <button onClick={() => setQuantity(quantity + 1)}>
+            <PlusIcon />
+          </button>
         </div>
       </div>
 
@@ -44,8 +56,11 @@ const AddToCart = ({ product, user }) => {
             </button>
             <button
               onClick={() => {
-                addToCart();
-                navigate(`/viewcart`);
+                if (!user) navigate("/signin");
+                else {
+                  addToCart();
+                  navigate(`/viewcart`);
+                }
               }}
               className="block w-full border border-black mb-3 text-center rounded-md py-2  hover:bg-black hover:cursor-pointer hover:text-white">
               <span>Buy It Now</span>

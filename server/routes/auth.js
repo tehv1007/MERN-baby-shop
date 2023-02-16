@@ -6,6 +6,7 @@ const {
   signup,
   verifyEmail,
 } = require("../controllers/authController");
+const { verifyToken } = require("../utility/verifyToken");
 
 // Create new user - POST
 router.post("/signup", signup);

@@ -32,7 +32,6 @@ const Signup = () => {
   const mutation = useMutation({
     mutationFn: async (newUser) => {
       try {
-        //   const url = `${import.meta.env.VITE_APP_BASE_URL}/auth/signup`;
         const { data: res } = await axios.post("/auth/signup", newUser);
         setMsg(res.message);
         setShow(true);

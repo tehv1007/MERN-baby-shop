@@ -6,9 +6,9 @@ import axios from "axios";
 import AddToCart from "./AddToCart";
 import RelatedProduct from "./RelatedProduct";
 import CustomerReview from "./CustomerReview";
-import AddReviewButton from "../../../components/review/AddReview";
 import Rating from "../../../components/review/Rating";
 import Reviews from "../../../components/review/Reviews";
+import GlobalSpinner from "../../../components/common/GlobalSpinner";
 
 const ProductDetail = ({ user }) => {
   const [imageIndex, setImageIndex] = useState(0);
@@ -20,11 +20,11 @@ const ProductDetail = ({ user }) => {
 
   const { productId } = useParams();
   const { data, isLoading } = useQuery({
-    queryKey: ["products", productId],
+    queryKey: ["products", "reviews"],
     queryFn: () => axios.get(`/products/${productId}`),
   });
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <GlobalSpinner />;
   const { data: product } = data;
 
   return (
@@ -70,7 +70,11 @@ const ProductDetail = ({ user }) => {
             </span>
             <div className="mb-[10px] flex gap-1">
               {/* rating */}
-              <Rating productId={productId} />
+              <Rating
+                productId={productId}
+                numReviews={product.numReviews}
+                avgRating={product.avgRating}
+              />
             </div>
             <div>
               {/* description */}
@@ -99,7 +103,15 @@ const ProductDetail = ({ user }) => {
             <div className="md:flex justify-between">
               <span>
                 <h3 className="text-2xl mb-2">Customer Reviews</h3>
-                <p>No reviews yet</p>
+                {product.numReviews <= 0 ? (
+                  <p>No reviews yet</p>
+                ) : (
+                  <Rating
+                    productId={productId}
+                    numReviews={product.numReviews}
+                    avgRating={product.avgRating}
+                  />
+                )}
               </span>
               <span>
                 <button
@@ -109,7 +121,26 @@ const ProductDetail = ({ user }) => {
                 </button>
               </span>
             </div>
-            {showForm && <CustomerReview productId={productId} />}
+
+            {/* Review form */}
+            {!user ? (
+              <p className="mt-5 text-lg">
+                You need to{" "}
+                <a className="underline text-blue-500" href="/signin">
+                  Login
+                </a>{" "}
+                to write a review
+              </p>
+            ) : (
+              <>
+                {showForm && (
+                  <CustomerReview productId={productId} user={user} />
+                )}
+              </>
+            )}
+
+            {/* Review list */}
+            <Reviews productId={productId} />
           </div>
         </div>
       </div>

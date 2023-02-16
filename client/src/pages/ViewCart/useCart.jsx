@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { addItemToCart } from "../../services/cartService";
+import { toast } from "react-toastify";
 
 export const getCartItems = (user) => {
   if (user) {
@@ -19,6 +20,7 @@ export const addCartItem = (user, quantity) => {
     mutationFn: (product) => addItemToCart(user, quantity, product),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart", "products"] });
+      toast.success("Successfully add product to cart");
     },
   });
   return addCartItem;

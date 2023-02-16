@@ -10,10 +10,9 @@ import { isAuthenticated } from "../../services/authService";
 import { useEffect, useState } from "react";
 import { emptyCart } from "../../services/cartService";
 import { getCartItems } from "../ViewCart/useCart";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const CheckOut = ({ user }) => {
-  console.log(user);
   const navigate = useNavigate();
   const info = JSON.parse(localStorage.getItem("shippingInfo"));
   const address = JSON.parse(localStorage.getItem("shippingInfo2"));
@@ -101,7 +100,7 @@ const CheckOut = ({ user }) => {
                   loading: false,
                   success: true,
                 });
-                navigate("/");
+                navigate("/profile");
               })
               .catch((error) => {
                 console.log(error);

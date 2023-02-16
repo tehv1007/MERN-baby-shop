@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
+import GlobalSpinner from "../../components/common/GlobalSpinner";
 import { getTotalPrice } from "../../services/cartService";
 import CartItem from "./CartItem";
 import { getCartItems } from "./useCart";
 
 const ViewCart = ({ user }) => {
   let items;
-  // if (!user) items = JSON.parse(localStorage.getItem("cart"));
   const { data, isLoading } = getCartItems(user);
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <GlobalSpinner />;
   items = data?.data?.products || [];
   console.log(items);
 
@@ -26,7 +26,7 @@ const ViewCart = ({ user }) => {
               Continue shopping
             </a>
           </div>
-          {items ? (
+          {items.length <= 0 ? (
             <div className="text-3xl font-medium leading-9 m-8 text-center">
               Your cart is empty
             </div>

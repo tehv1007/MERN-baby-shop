@@ -1,23 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { fetchReviews } from "../../services/fetchReviews";
-
-export default function Rating({ productId, avgRating, numReviews }) {
-  // let reviews;
-  // const { data } = useQuery({
-  //   queryKey: ["reviews", "products"],
-  //   queryFn: () => axios.get(`/reviews/${productId}`),
-  // });
-
-  // if (!data) reviews = [];
-  // else reviews = data.data;
-  // console.log(data);
-
-  // let totalRating = reviews.reduce((acc, review) => acc + review, 0) || 0;
-  // let numReviews = reviews.length;
-  // let avgRating = 0;
-  // avgRating = numReviews > 0 ? (totalRating / numReviews).toFixed(1) : 0;
-
+export default function RatingItem({ avgRating, numReviews = -1 }) {
   return (
     <div className="rating">
       <span>

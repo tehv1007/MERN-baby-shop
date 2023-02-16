@@ -1,4 +1,4 @@
-import ProductCard from "./ProductCard";
+import ProductCard from "../../Products/ProductCard";
 
 const ProductGrid = ({ products, user }) => {
   return (

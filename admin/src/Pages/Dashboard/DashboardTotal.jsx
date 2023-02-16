@@ -23,7 +23,7 @@ const DashboardData = [
     id: 2,
     imgUrl: "https://img.icons8.com/arcade/48/home.png",
     name: "Total Expenses",
-    total: "2,456",
+    total: "4.912",
   },
   {
     id: 3,

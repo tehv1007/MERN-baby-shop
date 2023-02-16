@@ -13,6 +13,8 @@ exports.addCart = async (req, res) => {
       res.status(404).send("Item not found!");
     }
     const price = item.price;
+    const image = item.photos[0];
+    const name = item.title;
 
     if (cart) {
       // if cart exists for the user
@@ -24,7 +26,14 @@ exports.addCart = async (req, res) => {
         productItem.quantity += quantity;
         cart.products[itemIndex] = productItem;
       } else {
-        cart.products.push({ productId, quantity, price, product: item });
+        cart.products.push({
+          productId,
+          quantity,
+          price,
+          name,
+          image,
+          product: item,
+        });
       }
       cart.subPrice += quantity * price;
       cart = await cart.save();
@@ -34,7 +43,7 @@ exports.addCart = async (req, res) => {
       const newCart = await Cart.create({
         userId,
         products: [{ productId, quantity, price, product: item }],
-        subPrice: quantity * price,
+        subPrice: quantity * price || 0,
       });
       return res.status(201).json(newCart);
     }

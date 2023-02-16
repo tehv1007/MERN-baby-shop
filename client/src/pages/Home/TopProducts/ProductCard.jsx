@@ -23,10 +23,11 @@ const ProductCard = ({ product, user }) => {
             <h4 className="pb-2">{product.title}</h4>
           </Link>
           <p className="pb-2">${product.price}</p>
-          <Rating productId={product._id} />
-          {/* <button className="bg-[#212529] text-white py-2 px-4 rounded-md  hover:bg-white hover:text-black md:px-6 lg:absolute -top-36 lg:left-[85px] xl:left-[95px] lg:hidden lg:group-hover:block transition duration-500 ">
-            Add To Cart
-          </button> */}
+          <Rating
+            productId={product._id}
+            avgRating={product.avgRating}
+            numReviews={product.numReviews}
+          />
           {product.inStock > 0 ? (
             <button
               onClick={addToCart}
