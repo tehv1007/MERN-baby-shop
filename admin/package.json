@@ -20,9 +20,11 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.0",
     "react-icons": "^4.7.1",
+    "react-loading-skeleton": "^3.2.0",
     "react-router-dom": "^6.8.0",
     "react-toastify": "^9.1.1",
-    "yaa-grid": "^0.1.35",
+    "swiper": "^9.1.1",
+    "yaa-grid": "^0.1.36",
     "yup": "^0.32.11"
   },
   "devDependencies": {
@@ -30,6 +32,7 @@
     "@types/react-dom": "^18.0.9",
     "@vitejs/plugin-react": "^3.0.0",
     "autoprefixer": "^10.4.13",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.2.4",
     "vite": "^4.0.0"

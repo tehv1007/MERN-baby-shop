@@ -12,8 +12,8 @@ import GlobalSpinner from "../../../components/common/GlobalSpinner";
 
 const ProductDetail = ({ user }) => {
   const [imageIndex, setImageIndex] = useState(0);
-
   const [showForm, setShowForm] = useState(false);
+
   const showFormHandle = () => {
     setShowForm(!showForm);
   };
@@ -116,7 +116,8 @@ const ProductDetail = ({ user }) => {
               <span>
                 <button
                   onClick={() => showFormHandle(true)}
-                  className="my-2 text-center rounded-xl px-3.5 py-2.5 text-sm bg-slate-700 hover:bg-black hover:cursor-pointer text-white">
+                  className={`my-2 text-center rounded-xl px-3.5 py-2.5 text-sm bg-slate-700 hover:bg-black hover:cursor-pointer text-white`}
+                >
                   Write a review
                 </button>
               </span>
@@ -125,7 +126,7 @@ const ProductDetail = ({ user }) => {
             {/* Review form */}
             {!user ? (
               <p className="mt-5 text-lg">
-                You need to{" "}
+                You need to{"  "}
                 <a className="underline text-blue-500" href="/signin">
                   Login
                 </a>{" "}
@@ -140,7 +141,7 @@ const ProductDetail = ({ user }) => {
             )}
 
             {/* Review list */}
-            <Reviews productId={productId} />
+            <Reviews productId={productId} userId={user?._id} />
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-toastify";
 import FormRowError from "../../../components/common/RowError";
 import axios from "axios";
 import { useState } from "react";
@@ -21,6 +22,8 @@ const reviewValidate = yup
 
 const CustomerReview = ({ productId, user }) => {
   const [rating, setRating] = useState({});
+  const [error, setError] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -43,8 +46,11 @@ const CustomerReview = ({ productId, user }) => {
     mutationFn: (newReview) =>
       axios.post(`/reviews/${productId}/${user._id}`, newReview),
     onSuccess: () => {
-      reset;
-      queryClient.invalidateQueries({ queryKey: ["reviews", "products"] });
+      reset();
+      toast.success("Successfully add a review");
+      queryClient.invalidateQueries({
+        queryKey: ["reviews"],
+      });
     },
   });
 
@@ -110,15 +116,22 @@ const CustomerReview = ({ productId, user }) => {
               id="message"
               rows="4"
               className="mt-2 p-2.5 w-full lg:w-[70%] text-sm border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Write your comments here"></textarea>
+              placeholder="Write your comments here"
+            ></textarea>
             <FormRowError error={errors.content} />
           </div>
 
           <button
             type="submit"
-            className="my-4 text-center rounded-xl px-3.5 py-2.5 text-sm bg-slate-700 hover:bg-black hover:cursor-pointer text-white">
+            className="my-4 text-center rounded-xl px-3.5 py-2.5 text-sm bg-slate-700 hover:bg-black hover:cursor-pointer text-white"
+          >
             Submit Review
           </button>
+          {mutation.isError ? (
+            <div className="p-4 text-sm bg-red-600 text-white rounded text-center border my-2">
+              An error occurred: {mutation.error.response.data}
+            </div>
+          ) : null}
         </form>
         <hr className="mt-5" />
       </div>

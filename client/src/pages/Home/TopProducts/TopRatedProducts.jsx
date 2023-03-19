@@ -10,7 +10,7 @@ const TopratedProducts = ({ user }) => {
   const { data, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: () => {
-      return axios.get(`/products`);
+      return axios.get(`/products/rated`);
     },
     // cacheTime: 5 * 60 * 1000,
   });
@@ -18,7 +18,7 @@ const TopratedProducts = ({ user }) => {
   if (isLoading) return <GlobalSpinner />;
   console.log(data);
   const products = data.data;
-  const topRatedProducts = getRandom(products, 4);
+  // const topRatedProducts = getRandom(products, 4);
 
   return (
     <div className="mt-8 lg:mt-16">
@@ -40,7 +40,7 @@ const TopratedProducts = ({ user }) => {
             </div>
           </div>
           {/* Cards */}
-          <ProductGrid products={topRatedProducts} user={user} />
+          <ProductGrid products={products} user={user} />
         </div>
       </div>
     </div>

@@ -1,10 +1,5 @@
 const router = require("express").Router();
-const {
-  deleteUser,
-  getAllUsers,
-  getUserStats,
-  addUser,
-} = require("../controllers/userController");
+const { getAllUsers, getUserStats } = require("../controllers/userController");
 
 const {
   deleteOrder,
@@ -18,17 +13,12 @@ const {
   addProduct,
   updateProduct,
   deleteProduct,
+  deleteProducts,
 } = require("../controllers/productController");
 
 // Users
 //GET ALL USER
 router.get("/users", getAllUsers);
-
-//Create Anonymous USER
-router.post("/users", addUser);
-
-//DELETE user by ID
-router.delete("/users/:id", deleteUser);
 
 //GET USER STATS
 router.get("/users/stats", getUserStats);
@@ -53,6 +43,9 @@ router.put("/products/:productId", updateProduct);
 // DELETE product by ID
 router.delete("/products/:productId", deleteProduct);
 
+// Delete multiple products
+router.delete('/products',deleteProducts);
+
 // Search product
 router.get("/products/search", searchProduct);
 
@@ -60,3 +53,5 @@ router.get("/products/search", searchProduct);
 router.post("/products/new", addProduct);
 
 module.exports = router;
+
+

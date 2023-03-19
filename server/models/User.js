@@ -9,10 +9,11 @@ const userSchema = new Schema(
     password: { type: String, required: true },
     username: { type: String, unique: true, required: true },
     phoneNumber: { type: Number },
+    address: { type: String },
     facebookId: { type: String },
     googleId: { type: String },
     provider: { type: String },
-    isAdmin: { type: Boolean, default: false },
+    // isAdmin: { type: Boolean, default: false },
     verified: { type: Boolean, default: false },
     image: {
       type: String,
@@ -28,19 +29,6 @@ userSchema.methods.generateAuthToken = () => {
     expiresIn: "7d",
   });
   return token;
-};
-
-userSchema.methods.toJSON = () => {
-  return {
-    id: this._id,
-    provider: this.provider,
-    email: this.email,
-    username: this.username,
-    image: this.image,
-    name: this.name,
-    createdAt: this.createdAt,
-    updatedAt: this.updatedAt,
-  };
 };
 
 module.exports = mongoose.model("User", userSchema);

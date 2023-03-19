@@ -6,10 +6,14 @@ const {
   listRelated,
   getCategories,
   getProductsByCategory,
+  getTopProducts,
 } = require("../controllers/productController");
 
 // GET all products
 router.get("/", getAllProduct);
+
+// GET top rated products
+router.get("/rated", getTopProducts);
 
 // GET product by id
 router.get("/:productId", getProductById);

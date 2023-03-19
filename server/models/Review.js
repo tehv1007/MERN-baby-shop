@@ -16,4 +16,6 @@ const reviewSchema = new Schema(
   { timestamps: true }
 );
 
+reviewSchema.index({ userId: 1, productId: 1 }, { unique: true });
+
 module.exports = mongoose.model("Review", reviewSchema);

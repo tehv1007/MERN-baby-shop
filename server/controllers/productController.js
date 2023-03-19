@@ -35,7 +35,7 @@ const Product = require("../models/Product");
 
 // GET all products
 exports.getAllProduct = async (req, res) => {
-  const products = await Product.find(req.query);
+  const products = await Product.find({});
   res.json(products);
 };
 
@@ -83,6 +83,14 @@ exports.deleteProduct = async (req, res) => {
   res.json(deletedProduct);
 };
 
+// Delete multiple products
+exports.deleteProducts = async (req, res) => {
+  const productIds = req.body.productIds;
+  Product.deleteMany({ _id: { $in: productIds } })
+    .then(() => res.json({ message: "Deleted successfully" }))
+    .catch((err) => res.status(400).json({ message: err.message }));
+};
+
 // Get all products categories
 exports.getCategories = async (req, res) => {
   const categories = await Product.distinct("category");
@@ -93,6 +101,12 @@ exports.getCategories = async (req, res) => {
 exports.getProductsByCategory = async (req, res) => {
   const products = await Product.find({ category: req.params.category });
   res.json({ products: products, total: 5, skip: 0, limit: 5 });
+};
+
+// get top 4 rated products
+exports.getTopProducts = async (req, res) => {
+  const topProducts = await Product.find({}).sort({ avgRating: -1 }).limit(4);
+  res.json(topProducts);
 };
 
 // GET related products

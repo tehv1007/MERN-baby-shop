@@ -1,7 +1,7 @@
 const OrderTable = ({ orders }) => {
   return (
     <>
-      <div className="overflow-x-auto w-full">
+      <div className="overflow-auto w-full">
         <table className="table w-full text-center">
           <thead className="text-[#9FA2B4]">
             <tr>
@@ -23,7 +23,7 @@ const OrderTable = ({ orders }) => {
                 <td className="text-sm">${item.amount}</td>
                 <td className="text-sm">{item.userId}</td>
                 <td>
-                  <select className=" border rounded py-1.5 text-sm max-w-xs">
+                  <select className="border rounded py-1 text-sm max-w-xs">
                     <option disabled selected>
                       Not processed
                     </option>

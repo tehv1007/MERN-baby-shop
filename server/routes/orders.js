@@ -3,8 +3,6 @@ const {
   addOrder,
   deleteOrder,
   getOrdersByUser,
-  getAllOrders,
-  getIncome,
 } = require("../controllers/orderController");
 
 //GET user orders

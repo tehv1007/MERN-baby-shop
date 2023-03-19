@@ -5,8 +5,8 @@ export const paginate = (array, page_size, page_number) => {
 };
 
 //Get Products by id
-export const getProductId = (id) => {
-  return axios.get(`/products/${id}`);
+export const getProductById = (productId) => {
+  return axios.get(`/products/${productId}`);
 };
 
 export const getProducts = () => {
@@ -26,5 +26,10 @@ export const updateProductById = (id, data) => {
 };
 
 export const deleteProductById = (id) => {
-  return axios.delete(`/products/${id}`);
+  return axios.delete(`/admin/products/${id}`);
+};
+export const deleteMultiProduct = (selectedProducts) => {
+  return axios.delete(`/admin/products`, {
+    data: { productIds: selectedProducts.map((p) => p._id) },
+  });
 };

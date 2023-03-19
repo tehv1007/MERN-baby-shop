@@ -1,14 +1,37 @@
 const Review = require("../models/Review");
 const Product = require("../models/Product");
+const User = require("../models/User");
 
 // Get all reviews at one product
 exports.getReviewById = async (req, res) => {
   try {
-    const review = await Review.find({ productId: req.params.productId }).sort({
-      createdAt: "desc",
+    const reviews = await Review.find({ productId: req.params.productId }).sort(
+      {
+        createdAt: "desc",
+      }
+    );
+    if (!reviews) return res.status(404).json({ message: "No review found." });
+    // Render the reviews in the UI
+    res.json({
+      reviews: reviews.map((review) => {
+        const editWindow = 7 * 24 * 60 * 60 * 1000; // 7 day in milliseconds
+        const now = new Date();
+        const createdAt = new Date(review.createdAt);
+        const canEdit = now - createdAt < editWindow;
+
+        return {
+          id: review._id,
+          userId: review.userId,
+          productId: review.productId,
+          rating: review.rating,
+          content: review.review[0].content,
+          title: review.review[0].title,
+          createdAt: review.createdAt,
+          canEdit: canEdit,
+        };
+      }),
     });
-    if (!review) return res.status(404).json({ message: "No review found." });
-    res.json(review);
+    // res.json(reviews);
   } catch (err) {
     res.status(500).json({ message: "Something went wrong." });
   }
@@ -24,36 +47,77 @@ exports.deleteReview = async (req, res) => {
   }
 };
 
+// Edit review
 exports.editReview = async (req, res) => {
-  const { error } = validateMessage(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
+  // const { error } = validateMessage(req.body);
+  // if (error) return res.status(400).json({ message: error.details[0].message });
+
+  // try {
+  //   let review = await Review.findByIdAndUpdate(
+  //     req.params.reviewId,
+  //     { text: req.body.text, user: tempReview.user.id },
+  //     { new: true }
+  //   );
+  //   if (!review) return res.status(404).json({ message: "No message found." });
+  //   review = await review.populate("user").execPopulate();
+
+  //   res.status(200).json({ review });
+  // } catch (err) {
+  //   res.status(500).json({ message: "Something went wrong." });
+  // }
+
+  const id = req.params.reviewId;
 
   try {
-    let review = await Review.findByIdAndUpdate(
-      req.params.reviewId,
-      { text: req.body.text, user: tempReview.user.id },
-      { new: true }
-    );
-    if (!review) return res.status(404).json({ message: "No message found." });
-    review = await review.populate("user").execPopulate();
+    // Find the review in the database
+    const review = await Review.findById(id);
 
-    res.status(200).json({ review });
+    if (!review) {
+      return res.status(404).json({ message: "Review not found" });
+    }
+
+    // Check if the review can still be edited (within 7 day of creation)
+    const editWindow = 7 * 24 * 60 * 60 * 1000; // 7 day in milliseconds
+    const now = new Date();
+    const createdAt = new Date(review.createdAt);
+    if (now - createdAt > editWindow) {
+      return res.status(403).json({ message: "Edit window has expired" });
+    }
+
+    // Update the review
+    review.rating = req.body.rating;
+    review.content = req.body.content;
+    const updatedReview = await review.save();
+    res.json(updatedReview);
   } catch (err) {
-    res.status(500).json({ message: "Something went wrong." });
+    res.status(400).json({ message: err.message });
   }
 };
 
 // Add review to a product
 exports.addReviewProduct = async (req, res) => {
   const productId = req.params.productId;
+  const userId = req.params.userId;
+  const username = await User.findById(userId);
   const product = await Product.findById(productId);
-  console.log(product);
+
+  console.log({ user: username });
+
+  // Check if the user has already reviewed the product
+  const existingReview = await Review.findOne({ userId, productId });
+  if (existingReview) {
+    return res.status(400).send("You have already reviewed this product");
+  }
+
   if (product) {
-    if (product.reviews.find((x) => x.userId == req.params.userId)) {
-      return res
-        .status(400)
-        .send({ message: "You already submitted a review" });
-    }
+    // Check if the user has already reviewed the product
+    // if (product.find((x) => x.userId == req.params.userId)) {
+    //   return res
+    //     .status(400)
+    //     .send({ message: "You already submitted a review" });
+    // }
+
+    // Create a new review
     let review = await Review.create(req.body);
 
     product.reviews.push(review);

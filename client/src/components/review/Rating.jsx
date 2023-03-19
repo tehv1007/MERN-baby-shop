@@ -5,7 +5,7 @@ import { fetchReviews } from "../../services/fetchReviews";
 export default function Rating({ productId, avgRating, numReviews }) {
   // let reviews;
   // const { data } = useQuery({
-  //   queryKey: ["reviews", "products"],
+  //   queryKey: ["rating"],
   //   queryFn: () => axios.get(`/reviews/${productId}`),
   // });
 

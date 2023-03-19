@@ -22,7 +22,7 @@ const MyOrders = ({ order }) => {
           {/* ProductInfo */}
           <ul className="w-5/6">
             {order.products.map((p, index) => (
-              <li key={index} className="flex gap-5">
+              <li key={index} className="flex gap-5 mb-2">
                 <img
                   className="w-1/6 rounded-md"
                   src={

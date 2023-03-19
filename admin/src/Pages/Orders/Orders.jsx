@@ -1,11 +1,12 @@
-import TitlePage from "../../components/common/TitlePage";
+import PageTitle from "../../components/common/PageTitle";
 import OrderTable from "./OrderTable";
 import { useState } from "react";
 import Pagination from "../../components/common/Pagination";
 import { paginate } from "../../Services/productsService";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import GlobalSpinner from "../../components/GlobalSpinner";
+import Layout from "../../components/layout/Layout";
+import GlobalSpinner from "../../components/common/GlobalSpinner";
 
 const Orders = () => {
   const [page, setPage] = useState(1);
@@ -38,9 +39,9 @@ const Orders = () => {
 
   return (
     <>
-      <div>
-        <TitlePage title="Orders" />
-        <div className="flex justify-between items-center mt-5 my-2">
+      <Layout>
+        <PageTitle title="Orders" />
+        <div className="flex justify-between items-center my-2">
           <div className="flex items-center">
             <input
               type="text"
@@ -51,7 +52,7 @@ const Orders = () => {
         </div>
         <OrderTable orders={paginatedArr} />
         <Pagination setPage={setPage} paginationParams={paginationParams} />
-      </div>
+      </Layout>
     </>
   );
 };

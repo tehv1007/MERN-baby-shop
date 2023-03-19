@@ -1,12 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import FormRow from "../../components/common/FormRow";
 import FormRowError from "../../components/common/FormRowError";
 import Loader from "../../components/common/Loader";
 
 const ProductForm = (props) => {
   const {
-    watch,
     showPreview,
     onSubmit,
     handleChange,
@@ -18,15 +15,8 @@ const ProductForm = (props) => {
     isLoadingImage,
     btnLabel,
     isDirty = true,
+    defaultImgs,
   } = props;
-
-  // const { data } = useQuery({
-  //   queryKey: ["categories"],
-  //   queryFn: () => axios.get("/products/categories"),
-  // });
-
-  // const { data: categories } = data;
-  // console.log(data);
 
   return (
     <div>
@@ -53,7 +43,8 @@ const ProductForm = (props) => {
                 <select
                   className="select select-bordered w-full"
                   defaultValue="default"
-                  {...register("category")}>
+                  {...register("category")}
+                >
                   <option disabled value="default">
                     Choose a category
                   </option>
@@ -69,7 +60,7 @@ const ProductForm = (props) => {
               <FormRow label="Price">
                 <label className="input-group">
                   <input
-                    type="text"
+                    type="number"
                     placeholder="0.01"
                     className="input input-bordered w-full"
                     step={0.01}
@@ -86,7 +77,7 @@ const ProductForm = (props) => {
                   <input
                     type="file"
                     multiple
-                    required
+                    // required
                     onChange={handleChange}
                     className="file-input file-input-bordered w-full"
                     // {...register("image")}
@@ -94,13 +85,16 @@ const ProductForm = (props) => {
                   <button
                     onClick={handleSubmit}
                     className="btn btn-primary"
-                    disabled={isLoadingImage}>
+                    disabled={isLoadingImage}
+                  >
                     <div className="flex items-center gap-2">
                       {isLoadingImage && <Loader />}
                       <span>Upload Images</span>
                     </div>
                   </button>
                 </div>
+
+                {/* Preview Image */}
                 {images?.length > 0 && showPreview ? (
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2 my-2">
                     {images.map((image, idx) => {
@@ -111,16 +105,18 @@ const ProductForm = (props) => {
                       );
                     })}
                   </div>
-                ) : null}
-
-                {/* Preview Image */}
-                {watch("imageUrl") && (
-                  <img
-                    className="mt-4"
-                    src={watch("imageUrl")}
-                    alt={watch("title")}
-                  />
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 my-2">
+                    {defaultImgs?.map((image, idx) => {
+                      return (
+                        <p key={idx}>
+                          <img src={image} alt="" />
+                        </p>
+                      );
+                    })}
+                  </div>
                 )}
+
                 <FormRowError error={errors.image} />
               </FormRow>
 
@@ -129,7 +125,8 @@ const ProductForm = (props) => {
                 <textarea
                   className="textarea textarea-bordered resize-none h-36"
                   placeholder="Write something here..."
-                  {...register("description")}></textarea>
+                  {...register("description")}
+                ></textarea>
                 <FormRowError error={errors.description} />
               </FormRow>
             </div>
@@ -138,7 +135,8 @@ const ProductForm = (props) => {
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={isLoading || !isDirty}>
+              disabled={images?.length == 0 && (isLoading || !isDirty)}
+            >
               <div className="flex items-center gap-2">
                 {isLoading && <Loader />}
                 <span>{btnLabel}</span>

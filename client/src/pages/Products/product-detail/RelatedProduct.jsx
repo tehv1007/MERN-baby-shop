@@ -24,9 +24,9 @@ const RelatedProduct = ({ product, user }) => {
       </h2>
       <div className="grid grid-cols-2 gap-6 pt-4 lg:grid-cols-4">
         {/* Product Card */}
-        {relatedProducts?.map((item) => {
-          return <ProductCard product={item} key={item._id} user={user} />;
-        })}
+        {relatedProducts?.map((item) => (
+          <ProductCard product={item} key={item._id} user={user} />
+        ))}
       </div>
     </>
   );

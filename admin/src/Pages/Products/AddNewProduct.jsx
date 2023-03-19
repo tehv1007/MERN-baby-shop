@@ -5,24 +5,12 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState, useEffect } from "react";
 import { createProduct } from "../../Services/productsService";
-import { storage } from "../../config/Firebase";
+import { storage } from "../../config/firebase";
 import * as yup from "yup";
 import ProductForm from "./ProductForm";
-
-const productSchema = yup
-  .object({
-    title: yup.string().required("This field is required"),
-    category: yup
-      .string()
-      .oneOf(
-        ["play aids", "toys", "baby care", "baby ware"],
-        "Select a category"
-      ),
-    price: yup.number().positive().required().typeError("Must be a number"),
-    image: yup.mixed(),
-    description: yup.string().required("This field is required"),
-  })
-  .required();
+import Layout from "../../components/layout/Layout";
+import PageTitle from "../../components/common/PageTitle";
+import { addProductSchema } from "../../validation/productSchema";
 
 const AddNewProduct = () => {
   const [isFileUploading, setIsFileUploading] = useState(false);
@@ -30,7 +18,7 @@ const AddNewProduct = () => {
   const [imageFiles, setImageFiles] = useState([]);
   const [images, setImages] = useState([]);
   const [showPreview, setShowPreview] = useState(true);
-  const imageTypeRegex = /image\/(png|jpg|jpeg)/gm;
+  const imageTypeRegex = /image\/(png|jpg|jpeg|webp)/gm;
 
   const {
     watch,
@@ -39,7 +27,7 @@ const AddNewProduct = () => {
     reset,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(productSchema),
+    resolver: yupResolver(addProductSchema),
   });
 
   const mutation = useMutation({
@@ -128,25 +116,29 @@ const AddNewProduct = () => {
     });
   };
   console.log(urls);
-  const onSumit = (data) => {
+
+  const onSubmit = (data) => {
     mutation.mutate({ ...data, photos: urls });
     setShowPreview(false);
   };
 
   return (
-    <ProductForm
-      watch={watch}
-      showPreview={showPreview}
-      onSubmit={handleSubmit(onSumit)}
-      handleChange={handleChange}
-      handleSubmit={ImagesHandleSubmit}
-      register={register}
-      images={images}
-      isLoading={mutation.isLoading}
-      isLoadingImage={isFileUploading}
-      errors={errors}
-      btnLabel="Create Product"
-    />
+    <Layout>
+      <PageTitle title="Add New Product" />
+      <ProductForm
+        watch={watch}
+        showPreview={showPreview}
+        onSubmit={handleSubmit(onSubmit)}
+        handleChange={handleChange}
+        handleSubmit={ImagesHandleSubmit}
+        register={register}
+        images={images}
+        isLoading={mutation.isLoading}
+        isLoadingImage={isFileUploading}
+        errors={errors}
+        btnLabel="Create Product"
+      />
+    </Layout>
   );
 };
 

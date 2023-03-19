@@ -5,3 +5,44 @@
 body {
   background-color: white;
 }
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+@layer base {
+  :root {
+    --navbar-height: 6rem;
+    --banner-height: calc(100vh - var(--navbar-height));
+  }
+}
+
+@layer components {
+  .icon {
+    height: 1.25rem;
+    aspect-ratio: 1/1;
+  }
+  .icon-sm {
+    height: 1rem;
+  }
+  .icon-lg {
+    height: 1.5rem;
+  }
+}
+
+/* Rating */
+.rating span {
+  color: #f0c040;
+  margin: 0.1rem;
+}
+.rating span:last-child {
+  color: #404040;
+}
