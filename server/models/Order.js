@@ -4,10 +4,12 @@ const Schema = mongoose.Schema;
 const orderSchema = new Schema(
   {
     transaction_id: { type: String, unique: true },
-    userId: { type: String, required: true },
+    // userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
+    userId: { type: String, required: true, ref: "User" },
     products: [
       {
-        productId: { type: String },
+        // productId: { type: Schema.Types.ObjectId, ref: "Product" },
+        productId: { type: String, ref: "Product" },
         name: { type: String },
         image: { type: String },
         quantity: { type: Number },
@@ -19,9 +21,9 @@ const orderSchema = new Schema(
     paymentMethod: { type: String },
     status: {
       type: String,
-      default: "Not processed",
+      default: "Not-processed",
       enum: [
-        "Not processed",
+        "Not-processed",
         "Processing",
         "Shipped",
         "Delivered",

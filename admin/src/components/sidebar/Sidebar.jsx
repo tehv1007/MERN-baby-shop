@@ -22,7 +22,7 @@ const NewSidebar = () => {
     <aside className="z-30 h-full flex-shrink-0 shadow-sm w-64 overflow-y-auto bg-white lg:block">
       <div className="py-4 text-gray-500">
         <a className=" text-gray-900" href="/">
-          <img src={Logo} alt="Logo" width={135} className="pl-6" />
+          <img src={Logo} alt="Logo" className="pl-6 w-[200px]" />
         </a>
         <ul className="mt-8 items-center text-sm font-semibold w-full">
           {/* Dashboard */}

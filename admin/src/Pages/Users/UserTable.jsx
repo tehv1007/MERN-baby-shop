@@ -90,7 +90,7 @@ const UserTable = ({ users, sortConfig, requestSort, getSortDirection }) => {
                 <td>
                   <div className="flex items-center justify-center gap-5">
                     {/* Orders Detail */}
-                    <Link to={`/customers/orders`}>
+                    <Link to={`/${item._id}/orders`}>
                       <div className="tooltip" data-tip="Orders">
                         <label className="btn btn-sm btn-square btn-success hover:opacity-60">
                           <BiCartAlt />

@@ -24,7 +24,7 @@ const ProductTable = ({
 
   return (
     <>
-      <div className="overflow-x-auto w-full mt-4">
+      <div className="overflow-y-auto w-full mt-4">
         <table className="table w-full text-center">
           <thead className="text-[#9FA2B4] ">
             <tr>
@@ -39,6 +39,7 @@ const ProductTable = ({
                 </label>
               </th>
               <TableHeaderCell
+                text="text-left"
                 title="Name"
                 column="title"
                 sortConfig={sortConfig}

@@ -11,10 +11,11 @@ import {
   sortNames,
   paginate,
 } from "../../services/productsService";
+import GlobalSpinner from "../../components/common/GlobalSpinner";
 
 const Products = ({ user }) => {
   const [category, setCategory] = useState("all");
-  const [sortType, setsortType] = useState("");
+  const [sortType, setSortType] = useState("");
   const [page, setPage] = useState(1);
   const [display, setDisplay] = useState(true);
   const ITEMS_PER_PAGE = 8;
@@ -26,7 +27,7 @@ const Products = ({ user }) => {
 
   const handleSorting = (e) => {
     e.preventDefault();
-    setsortType(e.target.value);
+    setSortType(e.target.value);
   };
 
   const { data, isLoading } = useQuery({
@@ -40,13 +41,14 @@ const Products = ({ user }) => {
     cacheTime: 5 * 60 * 1000,
   });
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <GlobalSpinner />;
   const { data: filteredProducts } = data;
 
   const sortedArr =
     (sortType === "lowtohigh" || sortType === "hightolow"
       ? sortNumbers(filteredProducts, sortType)
       : sortNames(filteredProducts, sortType)) || filteredProducts;
+
   let totalItems = sortedArr.length;
 
   const paginationParams = {
@@ -81,14 +83,16 @@ const Products = ({ user }) => {
                     onClick={() => {
                       setDisplay(true);
                     }}
-                    className={`${display ? "bg-sky-500/30 rounded-md" : ""}`}>
+                    className={`${display ? "bg-sky-500/30 rounded-md" : ""}`}
+                  >
                     <ColumnDisplayIcon />
                   </button>
                   <button
                     onClick={() => {
                       setDisplay(false);
                     }}
-                    className={`${!display ? "bg-sky-500/30 rounded-md" : ""}`}>
+                    className={`${!display ? "bg-sky-500/30 rounded-md" : ""}`}
+                  >
                     <RowDisplayIcon />
                   </button>
                   <p>Category:</p>
@@ -96,7 +100,8 @@ const Products = ({ user }) => {
                     name="Sorting"
                     defaultValue="all"
                     onChange={handleSelect}
-                    className="select select-bordered border rounded-lg p-1">
+                    className="select select-bordered border rounded-lg p-1"
+                  >
                     <option value="all">All</option>
                     <option value="play aids">Play Aids</option>
                     <option value="toys">Toys</option>
@@ -118,7 +123,8 @@ const Products = ({ user }) => {
                     name="Sorting"
                     onChange={handleSorting}
                     defaultValue="default"
-                    className="select select-bordered border rounded-lg p-1">
+                    className="select select-bordered border rounded-lg p-1"
+                  >
                     <option value="default" disabled>
                       Choose your option
                     </option>

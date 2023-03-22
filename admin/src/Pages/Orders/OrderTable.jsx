@@ -1,44 +1,56 @@
-const OrderTable = ({ orders }) => {
+import TableHeaderCell from "../../components/TableHeaderCell";
+import OrderDataRow from "./OrderDataRow";
+
+const OrderTable = ({ orders, requestSort, getSortDirection, sortConfig }) => {
   return (
     <>
-      <div className="overflow-auto w-full">
-        <table className="table w-full text-center">
-          <thead className="text-[#9FA2B4]">
+      <div className="overflow-y-auto w-full">
+        <table className="table w-full text-center ">
+          <thead className="text-[#9FA2B4] uppercase">
             <tr>
-              <th className="text-left font-normal text-sm">OrderId</th>
-              <th className="font-normal text-sm">Amount</th>
-              <th className="font-normal text-sm ">UserId</th>
-              <th className="font-normal text-sm">Status</th>
-              <th className="font-normal text-sm">Action</th>
+              <TableHeaderCell
+                text="text-left"
+                title="Order ID"
+                column="transaction_id"
+                sortConfig={sortConfig}
+                getSortDirection={getSortDirection}
+                requestSort={requestSort}
+              />
+              <TableHeaderCell
+                title="Time"
+                column="createdAt"
+                sortConfig={sortConfig}
+                getSortDirection={getSortDirection}
+                requestSort={requestSort}
+              />
+              <TableHeaderCell
+                title="Shipping Address"
+                column="address"
+                sortConfig={sortConfig}
+                getSortDirection={getSortDirection}
+                requestSort={requestSort}
+              />
+              <TableHeaderCell
+                title="Amount"
+                column="amount"
+                sortConfig={sortConfig}
+                getSortDirection={getSortDirection}
+                requestSort={requestSort}
+              />
+              <TableHeaderCell
+                title="Status"
+                column="status"
+                sortConfig={sortConfig}
+                getSortDirection={getSortDirection}
+                requestSort={requestSort}
+              />
+              <th className="font-normal text-[16px]">Action</th>
+              <th className="font-normal text-[16px]">Detail</th>
             </tr>
           </thead>
           <tbody>
             {orders.map((item) => (
-              <tr key={item._id}>
-                <td>
-                  <div className="flex items-center">
-                    <div className="text-sm">{item.transaction_id}</div>
-                  </div>
-                </td>
-                <td className="text-sm">${item.amount}</td>
-                <td className="text-sm">{item.userId}</td>
-                <td>
-                  <select className="border rounded py-1 text-sm max-w-xs">
-                    <option disabled selected>
-                      Not processed
-                    </option>
-                    <option>Processing</option>
-                    <option>Shipped</option>
-                    <option>Delivered</option>
-                    <option>Cancelled</option>
-                  </select>
-                </td>
-                <td>
-                  <button className="btn btn-ghost btn-xs text-sm">
-                    details
-                  </button>
-                </td>
-              </tr>
+              <OrderDataRow key={item._id} {...item} />
             ))}
           </tbody>
         </table>

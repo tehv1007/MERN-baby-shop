@@ -35,28 +35,29 @@ const DataChart = [
 ];
 
 const DashboardPieChart = () => {
-  const [userData, setUserData] = useState({
-    labels: DataChart.map((data) => data.year),
-    datasets: [
-      {
-        label: "Total Orders",
-        data: DataChart.map((data) => data.userGain),
-        backgroundColor: [
-          "rgba(75,192,192,1)",
-          "#ecf0f1",
-          "#50AF95",
-          "#f3ba2f",
-          "#2a71d0",
-        ],
-        borderColor: "black",
-        borderWidth: 2,
-      },
-    ],
-  });
   return (
-    <div className="w-[300px]">
-      <PieChart chartData={userData} />
-    </div>
+    <>
+      <div className="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+        <p className="mb-4 font-semibold text-gray-800 dark:text-gray-300">
+          Best Selling Products
+        </p>
+        <div>
+          <canvas
+            role="img"
+            height={398}
+            width={400}
+            legend="[object Object]"
+            className="chart"
+            style={{
+              display: "block",
+              boxSizing: "border-box",
+              height: "318.4px",
+              width: 320,
+            }}
+          />
+        </div>
+      </div>
+    </>
   );
 };
 

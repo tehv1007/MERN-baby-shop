@@ -1,3 +1,5 @@
+import formatDate from "../../services/formatDate.js";
+
 const MyOrders = ({ order }) => {
   return (
     <div className="w-full mt-4 px-2 lg:px-4">
@@ -5,16 +7,20 @@ const MyOrders = ({ order }) => {
       <div className="border rounded p-2">
         <div>
           <div className="flex justify-between px-2 pb-1 font-bold">
-            <p>Order: order.transaction_id</p>
+            <p>Order ID: #{order.transaction_id}</p>
             <div className="flex gap-2">
-              <span className="text-green-700/80"> ✔ Order Shipped</span>
+              <span
+                className={`text-green-700/80 ${order.status.toLowerCase()} rounded-full px-2`}
+              >
+                {order.status}
+              </span>
               <button>| Shipping Detail</button>
             </div>
           </div>
           <hr />
 
           <div className="flex justify-between pt-2 px-2 font-bold">
-            <p>Date: Jan 21, 2023</p>
+            <p>Date: {formatDate(order.createdAt)}</p>
             <p>Payment: Paid</p>
           </div>
         </div>
@@ -24,7 +30,7 @@ const MyOrders = ({ order }) => {
             {order.products.map((p, index) => (
               <li key={index} className="flex gap-5 mb-2">
                 <img
-                  className="w-1/6 rounded-md"
+                  className="rounded-md w-[64px] h-[64px]"
                   src={
                     p.image ||
                     "https://cdn.shopify.com/s/files/1/0618/2889/0871/products/maxi1_713x.webp?v=1657630686"
@@ -51,9 +57,7 @@ const MyOrders = ({ order }) => {
             <span className="text-xl font-bold">Total: ${order.amount}</span>
           </div>
           <div className="flex justify-end gap-4">
-            <button className="button">Order Detail</button>
-            <button className="button">Review</button>
-            <button className="button bg-green-700/70 text-white">
+            <button className="button bg-green-700/70 text-white px-2">
               Re-Order
             </button>
           </div>

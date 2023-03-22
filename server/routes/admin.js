@@ -5,6 +5,10 @@ const {
   deleteOrder,
   getAllOrders,
   getIncome,
+  updateOrderStatus,
+  getOrderById,
+  getOrdersByUserId,
+  getOrdersByUser,
 } = require("../controllers/orderController");
 
 const {
@@ -25,6 +29,9 @@ router.get("/users/stats", getUserStats);
 
 //Order
 //GET ALL orders
+router.get("/orders/:orderId", getOrderById);
+router.get("/:userId/orders", getOrdersByUser);
+router.put("/orders/:id", updateOrderStatus);
 router.get("/orders", getAllOrders);
 
 //DELETE an order by ID
@@ -44,7 +51,7 @@ router.put("/products/:productId", updateProduct);
 router.delete("/products/:productId", deleteProduct);
 
 // Delete multiple products
-router.delete('/products',deleteProducts);
+router.delete("/products", deleteProducts);
 
 // Search product
 router.get("/products/search", searchProduct);
@@ -53,5 +60,3 @@ router.get("/products/search", searchProduct);
 router.post("/products/new", addProduct);
 
 module.exports = router;
-
-

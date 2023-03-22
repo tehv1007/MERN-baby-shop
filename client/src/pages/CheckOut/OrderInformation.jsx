@@ -6,7 +6,7 @@ import LocationForm from "../../components/location/LocationForm";
 import FormCheckOut from "./FormCheckOut";
 import SidebarCheckOut from "./SidebarCheckOut";
 
-const OrderInfomation = ({ user }) => {
+const OrderInformation = ({ user }) => {
   const [subData, setSubData] = useState({});
   const navigate = useNavigate();
 
@@ -87,4 +87,4 @@ const OrderInfomation = ({ user }) => {
   );
 };
 
-export default OrderInfomation;
+export default OrderInformation;

@@ -1,38 +1,144 @@
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import React from "react";
+import { BsBagCheckFill } from "react-icons/bs";
+import { useParams } from "react-router-dom";
+import GlobalSpinner from "../../components/common/GlobalSpinner";
 import Layout from "../../components/layout/Layout";
 
 const CustomerOrders = () => {
+  const { userId } = useParams();
+  console.log(userId);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["orders"],
+    queryFn: () => axios.get(`/admin/${userId}/orders`),
+  });
+
+  if (isLoading) return <GlobalSpinner />;
+  const { data: orders } = data;
+  console.log(orders);
+
   return (
     <>
       <Layout>
-        <div className="container grid px-6 mx-auto">
-          <h1 className="my-6 text-lg font-bold text-gray-700 dark:text-gray-300">
-            Customer Order List
-          </h1>
-          <div className="w-full bg-white rounded-md dark:bg-gray-800">
-            <div className="p-8 text-center">
-              <span className="flex justify-center my-30 text-red-500 font-semibold text-6xl">
-                <svg
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth={0}
-                  viewBox="0 0 512 512"
-                  height="1em"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M454.65 169.4A31.82 31.82 0 00432 160h-64v-16a112 112 0 00-224 0v16H80a32 32 0 00-32 32v216c0 39 33 72 72 72h272a72.22 72.22 0 0050.48-20.55 69.48 69.48 0 0021.52-50.2V192a31.75 31.75 0 00-9.35-22.6zM176 144a80 80 0 01160 0v16H176zm192 96a112 112 0 01-224 0v-16a16 16 0 0132 0v16a80 80 0 00160 0v-16a16 16 0 0132 0z" />
-                </svg>
-              </span>
-              <h2 className="font-medium text-base mt-4 text-gray-600">
-                This Customer have no order Yet!
-              </h2>
+        {orders.length === 0 ? (
+          <div className="container grid px-6 mx-auto">
+            <h1 className="my-6 text-lg font-bold text-gray-700 dark:text-gray-300">
+              Customer Order List
+            </h1>
+            <div className="w-full bg-white rounded-md dark:bg-gray-800">
+              <div className="p-8 text-center">
+                <span className="flex justify-center my-30 text-red-500 font-semibold text-6xl">
+                  <BsBagCheckFill />
+                </span>
+                <h2 className="font-medium text-base mt-4 text-gray-600">
+                  This Customer have no order Yet!
+                </h2>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="overflow-y-auto w-full">
+            <table className="table w-full text-center ">
+              <thead className="text-[#9FA2B4] uppercase">
+                <tr>
+                  <TableHeaderCell
+                    text="text-left"
+                    title="Order ID"
+                    column="transaction_id"
+                    sortConfig={sortConfig}
+                    getSortDirection={getSortDirection}
+                    requestSort={requestSort}
+                  />
+                  <TableHeaderCell
+                    title="Time"
+                    column="createdAt"
+                    sortConfig={sortConfig}
+                    getSortDirection={getSortDirection}
+                    requestSort={requestSort}
+                  />
+                  <TableHeaderCell
+                    title="Shipping Address"
+                    column="address"
+                    sortConfig={sortConfig}
+                    getSortDirection={getSortDirection}
+                    requestSort={requestSort}
+                  />
+                  <TableHeaderCell
+                    title="Phone"
+                    column="phone"
+                    sortConfig={sortConfig}
+                    getSortDirection={getSortDirection}
+                    requestSort={requestSort}
+                  />
+                  <TableHeaderCell
+                    title="Amount"
+                    column="amount"
+                    sortConfig={sortConfig}
+                    getSortDirection={getSortDirection}
+                    requestSort={requestSort}
+                  />
+                  <TableHeaderCell
+                    title="Status"
+                    column="status"
+                    sortConfig={sortConfig}
+                    getSortDirection={getSortDirection}
+                    requestSort={requestSort}
+                  />
+                  <th className="font-normal text-[16px]">Action</th>
+                  <th className="font-normal text-[16px]">Detail</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ordersList.map((item) => (
+                  <tr key={item._id} className="text-center">
+                    <td className="text-sm text-left">{item.transaction_id}</td>
+                    <td className="text-sm">{formatDate(item.createdAt)}</td>
+                    <td className="text-sm">${item.address}</td>
+                    <td className="text-sm">${item.phoneNumber}</td>
+                    <td className="text-sm">${item.amount}</td>
+                    <td className="text-center text-sm">
+                      <span
+                        className={`inline-flex px-2 py-0 rounded-full ${item.status.toLowerCase()}`}
+                      >
+                        {item.status}
+                      </span>
+                    </td>
+                    <td>
+                      <select
+                        className="border rounded py-1 text-sm max-w-xs"
+                        value={item.status}
+                        onChange={(event) =>
+                          handleStatusChange(event, item._id)
+                        }
+                      >
+                        <option>Not processed</option>
+                        <option>Processing</option>
+                        <option>Shipped</option>
+                        <option>Delivered</option>
+                        <option>Cancelled</option>
+                      </select>
+                    </td>
+                    <td>
+                      {/* Detail */}
+                      <Link to={`${item._id}`}>
+                        <div className="tooltip" data-tip="Detail">
+                          <label className="btn btn-sm btn-square btn-success hover:opacity-60">
+                            <FcSearch />
+                          </label>
+                        </div>
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         {/* Order list */}
-        <div className="w-full overflow-hidden border border-gray-200 dark:border-gray-700 rounded-lg ring-1 ring-black ring-opacity-5 mb-8">
+        {/* <div className="w-full overflow-hidden border border-gray-200 dark:border-gray-700 rounded-lg ring-1 ring-black ring-opacity-5 mb-8">
           <div className="w-full overflow-x-auto">
             <table className="w-full whitespace-no-wrap">
               <thead className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:text-gray-400 dark:bg-gray-800">
@@ -194,7 +300,7 @@ const CustomerOrders = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </Layout>
     </>
   );

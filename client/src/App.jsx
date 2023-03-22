@@ -14,7 +14,7 @@ import Home from "./pages/Home/Home";
 import Products from "./pages/Products/Products";
 import ProductDetail from "./pages/Products/product-detail/ProductDetail";
 import ViewCart from "./pages/ViewCart/Cart";
-import OrderInfomation from "./pages/CheckOut/OrderInfomation";
+import OrderInformation from "./pages/CheckOut/OrderInformation";
 import OrderShipping from "./pages/CheckOut/OrderShipping";
 import CheckOut from "./pages/CheckOut/CheckOut";
 import Navbar from "./components/layouts/Navbar/NavBar";
@@ -99,8 +99,8 @@ function App() {
           />
           <Route path="/viewcart" element={<ViewCart user={user} />} />
           <Route
-            path="/checkout/:userId/infomation"
-            element={<OrderInfomation user={user} />}
+            path="/checkout/:userId/information"
+            element={<OrderInformation user={user} />}
           />
           <Route
             path="/checkout/:userId/shipping"

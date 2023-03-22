@@ -2,6 +2,7 @@ import React from "react";
 import { BsArrowDown, BsArrowUp } from "react-icons/bs";
 
 const TableHeaderCell = ({
+  text,
   title,
   column,
   sortConfig,
@@ -9,7 +10,7 @@ const TableHeaderCell = ({
   requestSort,
 }) => {
   return (
-    <th className="font-normal text-[16px]">
+    <th className={`font-normal text-[16px] ${text} uppercase`}>
       <button
         type="button"
         className={getSortDirection(column)}

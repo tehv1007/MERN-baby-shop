@@ -1,5 +1,17 @@
 const Order = require("../models/Order");
 
+//GET ALL orders
+exports.getAllOrders = async (req, res) => {
+  try {
+    const orders = await Order.find().sort({
+      createdAt: -1,
+    });
+    res.status(200).json(orders);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
 //CREATE an order
 exports.addOrder = async (req, res) => {
   try {
@@ -36,6 +48,34 @@ exports.updateOrder = async (req, res) => {
   }
 };
 
+exports.updateOrderStatus = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
+    }
+
+    const updateOrder = await Order.findByIdAndUpdate(
+      req.params.id,
+      {
+        status: req.body.status,
+      },
+      { new: true }
+    );
+
+    res.json({
+      success: true,
+      message: "Order status updated successfully",
+      order: updateOrder,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 //DELETE an order by ID
 exports.deleteOrder = async (req, res) => {
   try {
@@ -50,7 +90,7 @@ exports.deleteOrder = async (req, res) => {
 exports.getOrdersByUser = async (req, res) => {
   try {
     const orders = await Order.find({ userId: req.params.userId }).sort({
-      date: -1,
+      createdAt: -1,
     });
     res.status(200).json(orders);
   } catch (err) {
@@ -58,14 +98,14 @@ exports.getOrdersByUser = async (req, res) => {
   }
 };
 
-//GET ALL orders
-exports.getAllOrders = async (req, res) => {
-  try {
-    const orders = await Order.find();
-    res.status(200).json(orders);
-  } catch (err) {
-    res.status(500).json(err);
-  }
+// GET order by id
+exports.getOrderById = async (req, res) => {
+  const selectedItem = await Order.findById(req.params.orderId);
+  if (!selectedItem)
+    res.json({
+      message: `Product with id '${req.params.orderId}' not found`,
+    });
+  res.json(selectedItem);
 };
 
 // GET monthly income

@@ -8,6 +8,7 @@ import axios from "axios";
 import Layout from "../../components/layout/Layout";
 import GlobalSpinner from "../../components/common/GlobalSpinner";
 import useDebounce from "../../hooks/useDebounce";
+import useTableData from "../../hooks/usetableData";
 
 const Users = () => {
   const [page, setPage] = useState(1);
@@ -18,15 +19,7 @@ const Users = () => {
 
   const ITEMS_PER_PAGE = 7;
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["users"],
-    queryFn: () => {
-      setPage(1);
-      return axios.get("/admin/users");
-    },
-    cacheTime: 5 * 60 * 1000,
-  });
-
+  const { data, isLoading } = useTableData("users");
   if (isLoading) return <GlobalSpinner />;
   const { data: users } = data;
   // console.log(users);
@@ -88,7 +81,7 @@ const Users = () => {
               onChange={(e) => setSearchString(e.target.value)}
               type="text"
               value={searchString}
-              placeholder="Search product here"
+              placeholder="Search user here"
               className="input input-bordered w-full max-w-xs"
             />
           </div>

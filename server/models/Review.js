@@ -10,8 +10,9 @@ const reviewSchema = new Schema(
       },
     ],
     rating: { type: Number, required: true, min: 1, max: 5, default: 5 },
-    productId: { type: String, required: true },
-    userId: { type: mongoose.Schema.Types.ObjectId },
+    // productId: { type: Schema.Types.ObjectId, required: true, ref: "Product" },
+    productId: { type: String, required: true, ref: "Product" },
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );

@@ -3,29 +3,62 @@ import OrderTable from "./OrderTable";
 import { useState } from "react";
 import Pagination from "../../components/common/Pagination";
 import { paginate } from "../../Services/productsService";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import Layout from "../../components/layout/Layout";
 import GlobalSpinner from "../../components/common/GlobalSpinner";
+import useTableData from "../../hooks/usetableData";
+import Loader from "../../components/common/Loader";
+import useDebounce from "../../hooks/useDebounce";
 
 const Orders = () => {
   const [page, setPage] = useState(1);
+  const [searchString, setSearchString] = useState("");
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
+  const debouncedSearch = useDebounce(searchString, 500);
+  const searchFields = ["phoneNumber", "status", "date"];
 
   const ITEMS_PER_PAGE = 10;
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["orders"],
-    queryFn: () => {
-      setPage(1);
-      return axios.get("/admin/orders");
-    },
-    cacheTime: 5 * 60 * 1000,
-  });
-  if (isLoading) return <GlobalSpinner />;
+  const { data, isLoading } = useTableData("orders");
+  if (isLoading) return <Loader />;
   const { data: orders } = data;
-  console.log(orders);
+  // console.log(orders);
 
-  let totalItems = orders.length;
+  const sortableData = [...orders];
+  if (sortConfig.key) {
+    sortableData.sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === "ascending" ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === "ascending" ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+
+  const filteredData = sortableData.filter((item) => {
+    const searchRegex = new RegExp(debouncedSearch, "i");
+    return searchFields.some((field) => searchRegex.test(item[field]));
+  });
+
+  const requestSort = (key) => {
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortDirection = (column) => {
+    if (!sortConfig.key) {
+      return "text-gray-400 hover:text-gray-600";
+    }
+    return sortConfig.key === column && sortConfig.direction === "ascending"
+      ? "text-gray-900 font-semibold"
+      : "text-gray-400 hover:text-gray-600";
+  };
+
+  let totalItems = filteredData.length;
   const paginationParams = {
     currentPage: page,
     hasNextPage: ITEMS_PER_PAGE * page < totalItems,
@@ -35,7 +68,7 @@ const Orders = () => {
     lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
   };
 
-  const paginatedArr = paginate(orders, ITEMS_PER_PAGE, page);
+  const paginatedArr = paginate(filteredData, ITEMS_PER_PAGE, page);
 
   return (
     <>
@@ -44,13 +77,20 @@ const Orders = () => {
         <div className="flex justify-between items-center my-2">
           <div className="flex items-center">
             <input
+              onChange={(e) => setSearchString(e.target.value)}
               type="text"
-              placeholder="Search"
-              className="bg-white input input-bordered w-full max-w-xs"
+              value={searchString}
+              placeholder="Search order here"
+              className="input input-bordered w-full max-w-xs"
             />
           </div>
         </div>
-        <OrderTable orders={paginatedArr} />
+        <OrderTable
+          orders={paginatedArr}
+          sortConfig={sortConfig}
+          getSortDirection={getSortDirection}
+          requestSort={requestSort}
+        />
         <Pagination setPage={setPage} paginationParams={paginationParams} />
       </Layout>
     </>

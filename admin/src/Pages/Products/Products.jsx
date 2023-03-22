@@ -6,8 +6,8 @@ import Pagination from "../../components/common/Pagination";
 import { paginate } from "../../Services/productsService";
 import Layout from "../../components/layout/Layout";
 import GlobalSpinner from "../../components/common/GlobalSpinner";
-import useProducts from "../../hooks/Products/useProducts";
 import useDebounce from "../../hooks/useDebounce";
+import useTableData from "../../hooks/usetableData";
 
 const Products = () => {
   const [page, setPage] = useState(1);
@@ -17,7 +17,7 @@ const Products = () => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const debouncedSearch = useDebounce(searchString, 500);
 
-  const { data, isLoading } = useProducts();
+  const { data, isLoading } = useTableData("products");
   if (isLoading) return <GlobalSpinner />;
   const { data: products } = data;
 

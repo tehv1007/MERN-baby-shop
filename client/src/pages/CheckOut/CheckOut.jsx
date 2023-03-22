@@ -254,7 +254,7 @@ const CheckOut = ({ user }) => {
                 href={`/checkout/${user._id}/shipping`}
                 className="flex justify-center items-center text-md py-3">
                 <HiChevronLeft size={30} />
-                Return to infomation
+                Return to information
               </a>
             </div>
           </div>

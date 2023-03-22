@@ -7,17 +7,15 @@ import subNavLink from "./link";
 import NavLink from "./NavLink";
 import { getTotalQuantity } from "../../../services/cartService";
 import { getCartItems } from "../../../pages/ViewCart/useCart";
+import Loader from "../../common/Loader";
 
 const Navbar = ({ user, isConnected }) => {
   let totalQuantity = 0;
   let items;
-  // if (!user) {
-  //   items = JSON.parse(localStorage.getItem("cart"));
-  //   totalQuantity = items ? getTotalQuantity(items) : 0;
-  // }
+
   if (user) {
     const { data, isLoading } = getCartItems(user);
-    if (isLoading) return <h1>Loading...</h1>;
+    if (isLoading) return <Loader />;
     items = data.data.products;
     totalQuantity = getTotalQuantity(items);
   }

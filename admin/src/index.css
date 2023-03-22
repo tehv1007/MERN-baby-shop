@@ -46,3 +46,29 @@ input[type="number"] {
 .rating span:last-child {
   color: #404040;
 }
+
+/* Order status */
+span.not-processed {
+  background-color: #f2dede;
+  color: #a94442;
+}
+
+span.processing {
+  background-color: #fdf6b2;
+  color: #c27803;
+}
+
+span.shipped {
+  background-color: #dff0d8;
+  color: #3c763d;
+}
+
+span.delivered {
+  background-color: #d9edf7;
+  color: #31708f;
+}
+
+span.cancelled {
+  background-color: #f5f5f5;
+  color: #333;
+}

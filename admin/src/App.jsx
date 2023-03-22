@@ -5,7 +5,6 @@ import Users from "./Pages/Users/Users";
 import Orders from "./Pages/Orders/Orders";
 import ProductEdit from "./Pages/Products/ProductEdit";
 import AddNewProduct from "./Pages/Products/AddNewProduct";
-import TestGrid from "./Pages/Products/Grid";
 import { ToastContainer } from "react-toastify";
 import Login from "./Pages/login/Login";
 import NotFound from "./Pages/NotFound";
@@ -13,6 +12,8 @@ import { AuthContext } from "./context/AuthContext";
 import { useContext } from "react";
 import ProductDetail from "./Pages/Products/ProductDetail";
 import CustomerOrders from "./Pages/Orders/CustomerOrders";
+import Category from "./Pages/Category/Category";
+import OrderDetail from "./Pages/Orders/OrderDetail";
 
 const App = () => {
   const { currentUser } = useContext(AuthContext);
@@ -73,14 +74,14 @@ const App = () => {
               </RequireAuth>
             }
           />
-          <Route
+          {/* <Route
             path="/customers/orders"
             element={
               <RequireAuth>
                 <CustomerOrders />
               </RequireAuth>
             }
-          />
+          /> */}
           <Route
             path="/orders"
             element={
@@ -90,10 +91,26 @@ const App = () => {
             }
           />
           <Route
+            path="/orders/:orderId"
+            element={
+              <RequireAuth>
+                <OrderDetail />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/:userId/orders"
+            element={
+              <RequireAuth>
+                <CustomerOrders />
+              </RequireAuth>
+            }
+          />
+          <Route
             path="/category"
             element={
               <RequireAuth>
-                <TestGrid />
+                <Category />
               </RequireAuth>
             }
           />

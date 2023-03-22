@@ -1,9 +1,13 @@
-import React from 'react'
+import React from "react";
+import PageTitle from "../../components/common/PageTitle";
+import Layout from "../../components/layout/Layout";
 
 const Category = () => {
   return (
-    <div>Category</div>
-  )
-}
+    <Layout>
+      <PageTitle title="Category" />
+    </Layout>
+  );
+};
 
-export default Category
+export default Category;

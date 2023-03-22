@@ -19,7 +19,7 @@ const productSchema = new Schema(
         ],
         rating: { type: Number, required: true, min: 1, max: 5, default: 5 },
         productId: { type: String, required: true },
-        userId: { type: mongoose.Schema.Types.ObjectId },
+        userId: { type: Schema.Types.ObjectId },
         user: { type: String },
         createAt: { type: Date },
         editedAt: { type: Date },
