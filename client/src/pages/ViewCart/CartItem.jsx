@@ -3,7 +3,6 @@ import {
   removeCartItem,
   removeItem,
   updateCartItem,
-  updateItem,
 } from "../../services/cartService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import MinusIcon from "../../components/common/icons/MinusIcon";

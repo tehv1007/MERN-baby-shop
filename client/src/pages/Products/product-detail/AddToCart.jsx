@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MinusIcon from "../../../components/common/icons/MinusIcon";
 import PlusIcon from "../../../components/common/icons/PlusIcon";
-import { updateItem } from "../../../services/cartService";
 import { addCartItem } from "../../ViewCart/useCart";
 
 const AddToCart = ({ product, user }) => {

@@ -1,7 +1,6 @@
-import React from "react";
 import Skeleton from "react-loading-skeleton";
 
-const Loader = () => {
+const SkeletonBlock = () => {
   return (
     <>
       {[...Array(8).keys()].map((item) => (
@@ -15,4 +14,4 @@ const Loader = () => {
   );
 };
 
-export default Loader;
+export default SkeletonBlock;

@@ -32,14 +32,12 @@ const EditProduct = () => {
     queryFn: () => getProductById(productId),
   });
 
-  // console.log(data);
-
   const {
     register,
     handleSubmit,
     reset,
     watch,
-    formState: { errors, isDirty, dirtyFields },
+    formState: { errors, isDirty },
   } = useForm({
     resolver: yupResolver(editProductSchema),
   });

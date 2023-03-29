@@ -7,7 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const ORDER_STATUS = [
-  { label: "Not processed", value: "Not-Processed" },
+  { label: "Pending", value: "Pending" },
   { label: "Processing", value: "Processing" },
   { label: "Shipped", value: "Shipped" },
   { label: "Delivered", value: "Delivered" },
@@ -42,7 +42,7 @@ const OrderDataRow = ({
     <tr className="text-center">
       <td className="text-sm text-left">{transaction_id}</td>
       <td className="text-sm">{formatDate(createdAt)}</td>
-      <td className="text-sm">${address}</td>
+      <td className="text-sm">{address}</td>
       <td className="text-sm">${amount}</td>
       <td className="text-center text-sm">
         <span

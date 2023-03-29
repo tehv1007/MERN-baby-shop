@@ -58,7 +58,7 @@ input[type="number"] {
 }
 
 /* Order status */
-span.not-processed {
+span.pending {
   background-color: #f2dede;
   color: #a94442;
 }

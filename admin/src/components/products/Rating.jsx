@@ -10,7 +10,7 @@ export default function Rating({ productId }) {
 
   if (!data) reviews = [];
   else reviews = data.data.reviews;
-  console.log(data);
+  // console.log(data);
 
   let totalRating =
     reviews.length > 0

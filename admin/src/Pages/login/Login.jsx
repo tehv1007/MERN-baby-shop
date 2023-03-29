@@ -3,6 +3,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import LoginImg from "../../assets/login.jpeg";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [error, setError] = useState(false);
@@ -10,7 +11,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
-
   const { dispatch } = useContext(AuthContext);
 
   const handleLogin = (e) => {
@@ -22,10 +22,12 @@ const Login = () => {
         // Signed in
         const user = userCredential.user;
         dispatch({ type: "LOGIN", payload: user });
+        toast.success("Successfully Login");
         navigate("/");
       })
       .catch((error) => {
         setError(true);
+        toast.error(`${error.response.data.message}`);
       });
   };
 
@@ -89,24 +91,6 @@ const Login = () => {
         </div>
       </div>
     </>
-
-    // <div className="login">
-    //   <label htmlFor="login-form">Please Login for Shop Managing</label>
-    //   <form onSubmit={handleLogin}>
-    //     <input
-    //       type="email"
-    //       placeholder="email"
-    //       onChange={(e) => setEmail(e.target.value)}
-    //     />
-    //     <input
-    //       type="password"
-    //       placeholder="password"
-    //       onChange={(e) => setPassword(e.target.value)}
-    //     />
-    //     <button type="submit">Login</button>
-    //     {error && <span>Wrong email or password!</span>}
-    //   </form>
-    // </div>
   );
 };
 

@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const bcrypt = require("bcrypt");
 
 //GET ALL USER
 exports.getAllUsers = async (req, res) => {
@@ -47,59 +48,74 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
-//GET USER STATS
-exports.getUserStats = async (req, res) => {
-  const date = new Date();
-  const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
+// Update user profile
+exports.checkEmailDuplicate = async (req, res, next) => {
+  const { email } = req.body;
+  const userId = req.params.id;
 
+  const user = await User.findOne({ email });
+
+  if (user && user._id.toString() !== userId) {
+    return res.status(400).send({ message: "Email already exists" });
+  }
+
+  next();
+};
+
+exports.updateProfile = async (req, res) => {
   try {
-    const data = await User.aggregate([
-      { $match: { createdAt: { $gte: lastYear } } },
-      {
-        $project: {
-          month: { $month: "$createdAt" },
-        },
-      },
-      {
-        $group: {
-          _id: "$month",
-          total: { $sum: 1 },
-        },
-      },
-    ]);
-    res.status(200).json(data);
+    const userId = req.params.id;
+    const { name, email, phoneNumber, address, image } = req.body;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    user.name = name;
+    user.email = email;
+    user.phoneNumber = phoneNumber;
+    user.address = address;
+    user.image = image;
+
+    await user.save();
+
+    res.send(user);
   } catch (err) {
-    res.status(500).json(err);
+    console.error(err);
+    res.status(500).send("Something went wrong.");
   }
 };
 
-//
-exports.updateProfile = async (req, res) => {
-  try {
-    const { name, password, address } = req.body;
-    const user = await User.findById(req.user._id);
-    // check password length
-    if (password && password.length < 6) {
-      return res.json({
-        error: "Password is required and should be min 6 characters long",
-      });
-    }
-    // hash the password
-    const hashedPassword = password ? await hashPassword(password) : undefined;
+// Change password
+exports.changePassword = async (req, res) => {
+  const userId = req.params.id;
+  const { currentPassword, newPassword } = req.body;
 
-    const updated = await User.findByIdAndUpdate(
-      req.user._id,
-      {
-        name: name || user.name,
-        password: hashedPassword || user.password,
-        address: address || user.address,
-      },
-      { new: true }
-    );
-
-    updated.password = undefined;
-    res.json(updated);
-  } catch (err) {
-    console.log(err);
+  // Kiểm tra xem người dùng có tồn tại trong cơ sở dữ liệu hay không
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
   }
+
+  // Kiểm tra xem mật khẩu hiện tại có chính xác hay không
+  const passwordMatches = await bcrypt.compare(currentPassword, user.password);
+  if (!passwordMatches) {
+    return res.status(400).json({ message: "Current password is incorrect" });
+  }
+
+  // Kiểm tra xem mật khẩu mới và xác nhận lại mật khẩu mới có giống nhau hay không
+  if (newPassword !== req.body.confirmPassword) {
+    return res
+      .status(400)
+      .json({ message: "New password and confirm password do not match" });
+  }
+
+  // Cập nhật mật khẩu mới cho người dùng
+  const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+  user.password = hashedNewPassword;
+  await user.save();
+
+  return res.status(200).json({ message: "Password changed successfully" });
 };

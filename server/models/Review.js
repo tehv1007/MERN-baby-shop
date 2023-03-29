@@ -13,6 +13,7 @@ const reviewSchema = new Schema(
     // productId: { type: Schema.Types.ObjectId, required: true, ref: "Product" },
     productId: { type: String, required: true, ref: "Product" },
     userId: { type: Schema.Types.ObjectId, ref: "User" },
+    user: { type: Schema.Types.Mixed },
   },
   { timestamps: true }
 );

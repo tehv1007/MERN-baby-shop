@@ -8,7 +8,7 @@ import Logo from "../../assets/Logo.webp";
 
 const Invoice = () => {
   const { orderId } = useParams();
-  console.log(orderId);
+
   const { data, isLoading } = useQuery({
     queryKey: ["order"],
     queryFn: () => axios.get(`/admin/orders/${orderId}`),
@@ -26,9 +26,8 @@ const Invoice = () => {
             <h1 className="font-bold font-serif text-xl uppercase">
               Invoice
               <p className="text-xs mt-1 text-gray-500">
-                Status:{" "}
+                Status:
                 <span className="pl-2 font-medium text-xs capitalize">
-                  {" "}
                   <span className="font-serif">
                     <span
                       className={`inline-flex px-2 text-xs font-medium leading-5 rounded-full ${order.status.toLowerCase()}`}
@@ -44,7 +43,7 @@ const Invoice = () => {
                 <img src={Logo} alt="Birth Blessing" width={150} />
               </h2>
               <p className="text-sm text-gray-500 mt-2">
-                59C Nguyen Dinh Chieu, P6, Q3, <br /> Ho Chi Minh{" "}
+                59C Nguyen Dinh Chieu, P6, Q3, <br /> Ho Chi Minh
               </p>
             </div>
           </div>
@@ -104,7 +103,7 @@ const Invoice = () => {
                         ${product.price}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap text-center font-bold text-red-500">
-                        ${product.quantity * product.price}
+                        ${(product.quantity * product.price).toFixed(2)}
                       </td>
                     </tr>
                   ))}
@@ -117,14 +116,14 @@ const Invoice = () => {
         {/* Summary */}
         <div className="border rounded-xl border-gray-100 p-8 py-6 bg-gray-50">
           <div className="flex lg:flex-row md:flex-row flex-col justify-between">
-            {/* <div className="mb-3 md:mb-0 lg:mb-0  flex flex-col sm:flex-wrap">
-          <span className="mb-1 font-bold font-serif text-sm uppercase text-gray-600 block">
-            Payment Method
-          </span>
-          <span className="text-sm text-gray-500 font-semibold font-serif block">
-            COD
-          </span>
-        </div> */}
+            <div className="mb-3 md:mb-0 lg:mb-0  flex flex-col sm:flex-wrap">
+              <span className="mb-1 font-bold font-serif text-sm uppercase text-gray-600 block">
+                Payment Method
+              </span>
+              <span className="text-sm text-gray-500 font-semibold font-serif block">
+                {order.paymentMethod || "Credit Card"}
+              </span>
+            </div>
 
             {/* Shipping Cost */}
             <div className="mb-3 md:mb-0 lg:mb-0 flex flex-col sm:flex-wrap">

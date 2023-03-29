@@ -1,6 +1,7 @@
 const Review = require("../models/Review");
 const Product = require("../models/Product");
 const User = require("../models/User");
+const { create } = require("../models/Product");
 
 // Get all reviews at one product
 exports.getReviewById = async (req, res) => {
@@ -22,6 +23,7 @@ exports.getReviewById = async (req, res) => {
         return {
           id: review._id,
           userId: review.userId,
+          user: review.user,
           productId: review.productId,
           rating: review.rating,
           content: review.review[0].content,
@@ -31,12 +33,12 @@ exports.getReviewById = async (req, res) => {
         };
       }),
     });
-    // res.json(reviews);
   } catch (err) {
     res.status(500).json({ message: "Something went wrong." });
   }
 };
 
+// Delete a review
 exports.deleteReview = async (req, res) => {
   try {
     const review = await review.findByIdAndRemove(req.params.reviewId);
@@ -98,10 +100,7 @@ exports.editReview = async (req, res) => {
 exports.addReviewProduct = async (req, res) => {
   const productId = req.params.productId;
   const userId = req.params.userId;
-  const username = await User.findById(userId);
   const product = await Product.findById(productId);
-
-  console.log({ user: username });
 
   // Check if the user has already reviewed the product
   const existingReview = await Review.findOne({ userId, productId });
@@ -110,13 +109,6 @@ exports.addReviewProduct = async (req, res) => {
   }
 
   if (product) {
-    // Check if the user has already reviewed the product
-    // if (product.find((x) => x.userId == req.params.userId)) {
-    //   return res
-    //     .status(400)
-    //     .send({ message: "You already submitted a review" });
-    // }
-
     // Create a new review
     let review = await Review.create(req.body);
 
@@ -125,6 +117,7 @@ exports.addReviewProduct = async (req, res) => {
     product.avgRating =
       product.reviews.reduce((a, c) => c.rating + a, 0) /
       product.reviews.length;
+
     const updatedProduct = await product.save();
     res.status(201).send({
       message: "Review Created",

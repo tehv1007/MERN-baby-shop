@@ -1,4 +1,3 @@
-import React from "react";
 import ColumnDisplayIcon from "./icons/ColumnDisplayIcon";
 import FilterIcon from "./icons/FilterIcon";
 import RowDisplayIcon from "./icons/RowDisplayIcon";

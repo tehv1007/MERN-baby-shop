@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import Loader from "../../components/common/Loader";
+import Loader from "../../components/common/Skeleton/Loader";
 import fetchImage from "../../services/fetchImage";
 
 const PostCardItem = ({ featureMedia, title, content, author, url, date }) => {

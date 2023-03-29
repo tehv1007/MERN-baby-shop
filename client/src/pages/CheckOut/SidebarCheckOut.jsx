@@ -11,7 +11,7 @@ const CartSummary = ({ user }) => {
   if (!user) items = [];
   const { data, isLoading } = getCartItems(user);
   if (isLoading) return <h1>Loading...</h1>;
-  console.log(data);
+  // console.log(data);
   items = data.data.products;
   const subTotal = getTotalPrice(items);
   localStorage.setItem("total", Number((shippingFee + subTotal).toFixed(2)));
@@ -21,7 +21,8 @@ const CartSummary = ({ user }) => {
       {items.map((product, index) => (
         <div
           key={index}
-          className="flex gap-4 py-5 justify-between items-center max-w-screen-sm mx-auto">
+          className="flex gap-4 py-5 justify-between items-center max-w-screen-sm mx-auto"
+        >
           <div className="flex justify-between items-center">
             <div className="absolute">
               <button className="relative left-12 top-3 z-10 border bg-zinc-500 text-white rounded-full px-2 ">
@@ -89,7 +90,7 @@ const Hide = () => {
 };
 
 const SidebarCheckOut = ({ user }) => {
-  console.log(user);
+  // console.log(user);
   const [display, setDisplay] = useState(true);
   const total = localStorage.getItem("total");
   return (

@@ -1,16 +1,11 @@
 import { Link } from "react-router-dom";
 import Rating from "../../components/review/Rating";
-import { addItem } from "../../services/cartService";
 import { addCartItem } from "../ViewCart/useCart";
 
-const ProdudctCardRow = ({ product, user }) => {
+const ProductCardRow = ({ product, user }) => {
   const mutation = addCartItem(user, 1);
   const addToCart = () => {
     if (user) mutation.mutate(product);
-    else {
-      addItem(product);
-      window.location.reload(true);
-    }
   };
 
   return (
@@ -40,13 +35,15 @@ const ProdudctCardRow = ({ product, user }) => {
               {product.inStock > 0 ? (
                 <button
                   onClick={addToCart}
-                  className="bg-[#212529] text-white py-2 px-4 rounded-md  hover:bg-white hover:text-black md:px-6  transition duration-500 ">
+                  className="bg-[#212529] text-white py-2 px-4 rounded-md  hover:bg-white hover:text-black md:px-6  transition duration-500 "
+                >
                   Add To Cart
                 </button>
               ) : (
                 <button
                   disabled
-                  className="bg-[#212529] text-white py-2 px-4 rounded-md  hover:bg-white hover:text-black md:px-6  transition duration-500 ">
+                  className="bg-[#212529] text-white py-2 px-4 rounded-md  hover:bg-white hover:text-black md:px-6  transition duration-500 "
+                >
                   Out of Stock
                 </button>
               )}
@@ -58,4 +55,4 @@ const ProdudctCardRow = ({ product, user }) => {
   );
 };
 
-export default ProdudctCardRow;
+export default ProductCardRow;

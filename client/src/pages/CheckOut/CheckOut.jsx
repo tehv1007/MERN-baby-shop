@@ -8,8 +8,7 @@ import {
 } from "../../services/paymentService";
 import { isAuthenticated } from "../../services/authService";
 import { useEffect, useState } from "react";
-import { emptyCart } from "../../services/cartService";
-import { getCartItems } from "../ViewCart/useCart";
+import { getCartItems, removeCartItems } from "../ViewCart/useCart";
 import { Link, useNavigate } from "react-router-dom";
 
 const CheckOut = ({ user }) => {
@@ -17,21 +16,24 @@ const CheckOut = ({ user }) => {
   const info = JSON.parse(localStorage.getItem("shippingInfo"));
   const address = JSON.parse(localStorage.getItem("shippingInfo2"));
   const fullAddress = JSON.parse(localStorage.getItem("shippingAddress"));
+  const phoneNumber = JSON.parse(localStorage.getItem("phoneNumber"));
   const total = JSON.parse(localStorage.getItem("total"));
   let products;
+
   if (!user) products = [];
   const { data, isLoading } = getCartItems(user);
   if (isLoading) return <h1>Loading...</h1>;
   products = data.data.products;
 
-  const [datas, setDatas] = useState({
+  const [dataset, setDataset] = useState({
     loading: false,
     success: false,
     clientToken: null,
     error: "",
     instance: {},
-    address: fullAddress,
   });
+
+  const mutation = removeCartItems(user);
 
   const userId = user._id;
   const token = localStorage.getItem("token");
@@ -39,11 +41,11 @@ const CheckOut = ({ user }) => {
   const getToken = (userId, token) => {
     getBraintreeClientToken(userId, token).then((data) => {
       if (data.error) {
-        console.log(data.error);
-        setDatas({ ...data, error: data.error });
+        // console.log(data.error);
+        setDataset({ ...data, error: data.error });
       } else {
-        console.log(data);
-        setDatas({ clientToken: data.clientToken });
+        // console.log(data);
+        setDataset({ clientToken: data.clientToken });
       }
     });
   };
@@ -62,23 +64,24 @@ const CheckOut = ({ user }) => {
     );
   };
 
-  let deliveryAddress = datas.address;
-
   const buy = () => {
-    setDatas({ loading: true });
+    setDataset({ loading: true });
     // send the nonce to server
     // nonce = data.instance.requestPaymentMethod()
     let nonce;
-    let getNonce = datas.instance
+    let getNonce = dataset.instance
       .requestPaymentMethod()
-      .then((datas) => {
+      .then((dataset) => {
         // console.log(data);
-        nonce = datas.nonce;
+        nonce = dataset.nonce;
         const paymentData = {
           paymentMethodNonce: nonce,
           amount: total,
+          address: fullAddress,
+          phoneNumber: phoneNumber,
         };
 
+        console.log(paymentData);
         processPayment(userId, token, paymentData)
           .then((response) => {
             console.log(response);
@@ -89,51 +92,57 @@ const CheckOut = ({ user }) => {
               products: products,
               transaction_id: response.transaction.id,
               amount: response.transaction.amount,
-              address: deliveryAddress,
+              paymentMethod: response.transaction.paymentInstrumentType,
+              address: fullAddress,
+              phoneNumber: phoneNumber,
             };
+
+            console.log(createOrderData);
 
             createOrder(userId, token, createOrderData)
               .then((response) => {
-                emptyCart(user);
+                // emptyCart(user);
+                mutation.mutate();
                 console.log("payment success and empty cart");
-                setDatas({
+                setDataset({
                   loading: false,
                   success: true,
                 });
-                navigate("/profile");
+                navigate("/user/dashboard");
               })
               .catch((error) => {
                 console.log(error);
-                setDatas({ loading: false });
+                setDataset({ loading: false });
               });
           })
           .catch((error) => {
             console.log(error);
-            setDatas({ loading: false });
+            setDataset({ loading: false });
           });
       })
       .catch((error) => {
-        // console.log("dropin error: ", error);
-        setDatas({ ...datas, error: error.message });
+        // console.log("drop-in error: ", error);
+        setDataset({ ...dataset, error: error.message });
       });
   };
 
   const showDropIn = () => (
-    <div onBlur={() => setDatas({ ...datas, error: "" })}>
-      {datas.clientToken !== null && products.length > 0 ? (
+    <div onBlur={() => setDataset({ ...dataset, error: "" })}>
+      {dataset.clientToken !== null && products.length > 0 ? (
         <div>
           <DropIn
             options={{
-              authorization: datas.clientToken,
+              authorization: dataset.clientToken,
               paypal: {
                 flow: "vault",
               },
             }}
-            onInstance={(instance) => (datas.instance = instance)}
+            onInstance={(instance) => (dataset.instance = instance)}
           />
           <button
             onClick={buy}
-            className="inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline bg-green-500 text-white hover:green-600 w-full">
+            className="inline-block align-middle text-center select-none border whitespace-no-wrap rounded py-1 px-3 bg-green-500 text-white hover:green-600 w-full"
+          >
             Pay Now
           </button>
         </div>
@@ -144,7 +153,8 @@ const CheckOut = ({ user }) => {
   const showError = (error) => (
     <div
       className="alert alert-danger"
-      style={{ display: error ? "" : "none" }}>
+      style={{ display: error ? "" : "none" }}
+    >
       {error}
     </div>
   );
@@ -152,7 +162,8 @@ const CheckOut = ({ user }) => {
   const showSuccess = (success) => (
     <div
       className="alert alert-info"
-      style={{ display: success ? "" : "none" }}>
+      style={{ display: success ? "" : "none" }}
+    >
       Thanks! Your payment was successful!
     </div>
   );
@@ -185,10 +196,12 @@ const CheckOut = ({ user }) => {
             <div
               role="table"
               aria-label="Review your information"
-              className="bg-white border-gray-400 rounded border-solid border text-gray-700 text-sm leading-5 my-10">
+              className="bg-white border-gray-400 rounded border-solid border text-gray-700 text-sm leading-5 my-10"
+            >
               <div
                 role="row"
-                className="items-baseline mx-4 py-3 flex justify-between">
+                className="items-baseline mx-4 py-3 flex justify-between"
+              >
                 <div className="pr-3 flex justify-between gap-10">
                   <div role="cell" className="">
                     <span className="text-gray-600">Contact</span>
@@ -201,9 +214,10 @@ const CheckOut = ({ user }) => {
                 </div>
                 <div className="pr-3" role="cell">
                   <a
-                    href={`/checkout/${user._id}/infomation`}
+                    href={`/checkout/${user._id}/information`}
                     className=""
-                    aria-label="Change contact information">
+                    aria-label="Change contact information"
+                  >
                     <span className="text-indigo-900 inline text-xs leading-4">
                       Change
                     </span>
@@ -212,7 +226,8 @@ const CheckOut = ({ user }) => {
               </div>
               <div
                 role="row"
-                className="items-baseline border-gray-400 border-t mx-4 py-3 flex justify-between ">
+                className="items-baseline border-gray-400 border-t mx-4 py-3 flex justify-between "
+              >
                 <div className="pr-3 flex justify-between gap-10 ">
                   <div role="cell" className="">
                     <span className="text-gray-600">Ship to</span>
@@ -228,9 +243,10 @@ const CheckOut = ({ user }) => {
                 </div>
                 <div className="pr-3" role="cell">
                   <a
-                    href={`/checkout/${user._id}/infomation`}
+                    href={`/checkout/${user._id}/information`}
                     className=""
-                    aria-label="Change contact information">
+                    aria-label="Change contact information"
+                  >
                     <span className="text-indigo-900 inline text-xs leading-4">
                       Change
                     </span>
@@ -252,7 +268,8 @@ const CheckOut = ({ user }) => {
             <div className="max-w-screen-sm mx-auto my-11 pb-5 md:flex justify-between items-center ">
               <a
                 href={`/checkout/${user._id}/shipping`}
-                className="flex justify-center items-center text-md py-3">
+                className="flex justify-center items-center text-md py-3"
+              >
                 <HiChevronLeft size={30} />
                 Return to information
               </a>

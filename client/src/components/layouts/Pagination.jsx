@@ -17,7 +17,8 @@ const Pagination = ({ paginationParams, setPage }) => {
           className="bg-gray-400 text-white px-3 py-2 rounded-md"
           to="?page=1"
           type="submit"
-          onClick={() => setPage(1)}>
+          onClick={() => setPage(1)}
+        >
           1
         </Link>
       ) : (
@@ -28,37 +29,46 @@ const Pagination = ({ paginationParams, setPage }) => {
           className="bg-gray-400 text-white px-3 py-2 rounded-md"
           to={`?page=${previousPage}`}
           type="submit"
-          onClick={() => setPage(previousPage)}>
+          onClick={() => setPage(previousPage)}
+        >
           {previousPage}
         </Link>
       ) : (
         ""
       )}
-      <Link
-        to={`?page=${currentPage}`}
-        className="bg-black text-white px-3 py-2 rounded-md"
-        type="submit"
-        onClick={() => setPage(currentPage)}>
-        {currentPage}
-      </Link>
+      {currentPage ? (
+        <Link
+          to={`?page=${currentPage}`}
+          className="bg-black text-white px-3 py-2 rounded-md"
+          type="submit"
+          onClick={() => setPage(currentPage)}
+        >
+          {currentPage}
+        </Link>
+      ) : (
+        ""
+      )}
+
       {hasNextPage ? (
         <Link
           className="bg-gray-400 text-white px-3 py-2 rounded-md"
           to={`?page=${nextPage}`}
           type="submit"
-          onClick={() => setPage(nextPage)}>
+          onClick={() => setPage(nextPage)}
+        >
           {nextPage}
         </Link>
       ) : (
         ""
       )}
       {/* <button className="btn btn-disabled text-black">...</button> */}
-      {lastPage !== currentPage && nextPage !== lastPage ? (
+      {lastPage !== currentPage && nextPage !== lastPage && lastPage != 0 ? (
         <Link
           className="bg-gray-400 text-white px-3 py-2 rounded-md"
           to={`?page=${lastPage}`}
           type="submit"
-          onClick={() => setPage(lastPage)}>
+          onClick={() => setPage(lastPage)}
+        >
           {lastPage}
         </Link>
       ) : (

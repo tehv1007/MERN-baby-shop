@@ -5,7 +5,8 @@ import fetchImage from "../../services/fetchImage";
 import axios from "axios";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import GlobalSpinner from "../../components/common/GlobalSpinner";
-import Loader from "../../components/common/Loader";
+import Loader from "../../components/common/Skeleton/Loader";
+import Progress from "../../components/common/Progress";
 
 const SocialSharing = ({ post, postId }) => {
   return (
@@ -51,15 +52,17 @@ const SocialSharing = ({ post, postId }) => {
 
 const ImageRender = ({ post }) => {
   const featureMedia = post.featured_media;
-  console.log(featureMedia);
+  // console.log(featureMedia);
   const { data: imageSrc, isLoading } = useQuery({
     queryKey: ["media", featureMedia],
     queryFn: () => fetchImage(featureMedia),
   });
+
   if (isLoading) {
-    return <Loader />;
+    return <Progress />;
   }
-  console.log(imageSrc);
+
+  // console.log(imageSrc);
   return (
     <img className="mx-auto w-full" src={imageSrc} alt={post.title.rendered} />
   );
@@ -88,23 +91,24 @@ const PostPage = () => {
     month: "long",
     day: "numeric",
   };
-  const dateFormated = new Date(post.date);
+  const dateFormatted = new Date(post.date);
 
   return (
-    <section>
+    <section className="max-w-screen-xl mx-auto flex flex-grow w-full">
       {/* Container */}
-      <div className="max-w-screen-xl mx-auto p-4">
+      <div className="px-4 flex items-center justify-center">
         {/* Layout */}
         <div className="text-center">
           <h1
             className="text-xl font-medium leading-6 mb-3 capitalize"
             dangerouslySetInnerHTML={{
               __html: post.title.rendered,
-            }}></h1>
+            }}
+          ></h1>
           <div className="text-center flex gap-5 justify-center mb-5">
             <span className="">
               <time dateTime={post.date}>
-                {dateFormated.toLocaleString("en-US", options)}
+                {dateFormatted.toLocaleString("en-US", options)}
               </time>
             </span>
             <span className="font-medium">
@@ -122,7 +126,8 @@ const PostPage = () => {
             <span
               dangerouslySetInnerHTML={{
                 __html: post.content.rendered,
-              }}></span>
+              }}
+            ></span>
           </div>
 
           {/* Share */}
@@ -134,7 +139,8 @@ const PostPage = () => {
           <div className="mt-10 text-indigo-900 flex text-lg justify-center leading-7 text-center">
             <Link
               to="/blog"
-              className="flex items-center gap-2 justify-center text-lg">
+              className="flex items-center gap-2 justify-center text-lg"
+            >
               <AiOutlineArrowLeft />
               <span className="w-full">Back to blog</span>
             </Link>

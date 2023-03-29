@@ -6,8 +6,9 @@ const OrderShipping = ({ user }) => {
   const navigate = useNavigate();
   const info = JSON.parse(localStorage.getItem("shippingInfo"));
   const address = JSON.parse(localStorage.getItem("shippingInfo2"));
-  const shippingAddress = `${info.name}, ${info.phoneNumber}, ${info.detailAddress}, ${address.ward}, ${address.district}, ${address.city}`;
+  const shippingAddress = `${info.detailAddress}, ${address.ward}, ${address.district}, ${address.city}`;
   localStorage.setItem("shippingAddress", JSON.stringify(shippingAddress));
+  localStorage.setItem("phoneNumber", JSON.stringify(info.phoneNumber));
 
   const handleSubmit = () => {
     navigate(`/checkout/${user._id}/payment`);
@@ -38,10 +39,12 @@ const OrderShipping = ({ user }) => {
             <div
               role="table"
               aria-label="Review your information"
-              className="bg-white border-gray-400 rounded border-solid border text-gray-700 text-sm leading-5 my-10">
+              className="bg-white border-gray-400 rounded border-solid border text-gray-700 text-sm leading-5 my-10"
+            >
               <div
                 role="row"
-                className="items-baseline mx-4 py-3 flex justify-between">
+                className="items-baseline mx-4 py-3 flex justify-between"
+              >
                 <div className="pr-3 flex justify-between gap-10">
                   <div role="cell" className="">
                     <span className="text-gray-600">Contact</span>
@@ -54,9 +57,10 @@ const OrderShipping = ({ user }) => {
                 </div>
                 <div className="pr-3" role="cell">
                   <a
-                    href={`/checkout/${user._id}/infomation`}
+                    href={`/checkout/${user._id}/information`}
                     className=""
-                    aria-label="Change contact information">
+                    aria-label="Change contact information"
+                  >
                     <span className="text-indigo-900 inline text-xs leading-4">
                       Change
                     </span>
@@ -65,7 +69,8 @@ const OrderShipping = ({ user }) => {
               </div>
               <div
                 role="row"
-                className="items-baseline border-gray-400 border-t mx-4 py-3 flex justify-between ">
+                className="items-baseline border-gray-400 border-t mx-4 py-3 flex justify-between "
+              >
                 <div className="pr-3 flex justify-between gap-10 ">
                   <div role="cell" className="">
                     <span className="text-gray-600">Ship to</span>
@@ -81,9 +86,10 @@ const OrderShipping = ({ user }) => {
                 </div>
                 <div className="pr-3" role="cell">
                   <a
-                    href={`/checkout/${user._id}/infomation`}
+                    href={`/checkout/${user._id}/information`}
                     className=""
-                    aria-label="Change contact information">
+                    aria-label="Change contact information"
+                  >
                     <span className="text-indigo-900 inline text-xs leading-4">
                       Change
                     </span>
@@ -107,14 +113,16 @@ const OrderShipping = ({ user }) => {
             </div>
             <div className="max-w-screen-sm mx-auto my-11 pb-5 md:flex justify-between items-center ">
               <a
-                href={`/checkout/${user._id}/infomation`}
-                className="flex justify-center items-center text-md py-3">
+                href={`/checkout/${user._id}/information`}
+                className="flex justify-center items-center text-md py-3"
+              >
                 <HiChevronLeft size={30} />
-                Return to infomation
+                Return to information
               </a>
               <button
                 onClick={handleSubmit}
-                className="w-full text-sm font-medium text-white border rounded-md bg-[#3d405d] px-8 py-5 mb-2 md:w-1/3 lg:px-0 lg:w-2/5">
+                className="w-full text-sm font-medium text-white border rounded-md bg-[#3d405d] px-8 py-5 mb-2 md:w-1/3 lg:px-0 lg:w-2/5"
+              >
                 Continue to payment
               </button>
             </div>

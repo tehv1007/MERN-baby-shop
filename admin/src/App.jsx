@@ -14,6 +14,7 @@ import ProductDetail from "./Pages/Products/ProductDetail";
 import CustomerOrders from "./Pages/Orders/CustomerOrders";
 import Category from "./Pages/Category/Category";
 import OrderDetail from "./Pages/Orders/OrderDetail";
+import Coupons from "./Pages/Coupons/Coupons";
 
 const App = () => {
   const { currentUser } = useContext(AuthContext);
@@ -74,14 +75,6 @@ const App = () => {
               </RequireAuth>
             }
           />
-          {/* <Route
-            path="/customers/orders"
-            element={
-              <RequireAuth>
-                <CustomerOrders />
-              </RequireAuth>
-            }
-          /> */}
           <Route
             path="/orders"
             element={
@@ -111,6 +104,14 @@ const App = () => {
             element={
               <RequireAuth>
                 <Category />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/coupons"
+            element={
+              <RequireAuth>
+                <Coupons />
               </RequireAuth>
             }
           />

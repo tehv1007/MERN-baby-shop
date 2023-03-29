@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
+const Cart = require("../models/Cart");
 const Token = require("../models/Token");
 const sendEmail = require("../services/sendEmail");
 
@@ -23,13 +24,19 @@ exports.signup = async (req, res) => {
 
     user = await new User({ ...req.body, password: hashPassword }).save();
 
+    // Tạo cart cho user
+    const cart = new Cart({
+      userId: user._id,
+      products: [],
+    });
+    await cart.save();
+
     const token = await new Token({
       userId: user._id,
       token: user.generateAuthToken(),
-      // token: crypto.randomBytes(32).toString("hex"),
     }).save();
 
-    const url = `${process.env.CLIENT_URL_DEV}/auth/${user.id}/verify/${token.token}`;
+    const url = `${process.env.SERVER_URL_DEV}/auth/${user.id}/verify/${token.token}`;
     await sendEmail(
       user.email,
       "Verify Email",
@@ -65,7 +72,8 @@ exports.verifyEmail = async (req, res) => {
     await user.save();
     await token.remove();
 
-    res.status(200).send({ message: "Email verified successfully" });
+    // res.status(200).send({ message: "Email verified successfully" });
+    res.status(200).redirect(`${process.env.CLIENT_URL_DEV}/verify`);
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: "Internal Server Error" });
@@ -89,7 +97,6 @@ exports.signin = async (req, res) => {
       return res
         .status(401)
         .send({ message: "Invalid Email, Username or Password" });
-    console.log("Login successful");
 
     const validPassword = bcrypt.compare(req.body.password, user.password);
     if (!validPassword)
@@ -106,19 +113,25 @@ exports.signin = async (req, res) => {
         await sendEmail(user.email, "Verify Email", url);
       }
 
+      // await token.remove();
       return res.status(400).send({
         message:
-          "You haven't verified your email yet, so an email sent to your account. Please verify",
+          "You haven't verified your email yet, so an email sent to your account. Please verify!",
       });
     }
 
     const token = user.generateAuthToken();
     const { password, ...others } = user._doc;
-    res.status(200).send({
-      user_token: token,
-      user: others,
-      message: "logged in successfully",
-    });
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,
+      })
+      .status(200)
+      .send({
+        user_token: token,
+        user: others,
+        message: "Logged in successfully",
+      });
   } catch (error) {
     res.status(500).send({ message: "Internal Server Error" });
   }

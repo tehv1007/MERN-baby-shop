@@ -26,9 +26,9 @@ const ForgotPassword = () => {
   };
 
   return (
-    <section>
+    <section className="max-w-screen-xl mx-auto flex flex-grow">
       {/* Container */}
-      <div className="w-screen h-screen px-4 flex items-center justify-center">
+      <div className="px-4 flex items-center justify-center">
         {/* Layout */}
         <div className="w-[450px] bg-white text-gray-800 shadow-[0px_2px_12px_0px_rgba(0,0,0,0.1)] p-5 border-gray-200 border rounded">
           {/* Logo */}
@@ -81,13 +81,15 @@ const ForgotPassword = () => {
               <div className="flex justify-between gap-5 text-sm leading-3 text-center">
                 <button
                   type="submit"
-                  className="py-3 px-5 items-start hover:bg-blue-400 hover:border-blue-400 bg-blue-500 border-blue-500 rounded border text-white ">
+                  className="py-3 px-5 items-start hover:bg-blue-400 hover:border-blue-400 bg-blue-500 border-blue-500 rounded border text-white "
+                >
                   <span> Submit </span>
                 </button>
                 <Link
                   to="/signin"
                   type="submit"
-                  className="py-3 px-5 items-start hover:text-blue-500 hover:border-blue-500 bg-white border-gray-500 rounded border text-gray-500">
+                  className="py-3 px-5 items-start hover:text-blue-500 hover:border-blue-500 bg-white border-gray-500 rounded border text-gray-500"
+                >
                   <span> Cancel </span>
                 </Link>
               </div>

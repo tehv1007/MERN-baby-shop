@@ -1,5 +1,4 @@
 import { useState } from "react";
-import FilterIcon from "../../components/common/icons/FilterIcon";
 import Pagination from "../../components/layouts/Pagination";
 import ProductGrid from "./ProductGrid";
 import ColumnDisplayIcon from "../../components/common/icons/ColumnDisplayIcon";
@@ -12,23 +11,17 @@ import {
   paginate,
 } from "../../services/productsService";
 import GlobalSpinner from "../../components/common/GlobalSpinner";
+import useDebounce from "../../hooks/useDebounce";
 
 const Products = ({ user }) => {
   const [category, setCategory] = useState("all");
   const [sortType, setSortType] = useState("");
   const [page, setPage] = useState(1);
   const [display, setDisplay] = useState(true);
+  const [searchString, setSearchString] = useState("");
+  const debouncedSearch = useDebounce(searchString, 500);
+
   const ITEMS_PER_PAGE = 8;
-
-  const handleSelect = (e) => {
-    e.preventDefault();
-    setCategory(e.target.value);
-  };
-
-  const handleSorting = (e) => {
-    e.preventDefault();
-    setSortType(e.target.value);
-  };
 
   const { data, isLoading } = useQuery({
     queryKey: ["products", { category: category }],
@@ -38,11 +31,18 @@ const Products = ({ user }) => {
         params: category !== "all" && { category: category },
       });
     },
-    cacheTime: 5 * 60 * 1000,
   });
 
   if (isLoading) return <GlobalSpinner />;
-  const { data: filteredProducts } = data;
+
+  const products = data.data.products;
+
+  const filteredProducts = products.filter((product) => {
+    const searchRegex = new RegExp(debouncedSearch, "i");
+    return (
+      searchRegex.test(product.title) || searchRegex.test(product.category)
+    );
+  });
 
   const sortedArr =
     (sortType === "lowtohigh" || sortType === "hightolow"
@@ -65,7 +65,7 @@ const Products = ({ user }) => {
   return (
     <div className="mt-8 lg:mt-16">
       {/* Container */}
-      <div className="max-w-screen-xl mx-auto px-4">
+      <div className="max-w-screen-xl mx-auto p-4">
         {/* Layout */}
         <div className="">
           {/* Title */}
@@ -74,11 +74,10 @@ const Products = ({ user }) => {
               <h3 className="text-[#212529] text-lg font-bold mb-4 lg:text-4xl text-center">
                 Products
               </h3>
-              <div className="mt-6  py-2 px-3 lg:py-3 flex justify-between border border-gray-200 rounded-lg w-full">
+              <div className="mt-6 p-3 flex lg:justify-between border border-gray-200 rounded-lg w-full flex-wrap gap-10">
                 {/* Layout */}
-
-                <div className="flex items-center gap-3">
-                  {/*  */}
+                <div className="flex flex-grow items-center gap-3">
+                  {/* Categories */}
                   <button
                     onClick={() => {
                       setDisplay(true);
@@ -98,30 +97,60 @@ const Products = ({ user }) => {
                   <p>Category:</p>
                   <select
                     name="Sorting"
-                    defaultValue="all"
-                    onChange={handleSelect}
+                    // defaultValue="all"
+                    value={category}
+                    onChange={(e) => {
+                      e.preventDefault();
+                      setCategory(e.target.value);
+                    }}
                     className="select select-bordered border rounded-lg p-1"
                   >
                     <option value="all">All</option>
                     <option value="play aids">Play Aids</option>
                     <option value="toys">Toys</option>
                     <option value="baby care">Baby Care</option>
-                    <option value="baby ware">Baby Wear</option>
+                    <option value="baby wear">Baby Wear</option>
                   </select>
                 </div>
-                <div>
-                  {/* Filter */}
-                  <button className="flex gap-2 px-3 items-center md:hidden">
-                    <FilterIcon />
-                    <p>Fiter and sort</p>
-                  </button>
+
+                {/* Filter */}
+                <div className="flex flex-grow items-center">
+                  <div className="relative w-full">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <svg
+                        aria-hidden="true"
+                        className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <input
+                      onChange={(e) => setSearchString(e.target.value)}
+                      type="text"
+                      value={searchString}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
+                      placeholder="Search"
+                      required
+                    />
+                  </div>
                 </div>
-                <div className="hidden md:flex gap-2 items-center">
+
+                <div className="flex flex-grow gap-2 items-center lg:justify-end">
                   {/* Sort by */}
                   <p>Sort by:</p>
                   <select
                     name="Sorting"
-                    onChange={handleSorting}
+                    onChange={(e) => {
+                      e.preventDefault();
+                      setSortType(e.target.value);
+                    }}
                     defaultValue="default"
                     className="select select-bordered border rounded-lg p-1"
                   >

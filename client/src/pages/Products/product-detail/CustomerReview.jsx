@@ -22,7 +22,6 @@ const reviewValidate = yup
 
 const CustomerReview = ({ productId, user }) => {
   const [rating, setRating] = useState({});
-  const [error, setError] = useState("");
 
   const {
     register,
@@ -47,12 +46,22 @@ const CustomerReview = ({ productId, user }) => {
       axios.post(`/reviews/${productId}/${user._id}`, newReview),
     onSuccess: () => {
       reset();
+      setHoverValue(0);
+      setCurrentValue(0);
       toast.success("Successfully add a review");
       queryClient.invalidateQueries({
         queryKey: ["reviews"],
       });
     },
+
+    onError: (error) => {
+      reset();
+      toast.error(error.response.data);
+      setHoverValue(0);
+    },
   });
+
+  const date = new Date().toISOString();
 
   const onSubmit = (data) => {
     mutation.mutate({
@@ -60,6 +69,8 @@ const CustomerReview = ({ productId, user }) => {
       productId: productId,
       rating: rating,
       userId: user._id,
+      createdAt: new Date().toISOString(),
+      user: user,
     });
   };
 
@@ -96,7 +107,6 @@ const CustomerReview = ({ productId, user }) => {
               );
             })}
           </div>
-          {/* <FormRowError error={errors.rating} /> */}
 
           <div>
             <p className="text-sm mt-2.5">Review Title</p>
@@ -128,7 +138,7 @@ const CustomerReview = ({ productId, user }) => {
             Submit Review
           </button>
           {mutation.isError ? (
-            <div className="p-4 text-sm bg-red-600 text-white rounded text-center border my-2">
+            <div className="p-4 text-sm bg-red-600 text-white rounded text-center border my-2 w-[70%]">
               An error occurred: {mutation.error.response.data}
             </div>
           ) : null}

@@ -9,19 +9,18 @@ const ViewCart = ({ user }) => {
   const { data, isLoading } = getCartItems(user);
   if (isLoading) return <GlobalSpinner />;
   items = data?.data?.products || [];
-  console.log(items);
 
   const total = getTotalPrice(items);
 
   return (
     <>
       {/* Container */}
-      <div className="max-w-screen-xl mx-auto p-4">
+      <div className="max-w-screen-lg mx-auto flex-grow w-full">
         {/* Layout */}
-        <div>
+        <div className="p-4">
           {/* header */}
           <div className="flex justify-between mb-5 ">
-            <h1 className="font-bold text-2xl lg:text-5xl">Your Cart</h1>
+            <h1 className="font-bold text-2xl lg:text-4xl">Your Cart</h1>
             <a className="underline text-sm md:text-base" href="/products">
               Continue shopping
             </a>
@@ -64,7 +63,8 @@ const ViewCart = ({ user }) => {
                   </p>
                 </div>
                 <Link
-                  to={user ? `/checkout/${user._id}/infomation` : "/signin"}>
+                  to={user ? `/checkout/${user._id}/information` : "/signin"}
+                >
                   <button className="w-1/2 md:w-1/3 border rounded-xl bg-[#3d405b] hover:bg-black text-white text-sm py-2 px-3 transition duration-500">
                     Check Out
                   </button>

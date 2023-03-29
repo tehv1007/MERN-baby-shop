@@ -35,7 +35,8 @@ const OrderInformation = ({ user }) => {
           {/* main */}
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="max-w-screen-sm mx-auto px-4 lg:row-start-1 lg:col-span-3">
+            className="max-w-screen-sm mx-auto px-4 lg:row-start-1 lg:col-span-3"
+          >
             <div className="flex items-center gap-2 mt-4 text-xs max-w-screen-sm mx-auto">
               <p>Cart</p>
               <HiChevronRight />
@@ -70,13 +71,15 @@ const OrderInformation = ({ user }) => {
             <div className="max-w-screen-sm mx-auto my-11 pb-5 md:flex justify-between items-center ">
               <a
                 href="/viewcart"
-                className="flex justify-center items-center text-md py-3">
+                className="flex justify-center items-center text-md py-3"
+              >
                 <HiChevronLeft size={30} />
                 Return to cart
               </a>
               <button
                 type="submit"
-                className="w-full text-sm font-medium text-white border rounded-md bg-[#3d405d] px-8 py-5 mb-2 md:w-1/3 lg:px-0 lg:w-2/5">
+                className="w-full text-sm font-medium text-white border rounded-md bg-[#3d405d] px-8 py-5 mb-2 md:w-1/3 lg:px-0 lg:w-2/5"
+              >
                 Continue to shipping
               </button>
             </div>

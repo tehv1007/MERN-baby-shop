@@ -10,7 +10,7 @@ const {
 } = require("../controllers/productController");
 
 // GET all products
-router.get("/", getAllProduct);
+router.get("/", getProductsByCategory);
 
 // GET top rated products
 router.get("/rated", getTopProducts);
@@ -23,9 +23,6 @@ router.get("/search", searchProduct);
 
 // Get categories
 router.get("/categories", getCategories);
-
-// Get products of category
-router.get("/category/:category", getProductsByCategory);
 
 // Get related products
 router.get("/related/:category/:productId", listRelated);

@@ -1,53 +1,65 @@
+import { RxDashboard, RxLockOpen1 } from "react-icons/rx";
+import { VscListUnordered } from "react-icons/vsc";
+import { FiSettings } from "react-icons/fi";
+import { GrDocumentText } from "react-icons/gr";
 import { Link } from "react-router-dom";
-import EditIcon from "../../components/common/icons/EditIcon";
 
 const SideBar = ({ user }) => {
   return (
     <>
-      {" "}
-      <div className="lg:w-[40%] flex flex-row-reverse justify-between lg:block">
-        <div className="lg:hidden flex items-center">
-          <button className="px-2 flex gap-1">
-            <EditIcon />
-            <span>Edit Profile</span>
-          </button>
-        </div>
-        <div className="lg:flex-col">
-          <button className="pr-2">
-            <img
-              src={user.image}
-              alt="user face"
-              className="rounded-lg"
-              height={80}
-              width={80}
-            />
-          </button>
-          <div className="mt-2" />
-          <span className="name mt-3">{user.name}</span>
-          <br />
-          <span className="number">
-            📧 : <span className="font-bold text-base">{user.email}</span>
-          </span>
-        </div>
+      <div className="flex-shrink-0 w-full lg:w-80 mr-7 lg:mr-10 xl:mr-10">
+        <div className="bg-white p-4 sm:p-5 lg:p-8 rounded-md sticky top-32">
+          <Link
+            to="/user/dashboard"
+            className="p-2 my-2 flex items-center rounded-md hover:bg-gray-50 w-full hover:text-emerald-600"
+          >
+            <RxDashboard />
+            <label className="inline-flex items-center justify-between ml-2 text-sm font-medium w-full hover:text-emerald-600 cursor-pointer">
+              Dashboard
+            </label>
+          </Link>
 
-        <div className="hidden lg:block mt-2 py-2 text-lg">
-          <div className="">
-            <button className="mt-1 mb-3">
-              <Link
-                to="/profile"
-                className="pr-10 lg:pr-36 py-2 rounded-md hover:pl-2 hover:-pr-2 hover:bg-green-700/70 hover:text-white transition-all">
-                🛒: My Orders
-              </Link>
+          <Link
+            to="/user/my-orders"
+            className="p-2 my-2 flex items-center rounded-md hover:bg-gray-50 w-full hover:text-emerald-600"
+          >
+            <VscListUnordered />
+            <label className="inline-flex items-center justify-between ml-2 text-sm font-medium w-full hover:text-emerald-600 cursor-pointer">
+              My Orders
+            </label>
+          </Link>
+
+          <Link
+            to="/user/update-profile"
+            className="p-2 my-2 flex items-center rounded-md hover:bg-gray-50 w-full hover:text-emerald-600"
+          >
+            <FiSettings />
+            <label className="inline-flex items-center justify-between ml-2 text-sm font-medium w-full hover:text-emerald-600 cursor-pointer">
+              Update Profile
+            </label>
+          </Link>
+
+          <Link
+            to="/user/change-password"
+            className="p-2 my-2 flex items-center rounded-md hover:bg-gray-50 w-full hover:text-emerald-600"
+          >
+            <GrDocumentText />
+            <label className="inline-flex items-center justify-between ml-2 text-sm font-medium w-full hover:text-emerald-600 cursor-pointer">
+              Change Password
+            </label>
+          </Link>
+
+          <Link
+            to="/signout"
+            className="p-2 flex items-center rounded-md hover:bg-gray-50 w-full hover:text-emerald-600"
+          >
+            <span className="mr-2">
+              <RxLockOpen1 />
+            </span>
+            <button className="inline-flex items-center justify-between text-sm font-medium w-full hover:text-emerald-600">
+              Logout
             </button>
-            <br />
-            <button className="mt-1">
-              <Link
-                to="/profile/edit"
-                className="pr-10 lg:pr-36 py-2 rounded-md pl-2 bg-gray-400/95 hover:bg-green-700/70 hover:text-white transition-all">
-                🆔: My Profile
-              </Link>
-            </button>
-          </div>
+          </Link>
         </div>
       </div>
     </>

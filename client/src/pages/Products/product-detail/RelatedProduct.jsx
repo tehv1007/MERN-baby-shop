@@ -10,7 +10,6 @@ const RelatedProduct = ({ product, user }) => {
     queryFn: () => {
       return axios.get(`/products/related/${product.category}/${product._id}`);
     },
-    // cacheTime: 5 * 60 * 1000,
   });
 
   if (isLoading) return <GlobalSpinner />;

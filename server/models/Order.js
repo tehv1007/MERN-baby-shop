@@ -19,16 +19,11 @@ const orderSchema = new Schema(
     amount: { type: Number, default: 0 },
     address: { type: String },
     paymentMethod: { type: String },
+    phoneNumber: { type: String },
     status: {
       type: String,
-      default: "Not-processed",
-      enum: [
-        "Not-processed",
-        "Processing",
-        "Shipped",
-        "Delivered",
-        "Cancelled",
-      ],
+      default: "Pending",
+      enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"],
     },
   },
   { timestamps: true }

@@ -34,7 +34,8 @@ export const sortNames = (nameArr, direction) => {
 };
 
 export const paginate = (array, page_size, page_number) => {
-  return array.slice((page_number - 1) * page_size, page_number * page_size);
+  if (array != "undefined" || array?.length > 0)
+    return array?.slice((page_number - 1) * page_size, page_number * page_size);
 };
 
 export const listRelated = async (productId) => {

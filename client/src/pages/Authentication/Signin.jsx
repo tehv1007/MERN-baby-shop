@@ -6,11 +6,11 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import FormRowError from "../../components/common/RowError";
 import { signinSchema } from "../../validation/authSchema";
+import { toast } from "react-toastify";
 
 const Signin = () => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -23,26 +23,20 @@ const Signin = () => {
 
   const mutation = useMutation({
     mutationFn: async (loginUser) => {
-      try {
-        // const url = `${import.meta.env.VITE_APP_BASE_URL}/auth/signin`;
-        const { data: res } = await axios.post("/auth/signin", loginUser);
-        localStorage.setItem("token", JSON.stringify(res.user_token));
-        localStorage.setItem("user", JSON.stringify(res.user));
-        window.location = "/";
-        // window.location.reload(false);
-        // setTimeout(() => {
-        //   navigate("/");
-        //   setIsLoading(false);
-        // }, 1000);
-      } catch (error) {
-        if (
-          error.response &&
-          error.response.status >= 400 &&
-          error.response.status <= 500
-        ) {
-          setError(error.response.data.message);
-        }
-      }
+      const { data: res } = await axios.post("/auth/signin", loginUser);
+      localStorage.setItem("token", JSON.stringify(res.user_token));
+      localStorage.setItem("user", JSON.stringify(res.user));
+      window.location.reload(false);
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    },
+    onSuccess: () => {
+      toast.success("Successfully Login");
+    },
+    onError: (err) => {
+      toast.error(`${err.response.data.message}`);
+      setError(err.response.data.message);
     },
   });
 
@@ -59,9 +53,9 @@ const Signin = () => {
   };
 
   return (
-    <section>
+    <section className="max-w-screen-xl mx-auto flex flex-grow">
       {/* Container */}
-      <div className="w-screen h-screen px-4 flex items-center justify-center">
+      <div className=" px-4 flex items-center justify-center">
         {/* Layout */}
         <div className="w-[450px] bg-white overflow-hidden text-gray-800 shadow-[0px_2px_12px_0px_rgba(0,0,0,0.1)] p-5 border-gray-200 border rounded">
           {/* Logo */}
@@ -126,7 +120,8 @@ const Signin = () => {
               {/* Actions */}
               <button
                 type="submit"
-                className="py-3 px-5 w-full items-start hover:bg-blue-400 hover:border-blue-400 bg-blue-500 border-blue-500 rounded border text-white text-sm leading-3 text-center">
+                className="py-3 px-5 w-full items-start hover:bg-blue-400 hover:border-blue-400 bg-blue-500 border-blue-500 rounded border text-white text-sm leading-3 text-center"
+              >
                 <span> Sign in </span>
               </button>
             </form>
@@ -134,12 +129,14 @@ const Signin = () => {
             <div className="text-gray-800 flex justify-between my-2">
               <Link
                 to="/forgot-password"
-                className="text-blue-700  leading-5 hover:text-blue-400 hover:underline">
+                className="text-blue-700  leading-5 hover:text-blue-400 hover:underline"
+              >
                 <small>Forgot your password?</small>
               </Link>
               <Link
                 to="/signup"
-                className="text-blue-700  leading-5 hover:text-blue-400 hover:underline">
+                className="text-blue-700  leading-5 hover:text-blue-400 hover:underline"
+              >
                 <small>Create account</small>
               </Link>
             </div>
@@ -158,7 +155,8 @@ const Signin = () => {
                 <button
                   onClick={facebook}
                   type="button"
-                  className="w-full py-2.5 px-5 items-start bg-white hover:bg-indigo-100 border-indigo-200 rounded border text-gray-700 hover:text-blue-500 text-sm leading-3">
+                  className="w-full py-2.5 px-5 items-start bg-white hover:bg-indigo-100 border-indigo-200 rounded border text-gray-700 hover:text-blue-500 text-sm leading-3"
+                >
                   <i className="fab fa-facebook-f mr-2 text-indigo-800 inline-block text-sm leading-3 text-center" />
                   <span className="">Facebook</span>
                 </button>
@@ -167,7 +165,8 @@ const Signin = () => {
                 <button
                   onClick={google}
                   type="button"
-                  className="w-full py-2.5 px-5 items-start bg-white hover:bg-indigo-100 border-gray-300 rounded border text-gray-700 hover:text-blue-500 text-sm leading-3">
+                  className="w-full py-2.5 px-5 items-start bg-white hover:bg-indigo-100 border-gray-300 rounded border text-gray-700 hover:text-blue-500 text-sm leading-3"
+                >
                   <i className="fab fa-google mr-2 text-red-600 inline-block text-sm leading-3 text-center" />
                   <span className="">Google</span>
                 </button>

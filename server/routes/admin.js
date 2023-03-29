@@ -1,14 +1,25 @@
 const router = require("express").Router();
-const { getAllUsers, getUserStats } = require("../controllers/userController");
+const { getAllUsers } = require("../controllers/userController");
 
 const {
   deleteOrder,
   getAllOrders,
-  getIncome,
   updateOrderStatus,
   getOrderById,
-  getOrdersByUserId,
   getOrdersByUser,
+  getTotalRevenue,
+  getMonthlyRevenue,
+  getDailyRevenue,
+  countOrdersByStatus,
+  getRecentOrders,
+  getTodayRevenue,
+  getThisMonthRevenue,
+  getTopSellingProducts,
+  getWeeklySales,
+  getDailyRevenueLast7Days,
+  getDailyOrdersLast7Days,
+  getDailyOrderCount,
+  getRecentDailyRevenue,
 } = require("../controllers/orderController");
 
 const {
@@ -24,22 +35,53 @@ const {
 //GET ALL USER
 router.get("/users", getAllUsers);
 
-//GET USER STATS
-router.get("/users/stats", getUserStats);
-
+/*--------------------------------------*/
 //Order
-//GET ALL orders
-router.get("/orders/:orderId", getOrderById);
-router.get("/:userId/orders", getOrdersByUser);
 router.put("/orders/:id", updateOrderStatus);
-router.get("/orders", getAllOrders);
 
 //DELETE an order by ID
 router.delete("/orders/:userId", deleteOrder);
 
-// GET monthly income
-router.get("/orders/income", getIncome);
+// GET recent orders
+router.get("/recent-orders", getRecentOrders);
 
+// Get total revenue
+router.get("/total-revenue", getTotalRevenue);
+
+// Get this monthly revenue
+router.get("/this-month-revenue", getThisMonthRevenue);
+
+// Get today's revenue
+router.get("/today-revenue", getTodayRevenue);
+
+// Get monthly revenue
+router.get("/monthly-revenue", getMonthlyRevenue);
+
+// Get daily revenue
+router.get("/daily-revenue", getDailyRevenue);
+
+// Count Orders By Status
+router.get("/count-orders", countOrdersByStatus);
+
+// Get best Selling Products
+router.get("/best-selling", getTopSellingProducts);
+
+// Get weekly order
+router.get("/weekly-orders", getDailyOrderCount);
+
+// Get weekly sale
+router.get("/weekly-sales", getRecentDailyRevenue);
+
+// Get order by id
+router.get("/orders/:orderId", getOrderById);
+
+// Get order by user
+router.get("/:userId/orders", getOrdersByUser);
+
+//GET ALL orders
+router.get("/orders", getAllOrders);
+
+/*--------------------------------------*/
 //Products
 // GET all products
 router.get("/products", getAllProduct);

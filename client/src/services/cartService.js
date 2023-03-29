@@ -5,6 +5,7 @@ export const getTotalPrice = (items) => {
     return currentValue + nextValue.quantity * nextValue.price;
   }, 0);
 };
+
 export const getTotalQuantity = (items) => {
   return items.reduce((currentValue, nextValue) => {
     return currentValue + nextValue.quantity;
@@ -34,6 +35,7 @@ export const emptyCart = async (user) => {
   return await axios.delete(`/cart/${user._id}`);
 };
 
+/*-----------------------------------------------------------------------*/
 // handle cart with local storage
 export const addItem = (item, quantity = 1, next = (f) => f) => {
   let cart = [];

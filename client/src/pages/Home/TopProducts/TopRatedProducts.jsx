@@ -2,23 +2,19 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import GlobalSpinner from "../../../components/common/GlobalSpinner";
-import Loader from "../../../components/common/Loader";
-import { getRandom } from "../../../services/productsService";
 import ProductGrid from "./ProductGrid";
 
-const TopratedProducts = ({ user }) => {
+const TopRatedProducts = ({ user }) => {
   const { data, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: () => {
       return axios.get(`/products/rated`);
     },
-    // cacheTime: 5 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
   });
 
   if (isLoading) return <GlobalSpinner />;
-  console.log(data);
   const products = data.data;
-  // const topRatedProducts = getRandom(products, 4);
 
   return (
     <div className="mt-8 lg:mt-16">
@@ -30,7 +26,7 @@ const TopratedProducts = ({ user }) => {
           <div className="text-center lg:flex items-center justify-center lg:gap-20">
             <div className=" mb-4">
               <h3 className="text-[#212529] text-lg font-bold mb-4 lg:text-4xl">
-                Toprated Products
+                TopRated Products
               </h3>
               <p className="text-xs lg:text-lg">
                 Interesting Features Is Rich And Colorful, Each Button To Bring
@@ -47,4 +43,4 @@ const TopratedProducts = ({ user }) => {
   );
 };
 
-export default TopratedProducts;
+export default TopRatedProducts;

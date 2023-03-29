@@ -11,6 +11,7 @@ import Reviews from "../../../components/review/Reviews";
 import GlobalSpinner from "../../../components/common/GlobalSpinner";
 
 const ProductDetail = ({ user }) => {
+  const { productId } = useParams();
   const [imageIndex, setImageIndex] = useState(0);
   const [showForm, setShowForm] = useState(false);
 
@@ -18,9 +19,8 @@ const ProductDetail = ({ user }) => {
     setShowForm(!showForm);
   };
 
-  const { productId } = useParams();
   const { data, isLoading } = useQuery({
-    queryKey: ["products", "reviews"],
+    queryKey: ["product", "reviews", productId],
     queryFn: () => axios.get(`/products/${productId}`),
   });
 
@@ -70,11 +70,7 @@ const ProductDetail = ({ user }) => {
             </span>
             <div className="mb-[10px] flex gap-1">
               {/* rating */}
-              <Rating
-                productId={productId}
-                numReviews={product.numReviews}
-                avgRating={product.avgRating}
-              />
+              <Rating productId={productId} />
             </div>
             <div>
               {/* description */}
@@ -95,6 +91,7 @@ const ProductDetail = ({ user }) => {
           </div>
         </div>
       </div>
+
       {/* ========= */}
       <div className=" mt-7">
         <div className="border p-4 rounded-xl mb-7">
@@ -106,11 +103,7 @@ const ProductDetail = ({ user }) => {
                 {product.numReviews <= 0 ? (
                   <p>No reviews yet</p>
                 ) : (
-                  <Rating
-                    productId={productId}
-                    numReviews={product.numReviews}
-                    avgRating={product.avgRating}
-                  />
+                  <Rating productId={productId} />
                 )}
               </span>
               <span>

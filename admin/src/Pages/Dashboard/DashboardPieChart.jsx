@@ -1,60 +1,66 @@
-import { useState } from "react";
-import PieChart from "../../components/common/PieChart";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+ChartJS.register(ArcElement, Tooltip, Legend);
 
-const DataChart = [
-  {
-    id: 1,
-    year: 2016,
-    userGain: 80000,
-    userLost: 823,
-  },
-  {
-    id: 2,
-    year: 2017,
-    userGain: 45677,
-    userLost: 345,
-  },
-  {
-    id: 3,
-    year: 2018,
-    userGain: 78888,
-    userLost: 555,
-  },
-  {
-    id: 4,
-    year: 2019,
-    userGain: 90000,
-    userLost: 4555,
-  },
-  {
-    id: 5,
-    year: 2020,
-    userGain: 4300,
-    userLost: 234,
-  },
-];
+const BestSellingProductsPieChart = ({ data }) => {
+  const chartData = {
+    labels: data.map((item) => item._id),
+    datasets: [
+      {
+        data: data.map((item) => item.quantity),
+        backgroundColor: [
+          "#FF6384",
+          "#36A2EB",
+          "#FFCE56",
+          "#4BC0C0",
+          "#9966FF",
+          "#FF9933",
+          "#CC66CC",
+          // "#66CC66",
+          // "#9999FF",
+          // "#FF6666",
+        ],
+        hoverBackgroundColor: [
+          "#FF6384",
+          "#36A2EB",
+          "#FFCE56",
+          "#4BC0C0",
+          "#9966FF",
+          "#FF9933",
+          "#CC66CC",
+          // "#66CC66",
+          // "#9999FF",
+          // "#FF6666",
+        ],
+      },
+    ],
+  };
+
+  return <Pie data={chartData} />;
+};
 
 const DashboardPieChart = () => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axios.get(`/admin/best-selling`);
+      console.log(res);
+      setProducts(res.data);
+    };
+    fetchData();
+  }, []);
+
   return (
     <>
-      <div className="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-        <p className="mb-4 font-semibold text-gray-800 dark:text-gray-300">
+      <div className="min-w-0 p-4 bg-white rounded-lg shadow-xs">
+        <p className="mb-4 font-semibold text-gray-800">
           Best Selling Products
         </p>
         <div>
-          <canvas
-            role="img"
-            height={398}
-            width={400}
-            legend="[object Object]"
-            className="chart"
-            style={{
-              display: "block",
-              boxSizing: "border-box",
-              height: "318.4px",
-              width: 320,
-            }}
-          />
+          <BestSellingProductsPieChart data={products} />
         </div>
       </div>
     </>

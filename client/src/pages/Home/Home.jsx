@@ -3,14 +3,14 @@ import Banner from "./Banner";
 import Brand from "./Brand";
 import Delivery from "./Delivery";
 import Hero from "./Hero";
-import TopratedProducts from "./TopProducts/TopRatedProducts";
+import TopRatedProducts from "./TopProducts/TopRatedProducts";
 
 const Home = ({ user }) => {
   return (
     <>
       <Banner />
       <Delivery />
-      <TopratedProducts user={user} />
+      <TopRatedProducts user={user} />
       <Hero />
       <Brand />
     </>

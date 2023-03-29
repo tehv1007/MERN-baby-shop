@@ -7,17 +7,19 @@ import subNavLink from "./link";
 import NavLink from "./NavLink";
 import { getTotalQuantity } from "../../../services/cartService";
 import { getCartItems } from "../../../pages/ViewCart/useCart";
-import Loader from "../../common/Loader";
+import Progress from "../../common/Progress";
 
 const Navbar = ({ user, isConnected }) => {
   let totalQuantity = 0;
-  let items;
+  let items = [];
 
   if (user) {
     const { data, isLoading } = getCartItems(user);
-    if (isLoading) return <Loader />;
-    items = data.data.products;
-    totalQuantity = getTotalQuantity(items);
+
+    if (typeof data == "object" && data.data != "null") {
+      items = data?.data?.products;
+      totalQuantity = getTotalQuantity(items);
+    }
   }
 
   return (
@@ -37,7 +39,7 @@ const Navbar = ({ user, isConnected }) => {
           {/* Navbar */}
           <div className="text-gray-500">
             {/* Menu Web */}
-            <nav className="hidden md:flex items-center text-xl md:gap-14 lg:gap-20">
+            <nav className="hidden md:flex items-center text-xl gap-10">
               {subNavLink.map((item) => {
                 return (
                   <NavLink
@@ -50,23 +52,25 @@ const Navbar = ({ user, isConnected }) => {
               })}
             </nav>
           </div>
+
           {/* Button */}
-          <div className="flex gap-4 md:gap-9">
-            <div className="flex items-center gap-4 md:gap-9 text-xl">
+          <div className="flex items-center gap-4 ">
+            <div className=" items-center">
               {isConnected ? (
-                <div className="flex gap-3 items-center">
-                  <Link to="/profile">
-                    <span className="hidden md:block">My account</span>
-                    <BiUser className="md:hidden text-3xl text-[#212529]" />
-                  </Link>
-                  <span>|</span>
-                  <Link to="/signout">Signout</Link>
-                </div>
+                <Link to="/user/dashboard">
+                  <div>
+                    <img
+                      src={user.image}
+                      alt="User Avatar"
+                      className="rounded-full w-auto max-h-10 block"
+                    />
+                  </div>
+                </Link>
               ) : (
-                <div className="flex gap-3 items-center">
-                  <Link to="/signin">Signin</Link>
-                  <span>|</span>
-                  <Link to="/signup">Signup</Link>
+                <div className="items-center">
+                  <Link to="/signin">
+                    <BiUser className="text-3xl text-[#212529]" />
+                  </Link>
                 </div>
               )}
             </div>
@@ -76,7 +80,7 @@ const Navbar = ({ user, isConnected }) => {
                   <BsCartPlus className="text-3xl text-[#212529]" />
                 </Link>
               </button>
-              <span className="absolute  top-3 right-2 sm:right-[7px]  lg:right-[8px] xl:right-[8px] bg-[#212529] text-white w-5 h-5 text-center rounded-full">
+              <span className="absolute top-3 right-2 sm:right-[7px]  lg:right-[8px] xl:right-[8px] bg-[#212529] text-white w-5 h-5 text-center rounded-full">
                 {totalQuantity}
               </span>
             </div>

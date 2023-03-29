@@ -3,8 +3,6 @@ import UserTable from "./UserTable";
 import { useState } from "react";
 import Pagination from "../../components/common/Pagination";
 import { paginate } from "../../Services/productsService";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import Layout from "../../components/layout/Layout";
 import GlobalSpinner from "../../components/common/GlobalSpinner";
 import useDebounce from "../../hooks/useDebounce";

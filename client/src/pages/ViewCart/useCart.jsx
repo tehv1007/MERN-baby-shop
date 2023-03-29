@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { addItemToCart } from "../../services/cartService";
+import { addItemToCart, emptyCart } from "../../services/cartService";
 import { toast } from "react-toastify";
 
 export const getCartItems = (user) => {
@@ -24,4 +24,15 @@ export const addCartItem = (user, quantity) => {
     },
   });
   return addCartItem;
+};
+
+export const removeCartItems = (user) => {
+  const queryClient = useQueryClient();
+  const removeCartItems = useMutation({
+    mutationFn: () => emptyCart(user),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+    },
+  });
+  return removeCartItems;
 };

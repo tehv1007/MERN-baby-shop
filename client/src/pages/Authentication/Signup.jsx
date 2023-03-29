@@ -6,6 +6,7 @@ import { signupSchema } from "../../validation/authSchema";
 import InputCard from "../../components/auth/InputCard";
 import { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Signup = () => {
   const google = () => {
@@ -31,32 +32,28 @@ const Signup = () => {
 
   const mutation = useMutation({
     mutationFn: async (newUser) => {
-      try {
-        const { data: res } = await axios.post("/auth/signup", newUser);
-        setMsg(res.message);
-        setShow(true);
-      } catch (error) {
-        if (
-          error.response &&
-          error.response.status >= 400 &&
-          error.response.status <= 500
-        ) {
-          setError(error.response.data.message);
-          setShow(false);
-        }
-      }
+      const { data: res } = await axios.post("/auth/signup", newUser);
+      setMsg(res.message);
+      setShow(true);
+    },
+    onSuccess: () => {
+      toast.success("Successfully Create Account");
+    },
+    onError: (err) => {
+      toast.error(`${err.response.data.message}`);
+      setError(err.response.data.message);
+      setShow(false);
     },
   });
 
   const onSubmit = (data) => {
-    console.log(data);
     mutation.mutate(data);
   };
 
   return (
-    <section>
+    <section className="max-w-screen-xl mx-auto flex flex-grow">
       {/* Container */}
-      <div className="w-screen h-screen px-4 flex justify-center items-center">
+      <div className="p-4 justify-center items-center flex">
         {/* Layout */}
         <div className="w-[450px] bg-white text-gray-800 shadow-[0px_2px_12px_0px_rgba(0,0,0,0.1)] p-5 border-gray-200 border rounded">
           {/* Logo */}
@@ -123,7 +120,8 @@ const Signup = () => {
               {/* Actions */}
               <button
                 type="submit"
-                className="py-3 px-5 w-full items-start hover:bg-blue-400 hover:border-blue-400 bg-blue-500 border-blue-500 rounded border text-white text-sm leading-3 text-center">
+                className="py-3 px-5 w-full items-start hover:bg-blue-400 hover:border-blue-400 bg-blue-500 border-blue-500 rounded border text-white text-sm leading-3 text-center"
+              >
                 <span> Sign up </span>
               </button>
             </form>
@@ -131,7 +129,8 @@ const Signup = () => {
             <div className="text-gray-800 flex my-4">
               <Link
                 to="/signin"
-                className="text-blue-700 leading-5 hover:text-blue-400 hover:underline">
+                className="text-blue-700 leading-5 hover:text-blue-400 hover:underline"
+              >
                 <small>Already have an account? Please login here</small>
               </Link>
             </div>
@@ -150,7 +149,8 @@ const Signup = () => {
                 <button
                   onClick={facebook}
                   type="button"
-                  className="w-full py-2.5 px-5 items-start bg-white hover:bg-indigo-100 border-indigo-200 rounded border text-gray-700 hover:text-blue-500 ">
+                  className="w-full py-2.5 px-5 items-start bg-white hover:bg-indigo-100 border-indigo-200 rounded border text-gray-700 hover:text-blue-500 "
+                >
                   <i className="fab fa-facebook-f mr-2 text-indigo-800 text-center" />
                   <span>Facebook</span>
                 </button>
@@ -159,7 +159,8 @@ const Signup = () => {
                 <button
                   onClick={google}
                   type="button"
-                  className="w-full py-2.5 px-5 items-start bg-white hover:bg-indigo-100 border-gray-300 rounded border text-gray-700 hover:text-blue-500">
+                  className="w-full py-2.5 px-5 items-start bg-white hover:bg-indigo-100 border-gray-300 rounded border text-gray-700 hover:text-blue-500"
+                >
                   <i className="fab fa-google mr-2 text-red-600 text-center" />
                   <span>Google</span>
                 </button>
