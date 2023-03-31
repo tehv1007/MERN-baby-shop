@@ -39,12 +39,14 @@ function App() {
 
   useEffect(() => {
     // Cập nhật thông tin user mới nhất vào state
-    const getUser = async () => {
-      const res = await axios.get(`/users/find/${localUser._id}`);
-      setUser(res.data);
-    };
-    getUser();
-  }, []);
+    if (localUser) {
+      const getUser = async () => {
+        const res = await axios.get(`/users/find/${localUser._id}`);
+        setUser(res.data);
+      };
+      getUser();
+    }
+  }, [user]);
 
   const checkUserToken = () => {
     if (typeof window !== "undefined") {
@@ -113,7 +115,6 @@ function App() {
             }
           />
           <Route path="/" element={<Home user={user} />} />
-
           <Route path="/signup" element={<Signup />} />
           <Route path="/signout" element={<Signout />} />
           <Route path="/blog" element={<BlogPage />} />
@@ -144,6 +145,7 @@ function App() {
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
+
         <ToastContainer
           position="bottom-right"
           autoClose={3000}

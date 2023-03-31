@@ -6,6 +6,7 @@ const {
   signup,
   verifyEmail,
 } = require("../controllers/authController");
+const Cart = require("../models/Cart");
 
 // Create new user - POST
 router.post("/signup", signup);
@@ -34,7 +35,16 @@ router.get(
   }),
   async (req, res) => {
     console.log(req.user);
+    const userId = req.user._id;
+    const cart = await Cart.findOne({ userId });
 
+    if (!cart) {
+      const userCart = await new Cart({
+        userId,
+        products: [],
+        subPrice: 0,
+      }).save();
+    }
     const token = req.user.generateAuthToken();
     const { password, ...others } = req.user;
     res.cookie("access_token", { token: token, user: others });
@@ -60,6 +70,16 @@ router.get(
   }),
   async (req, res) => {
     console.log(req.user);
+    const userId = req.user._id;
+    const cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      const userCart = await new Cart({
+        userId,
+        products: [],
+        subPrice: 0,
+      }).save();
+    }
 
     const token = req.user.generateAuthToken();
     const { password, ...others } = req.user;

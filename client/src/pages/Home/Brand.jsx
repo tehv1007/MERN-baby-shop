@@ -7,7 +7,7 @@ import brandAntony from "../../assets/img/brand-antony.webp";
 
 const Brand = () => {
   return (
-    <div className="mt-8 lg:mt-16">
+    <div className="my-8 lg:mt-16">
       {/* Container */}
       <div className="max-w-screen-xl mx-auto px-4">
         {/* Layout */}

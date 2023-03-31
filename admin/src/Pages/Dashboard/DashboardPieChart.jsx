@@ -47,7 +47,7 @@ const DashboardPieChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       const res = await axios.get(`/admin/best-selling`);
-      console.log(res);
+      // console.log(res);
       setProducts(res.data);
     };
     fetchData();

@@ -1,5 +1,6 @@
 import ProductCard from "./ProductCard";
 import ProductCardRow from "./ProductCardRow";
+import notFound from "../../assets/no_results_found.webp";
 
 const ProductGrid = ({ products, display, user }) => {
   return products.length > 0 ? (
@@ -19,7 +20,13 @@ const ProductGrid = ({ products, display, user }) => {
       </div>
     )
   ) : (
-    <h1 className="text-center text-3xl my-10">No Product Found</h1>
+    <div className="text-center">
+      <img
+        src={notFound}
+        alt="No Product Found"
+        className="block max-w-[500px] mx-auto"
+      />
+    </div>
   );
 };
 export default ProductGrid;

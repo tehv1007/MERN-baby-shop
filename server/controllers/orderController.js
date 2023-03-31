@@ -362,63 +362,6 @@ exports.getWeeklySales = async (req, res) => {
   }
 };
 
-// Get số đơn hàng mỗi ngày cho 7 ngày gần nhất
-exports.getDailyOrderCount = async (req, res) => {
-  try {
-    const startDate = moment().subtract(6, "days").toDate();
-    const endDate = moment().toDate();
-
-    // Get list of dates within the date range
-    const dates = [];
-    let currDate = moment(startDate);
-    while (currDate.isSameOrBefore(endDate)) {
-      dates.push(currDate.format("YYYY-MM-DD"));
-      currDate.add(1, "days");
-    }
-
-    // Aggregate orders by day
-    const result = await Order.aggregate([
-      {
-        $match: {
-          createdAt: { $gte: startDate, $lte: endDate },
-        },
-      },
-      {
-        $group: {
-          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-          count: { $sum: 1 },
-        },
-      },
-    ]);
-
-    // Create a map to hold the daily order counts
-    const orderCounts = new Map();
-    for (const item of result) {
-      orderCounts.set(item._id, item.count);
-    }
-
-    // Add missing dates with zero order count
-    for (const date of dates) {
-      if (!orderCounts.has(date)) {
-        orderCounts.set(date, 0);
-      }
-    }
-
-    // Sort the order counts by date
-    const sortedOrderCounts = new Map([...orderCounts.entries()].sort());
-
-    // Convert the map to an array of objects
-    const orderCountArray = [];
-    for (const [date, count] of sortedOrderCounts.entries()) {
-      orderCountArray.push({ date, count });
-    }
-
-    res.status(200).json(orderCountArray);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
 // Get  doanh thu mỗi ngày cho 7 ngày gần nhất
 exports.getRecentDailyRevenue = async (req, res) => {
   try {
@@ -445,6 +388,47 @@ exports.getRecentDailyRevenue = async (req, res) => {
       const existing = result.find((item) => item._id === date);
       if (!existing) {
         result.push({ _id: date, totalRevenue: 0 });
+      }
+    }
+
+    const sortArr = result.sort((a, b) => {
+      let da = new Date(a._id),
+        db = new Date(b._id);
+      return da - db;
+    });
+
+    res.status(200).json(sortArr);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Get  số đơn hàng mỗi ngày cho 7 ngày gần nhất
+exports.getRecentDailyOrders = async (req, res) => {
+  try {
+    const sevenDaysAgo = moment().subtract(7, "days").startOf("day").toDate();
+
+    const result = await Order.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: sevenDaysAgo },
+        },
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+          totalOrders: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Nếu không có đơn hàng cho các ngày trong tuần trước đó, thêm các giá trị mặc định vào
+    const today = moment().startOf("day");
+    for (let i = 0; i < 7; i++) {
+      const date = today.clone().subtract(i, "days").format("YYYY-MM-DD");
+      const existing = result.find((item) => item._id === date);
+      if (!existing) {
+        result.push({ _id: date, totalOrders: 0 });
       }
     }
 

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import Logo from "../../assets/Logo.webp";
 import { AuthContext } from "../../context/AuthContext";
 import CategoryIcon from "../common/icons/CategoryIcon";
@@ -8,6 +8,34 @@ import DashboardIcon from "../common/icons/DashboardIcon";
 import LogoutIcon from "../common/icons/LogoutIcon";
 import OrderIcon from "../common/icons/OrderIcon";
 import ProductIcon from "../common/icons/ProductIcon";
+import { NavLink } from "react-router-dom";
+
+const SidebarItem = ({ children, title, href }) => {
+  const style =
+    "px-6 py-4 inline-flex w-full transition-colors duration-150 hover:text-green-700";
+
+  return (
+    <li className="relative">
+      <NavLink
+        className={({ isActive }) =>
+          isActive ? `text-green-500 bg-green-100 ${style}` : `${style}`
+        }
+        to={href ? href : `/${title}`}
+      >
+        {({ isActive }) =>
+          isActive && (
+            <span
+              className="absolute inset-y-0 left-0 w-1 bg-green-500 rounded-tr-lg rounded-br-lg"
+              aria-hidden="true"
+            />
+          )
+        }
+        {children}
+        <span className="ml-4 capitalize">{title}</span>
+      </NavLink>
+    </li>
+  );
+};
 
 const NewSidebar = () => {
   const { dispatch } = useContext(AuthContext);
@@ -26,75 +54,34 @@ const NewSidebar = () => {
         </a>
         <ul className="mt-8 items-center text-sm font-semibold w-full">
           {/* Dashboard */}
-          <li className="relative">
-            <a
-              className="px-6 py-4 inline-flex transition-colors duration-150 hover:text-green-700"
-              href="/"
-            >
-              <DashboardIcon />
-              <span className="ml-4">Dashboard</span>
-            </a>
-          </li>
+          <SidebarItem title="dashboard" href="/">
+            <DashboardIcon />
+          </SidebarItem>
 
           {/* Products */}
-          <li className="relative">
-            <a
-              className="px-6 py-4 inline-flex transition-colors duration-150 hover:text-green-700 active:text-green-500"
-              href="/products"
-              aria-current="page"
-            >
-              {/* <span
-                  className="absolute inset-y-0 left-0 w-1 bg-green-500 rounded-tr-lg rounded-br-lg"
-                  aria-hidden="true"
-                /> */}
-              <ProductIcon />
-              <span className="ml-4">Products</span>
-            </a>
-          </li>
+          <SidebarItem title="products">
+            <ProductIcon />
+          </SidebarItem>
 
           {/* Category */}
-          <li className="relative">
-            <a
-              className="px-6 py-4 inline-flex transition-colors duration-150 hover:text-green-700"
-              href="/category"
-            >
-              <CategoryIcon />
-              <span className="ml-4">Category</span>
-            </a>
-          </li>
+          <SidebarItem title="category">
+            <CategoryIcon />
+          </SidebarItem>
 
           {/* Customers */}
-          <li className="relative">
-            <a
-              className="px-6 py-4 inline-flex transition-colors duration-150 hover:text-green-700"
-              href="/customers"
-            >
-              <CustomerIcon />
-              <span className="ml-4">Customers</span>
-            </a>
-          </li>
+          <SidebarItem title="customers">
+            <CustomerIcon />
+          </SidebarItem>
 
           {/* Orders */}
-          <li className="relative">
-            <a
-              className="px-6 py-4 inline-flex transition-colors duration-150 hover:text-green-700"
-              href="/orders"
-            >
-              <OrderIcon />
-              <span className="ml-4">Orders</span>
-            </a>
-          </li>
+          <SidebarItem title="orders">
+            <OrderIcon />
+          </SidebarItem>
 
           {/* Coupon */}
-          <li className="relative">
-            <a
-              className="px-6 py-4 inline-flex transition-colors duration-150 hover:text-green-700"
-              href="/coupons"
-            >
-              <CouponIcon />
-              <span className="ml-4">Coupons</span>
-            </a>
-          </li>
+          <SidebarItem title="coupons">
+            <CouponIcon />
+          </SidebarItem>
         </ul>
 
         {/* Logout Action */}

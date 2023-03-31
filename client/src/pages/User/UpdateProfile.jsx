@@ -8,13 +8,22 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import { updateProfileSchema } from "../../validation/userSchema";
 import { storage } from "../../config/firebase";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import GlobalSpinner from "../../components/common/GlobalSpinner";
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+  listAll,
+} from "firebase/storage";
+import Progress from "../../components/common/Progress";
 
 const UpdateProfile = ({ user, setUser }) => {
   const [isFileLoading, setIsFileLoading] = useState(false);
   const [image, setImage] = useState(null);
   const [imageFile, setImageFile] = useState([]);
+
+  // Create a reference to the file to delete
+  const desertRef = ref(storage, `users/${user.username}`);
 
   const {
     register,
@@ -60,7 +69,7 @@ const UpdateProfile = ({ user, setUser }) => {
       // Upload file and metadata to the object 'images/mountains.jpg'
       const storageRef = ref(
         storage,
-        `users/${user.name}/${imageFile[0].name}`
+        `users/${user.username}/${imageFile[0].name}`
       );
       const uploadTask = uploadBytesResumable(storageRef, imageFile[0]);
 
@@ -76,12 +85,41 @@ const UpdateProfile = ({ user, setUser }) => {
         },
         (error) => {
           //Handle error
-          console.log(err);
+          console.log(error);
         },
         () => {
           // Upload completed successfully, now we can get the download URL
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            const filename = downloadURL
+              .split("/")
+              .pop()
+              .split("?")[0]
+              .split("%2F")
+              .pop();
             setIsFileLoading(false);
+
+            listAll(desertRef)
+              .then((res) => {
+                res.items.forEach((itemRef) => {
+                  // All the items under listRef
+                  // Delete the file
+                  if (itemRef.name != filename)
+                    deleteObject(
+                      ref(storage, `users/${user.username}/${itemRef.name}`)
+                    )
+                      .then(() => {
+                        // File deleted successfully
+                      })
+                      .catch((error) => {
+                        // Uh-oh, an error occurred!
+                        console.log(error);
+                      });
+                });
+              })
+              .catch((error) => {
+                // Uh-oh, an error occurred!
+                console.log(error);
+              });
             console.log("File available at", downloadURL);
             mutation.mutate({ ...data, image: downloadURL });
             setUser({ ...data, image: downloadURL });
@@ -89,12 +127,12 @@ const UpdateProfile = ({ user, setUser }) => {
         }
       );
     } else {
-      mutation.mutate(data);
+      mutation.mutate({ ...data, image: user.image });
       setUser(data);
     }
   };
 
-  console.log(imageFile);
+  // console.log(imageFile);
 
   return (
     <Layout>
@@ -224,10 +262,12 @@ const UpdateProfile = ({ user, setUser }) => {
                             imageFile?.length == 0 &&
                             (isFileLoading || !isDirty)
                           }
-                          className="cursor-pointer transition ease-in-out duration-300 font-medium text-center rounded-md bg-emerald-500 text-white px-5 md:px-6 lg:px-8 py-2 md:py-3 lg:py-3 hover:text-white hover:bg-emerald-600 h-12 mt-1 text-sm w-full sm:w-auto disabled:bg-gray-400 disabled:text-gray-500"
+                          className="cursor-pointer transition ease-in-out duration-300 font-medium text-center rounded-md bg-emerald-500 text-white px-6 py-3 hover:text-white hover:bg-emerald-600 h-12 mt-1 text-sm w-full sm:w-auto disabled:bg-gray-400 disabled:text-gray-500"
                         >
-                          {isFileLoading && <GlobalSpinner />}
-                          <span>Update Profile</span>
+                          <div className="flex gap-1">
+                            {isFileLoading && <Progress />}
+                            <span>Update Profile</span>
+                          </div>
                         </button>
                       </div>
                     </div>

@@ -1,87 +1,5 @@
 const Product = require("../models/Product");
 
-exports.getAllProducts = async (req, res) => {
-  // const page = +req.query.page || 1;
-  // const category = req.query.category || "all";
-  // const totalItems =
-  //   category === "all"
-  //     ? await Product.find().countDocuments()
-  //     : await Product.find({ category: category }).countDocuments();
-
-  // const products =
-  //   category === "all"
-  //     ? await Product.find()
-  //         .skip((page - 1) * ITEMS_PER_PAGE)
-  //         .limit(ITEMS_PER_PAGE)
-  //     : await Product.find({ category: category })
-  //         .skip((page - 1) * ITEMS_PER_PAGE)
-  //         .limit(ITEMS_PER_PAGE);
-  // // const totalItems = products.length;
-  // console.log(totalItems);
-  // res.json({
-  //   products: products,
-  //   page: page,
-  //   skip: (page - 1) * ITEMS_PER_PAGE,
-  //   limit: ITEMS_PER_PAGE,
-  //   total: 100,
-  //   currentPage: page,
-  //   hasNextPage: ITEMS_PER_PAGE * page < totalItems,
-  //   hasPreviousPage: page > 1,
-  //   nextPage: page + 1,
-  //   previousPage: page - 1,
-  //   lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
-  // });
-  try {
-    const page = parseInt(req.query.page) - 1 || 0;
-    const limit = parseInt(req.query.limit) || 8;
-    const search = req.query.search || "";
-    let sort = req.query.sort || "";
-    let category = req.query.category || "all";
-
-    const categoryOptions = ["play aids", "toys", "baby care", "baby wear"];
-
-    category === "all"
-      ? (category = [...categoryOptions])
-      : (category = req.query.category.split(","));
-    req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort]);
-
-    let sortBy = {};
-    if (sort[1]) {
-      sortBy[sort[0]] = sort[1];
-    } else {
-      sortBy[sort[0]] = "asc";
-    }
-
-    const products = await Product.find({
-      name: { $regex: search, $options: "i" },
-    })
-      .where("category")
-      .in([...category])
-      .sort(sortBy)
-      .skip(page * limit)
-      .limit(limit);
-
-    const total = await Product.countDocuments({
-      category: { $in: [...category] },
-      name: { $regex: search, $options: "i" },
-    });
-
-    const response = {
-      error: false,
-      total,
-      page: page + 1,
-      limit,
-      categories: categoryOptions,
-      products,
-    };
-
-    res.status(200).json(response);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: true, message: "Internal Server Error" });
-  }
-};
-
 // GET all products
 exports.getAllProduct = async (req, res) => {
   const products = await Product.find({});
@@ -163,7 +81,7 @@ exports.listRelated = async (req, res) => {
   const products = await Product.find({
     _id: { $ne: req.params.productId },
     category: req.params.category,
-  });
+  }).limit(8);
   res.json(products);
 };
 
@@ -191,3 +109,85 @@ exports.listRelated = async (req, res) => {
 //       });
 //   });
 // };
+
+exports.getAllProducts = async (req, res) => {
+  // const page = +req.query.page || 1;
+  // const category = req.query.category || "all";
+  // const totalItems =
+  //   category === "all"
+  //     ? await Product.find().countDocuments()
+  //     : await Product.find({ category: category }).countDocuments();
+
+  // const products =
+  //   category === "all"
+  //     ? await Product.find()
+  //         .skip((page - 1) * ITEMS_PER_PAGE)
+  //         .limit(ITEMS_PER_PAGE)
+  //     : await Product.find({ category: category })
+  //         .skip((page - 1) * ITEMS_PER_PAGE)
+  //         .limit(ITEMS_PER_PAGE);
+  // // const totalItems = products.length;
+  // console.log(totalItems);
+  // res.json({
+  //   products: products,
+  //   page: page,
+  //   skip: (page - 1) * ITEMS_PER_PAGE,
+  //   limit: ITEMS_PER_PAGE,
+  //   total: 100,
+  //   currentPage: page,
+  //   hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+  //   hasPreviousPage: page > 1,
+  //   nextPage: page + 1,
+  //   previousPage: page - 1,
+  //   lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
+  // });
+  try {
+    const page = parseInt(req.query.page) - 1 || 0;
+    const limit = parseInt(req.query.limit) || 8;
+    const search = req.query.search || "";
+    let sort = req.query.sort || "";
+    let category = req.query.category || "all";
+
+    const categoryOptions = ["play aids", "toys", "baby care", "baby wear"];
+
+    category === "all"
+      ? (category = [...categoryOptions])
+      : (category = req.query.category.split(","));
+    req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort]);
+
+    let sortBy = {};
+    if (sort[1]) {
+      sortBy[sort[0]] = sort[1];
+    } else {
+      sortBy[sort[0]] = "asc";
+    }
+
+    const products = await Product.find({
+      name: { $regex: search, $options: "i" },
+    })
+      .where("category")
+      .in([...category])
+      .sort(sortBy)
+      .skip(page * limit)
+      .limit(limit);
+
+    const total = await Product.countDocuments({
+      category: { $in: [...category] },
+      name: { $regex: search, $options: "i" },
+    });
+
+    const response = {
+      error: false,
+      total,
+      page: page + 1,
+      limit,
+      categories: categoryOptions,
+      products,
+    };
+
+    res.status(200).json(response);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+};

@@ -10,6 +10,10 @@ import { isAuthenticated } from "../../services/authService";
 import { useEffect, useState } from "react";
 import { getCartItems, removeCartItems } from "../ViewCart/useCart";
 import { Link, useNavigate } from "react-router-dom";
+import Progress from "../../components/common/Progress";
+import GlobalSpinner from "../../components/common/GlobalSpinner";
+import ShippingInfo from "./ShippingInfo";
+import { showError, showSuccess, showLoading } from "./Services";
 
 const CheckOut = ({ user }) => {
   const navigate = useNavigate();
@@ -22,7 +26,7 @@ const CheckOut = ({ user }) => {
 
   if (!user) products = [];
   const { data, isLoading } = getCartItems(user);
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <GlobalSpinner />;
   products = data.data.products;
 
   const [dataset, setDataset] = useState({
@@ -34,7 +38,6 @@ const CheckOut = ({ user }) => {
   });
 
   const mutation = removeCartItems(user);
-
   const userId = user._id;
   const token = localStorage.getItem("token");
 
@@ -81,7 +84,6 @@ const CheckOut = ({ user }) => {
           phoneNumber: phoneNumber,
         };
 
-        console.log(paymentData);
         processPayment(userId, token, paymentData)
           .then((response) => {
             console.log(response);
@@ -150,26 +152,30 @@ const CheckOut = ({ user }) => {
     </div>
   );
 
-  const showError = (error) => (
-    <div
-      className="alert alert-danger"
-      style={{ display: error ? "" : "none" }}
-    >
-      {error}
-    </div>
-  );
+  // const showError = (error) => (
+  //   <div
+  //     className="alert alert-danger"
+  //     style={{ display: error ? "" : "none" }}
+  //   >
+  //     {error}
+  //   </div>
+  // );
 
-  const showSuccess = (success) => (
-    <div
-      className="alert alert-info"
-      style={{ display: success ? "" : "none" }}
-    >
-      Thanks! Your payment was successful!
-    </div>
-  );
+  // const showSuccess = (success) => (
+  //   <div
+  //     className="alert alert-info"
+  //     style={{ display: success ? "" : "none" }}
+  //   >
+  //     Thanks! Your payment was successful!
+  //   </div>
+  // );
 
-  const showLoading = (loading) =>
-    loading && <h2 className="text-danger">Loading...</h2>;
+  // const showLoading = (loading) =>
+  //   loading && (
+  //     <h2 className="text-danger">
+  //       <Progress />
+  //     </h2>
+  //   );
 
   return (
     <section>
@@ -192,68 +198,10 @@ const CheckOut = ({ user }) => {
               <p className="font-bold">Payment</p>
               <HiChevronRight />
             </div>
+
             {/* Shipping address */}
-            <div
-              role="table"
-              aria-label="Review your information"
-              className="bg-white border-gray-400 rounded border-solid border text-gray-700 text-sm leading-5 my-10"
-            >
-              <div
-                role="row"
-                className="items-baseline mx-4 py-3 flex justify-between"
-              >
-                <div className="pr-3 flex justify-between gap-10">
-                  <div role="cell" className="">
-                    <span className="text-gray-600">Contact</span>
-                  </div>
-                  <div role="cell" className="">
-                    <bdo className="" dir="ltr">
-                      {info.name}, {info.phoneNumber}, {info.email}
-                    </bdo>
-                  </div>
-                </div>
-                <div className="pr-3" role="cell">
-                  <a
-                    href={`/checkout/${user._id}/information`}
-                    className=""
-                    aria-label="Change contact information"
-                  >
-                    <span className="text-indigo-900 inline text-xs leading-4">
-                      Change
-                    </span>
-                  </a>
-                </div>
-              </div>
-              <div
-                role="row"
-                className="items-baseline border-gray-400 border-t mx-4 py-3 flex justify-between "
-              >
-                <div className="pr-3 flex justify-between gap-10 ">
-                  <div role="cell" className="">
-                    <span className="text-gray-600">Ship to</span>
-                  </div>
-                  <div role="cell" className="">
-                    <div className="">
-                      <address className="">
-                        {info.detailAddress}, {address.ward}, {address.district}
-                        , {address.city}
-                      </address>
-                    </div>
-                  </div>
-                </div>
-                <div className="pr-3" role="cell">
-                  <a
-                    href={`/checkout/${user._id}/information`}
-                    className=""
-                    aria-label="Change contact information"
-                  >
-                    <span className="text-indigo-900 inline text-xs leading-4">
-                      Change
-                    </span>
-                  </a>
-                </div>
-              </div>
-            </div>
+            <p className="my-4">Shipping Details</p>
+            <ShippingInfo user={user} info={info} address={address} />
 
             {/* Payment */}
             <div className="my-4">

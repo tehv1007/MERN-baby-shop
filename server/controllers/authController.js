@@ -28,6 +28,8 @@ exports.signup = async (req, res) => {
     const cart = new Cart({
       userId: user._id,
       products: [],
+      subPrice: 0,
+
     });
     await cart.save();
 

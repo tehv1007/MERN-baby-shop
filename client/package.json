@@ -35,6 +35,7 @@
     "sharethis-reactjs": "^1.6.0",
     "socket.io-client": "^4.5.4",
     "swiper": "^8.4.5",
+    "uuid": "^9.0.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

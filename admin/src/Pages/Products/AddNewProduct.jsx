@@ -53,7 +53,7 @@ const AddNewProduct = () => {
     alert("Selected images are not of valid type!");
   };
 
-  console.log(imageFiles);
+  // console.log(imageFiles);
 
   useEffect(() => {
     const images = [],

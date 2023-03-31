@@ -17,7 +17,6 @@ const OrderInformation = ({ user }) => {
   } = useForm();
 
   const onSubmit = (data) => {
-    // console.log(data);
     localStorage.setItem("shippingInfo", JSON.stringify(data));
     localStorage.setItem("shippingInfo2", JSON.stringify(subData));
     navigate(`/checkout/${user._id}/shipping`);
@@ -37,21 +36,9 @@ const OrderInformation = ({ user }) => {
             onSubmit={handleSubmit(onSubmit)}
             className="max-w-screen-sm mx-auto px-4 lg:row-start-1 lg:col-span-3"
           >
-            <div className="flex items-center gap-2 mt-4 text-xs max-w-screen-sm mx-auto">
-              <p>Cart</p>
-              <HiChevronRight />
-              <p className="font-bold">Information</p>
-              <HiChevronRight />
-              <p>Shipping</p>
-              <HiChevronRight />
-              <p>Payment</p>
-              <HiChevronRight />
-            </div>
+
             <h3 className="flex justify-between items-center my-6 lg:text-lg">
               Contact information
-              {/* <span className="lg:text-sm">
-                Already have an account? Log in
-              </span> */}
             </h3>
             {/* Form */}
             <FormCheckOut register={register} errors={errors} />

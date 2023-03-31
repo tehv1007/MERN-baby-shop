@@ -49,19 +49,6 @@ exports.deleteUser = async (req, res) => {
 };
 
 // Update user profile
-exports.checkEmailDuplicate = async (req, res, next) => {
-  const { email } = req.body;
-  const userId = req.params.id;
-
-  const user = await User.findOne({ email });
-
-  if (user && user._id.toString() !== userId) {
-    return res.status(400).send({ message: "Email already exists" });
-  }
-
-  next();
-};
-
 exports.updateProfile = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -73,11 +60,18 @@ exports.updateProfile = async (req, res) => {
       return res.status(404).send("User not found");
     }
 
+    // Kiểm tra email
+    const existingUser = await User.findOne({ email });
+    if (existingUser && existingUser._id.toString() !== userId) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+    // Cập nhật thông tin người dùng
     user.name = name;
-    user.email = email;
     user.phoneNumber = phoneNumber;
     user.address = address;
     user.image = image;
+    if (email != user.email) user.email = email;
 
     await user.save();
 

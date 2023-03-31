@@ -10,12 +10,13 @@ import { getCartItems } from "../../../pages/ViewCart/useCart";
 import Progress from "../../common/Progress";
 
 const Navbar = ({ user, isConnected }) => {
+  let isLoadingState;
   let totalQuantity = 0;
   let items = [];
 
   if (user) {
     const { data, isLoading } = getCartItems(user);
-
+    isLoadingState = isLoading;
     if (typeof data == "object" && data.data != "null") {
       items = data?.data?.products;
       totalQuantity = getTotalQuantity(items);
@@ -57,15 +58,19 @@ const Navbar = ({ user, isConnected }) => {
           <div className="flex items-center gap-4 ">
             <div className=" items-center">
               {isConnected ? (
-                <Link to="/user/dashboard">
-                  <div>
-                    <img
-                      src={user.image}
-                      alt="User Avatar"
-                      className="rounded-full w-auto max-h-10 block"
-                    />
-                  </div>
-                </Link>
+                isLoadingState ? (
+                  <Progress />
+                ) : (
+                  <Link to="/user/dashboard">
+                    <div>
+                      <img
+                        src={user.image}
+                        alt="User Avatar"
+                        className="rounded-full w-auto max-h-10 block"
+                      />
+                    </div>
+                  </Link>
+                )
               ) : (
                 <div className="items-center">
                   <Link to="/signin">

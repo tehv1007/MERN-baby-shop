@@ -21,6 +21,6 @@ router.delete("/:id", deleteUser);
 router.put("/:id/password", changePassword);
 
 // UPDATE profile
-router.put("/:id/profile", checkEmailDuplicate, updateProfile);
+router.put("/:id/profile", updateProfile);
 
 module.exports = router;

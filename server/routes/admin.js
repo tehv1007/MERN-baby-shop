@@ -15,11 +15,8 @@ const {
   getTodayRevenue,
   getThisMonthRevenue,
   getTopSellingProducts,
-  getWeeklySales,
-  getDailyRevenueLast7Days,
-  getDailyOrdersLast7Days,
-  getDailyOrderCount,
   getRecentDailyRevenue,
+  getRecentDailyOrders,
 } = require("../controllers/orderController");
 
 const {
@@ -67,7 +64,7 @@ router.get("/count-orders", countOrdersByStatus);
 router.get("/best-selling", getTopSellingProducts);
 
 // Get weekly order
-router.get("/weekly-orders", getDailyOrderCount);
+router.get("/weekly-orders", getRecentDailyOrders);
 
 // Get weekly sale
 router.get("/weekly-sales", getRecentDailyRevenue);

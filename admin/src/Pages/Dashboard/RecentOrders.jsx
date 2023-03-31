@@ -16,7 +16,7 @@ const RecentOrders = () => {
   useEffect(() => {
     const fetchData = async () => {
       const res = await axios.get(`/admin/recent-orders`);
-      console.log(res);
+      // console.log(res);
       setData(res.data);
     };
     fetchData();

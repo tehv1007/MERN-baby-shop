@@ -63,7 +63,7 @@ const Products = ({ user }) => {
   const paginatedArr = paginate(sortedArr, ITEMS_PER_PAGE, page);
 
   return (
-    <div className="mt-8 lg:mt-16">
+    <div className="mt-8 lg:mt-16 flex-grow">
       {/* Container */}
       <div className="max-w-screen-xl mx-auto p-4">
         {/* Layout */}
@@ -169,7 +169,10 @@ const Products = ({ user }) => {
 
           {/* Cards */}
           <ProductGrid products={paginatedArr} display={display} user={user} />
-          <Pagination setPage={setPage} paginationParams={paginationParams} />
+
+          {sortedArr.length > 0 && (
+            <Pagination setPage={setPage} paginationParams={paginationParams} />
+          )}
         </div>
       </div>
     </div>

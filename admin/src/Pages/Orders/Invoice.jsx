@@ -50,7 +50,7 @@ const Invoice = () => {
           <div className="flex lg:flex-row md:flex-row flex-col justify-between pt-4">
             <div className="mb-3 md:mb-0 lg:mb-0 flex flex-col">
               <span className="font-bold font-serif text-sm uppercase text-gray-600 block">
-                Date
+                Order Date
               </span>
               <span className="text-sm text-gray-500 block">
                 <span>{formatDate(order.createdAt)}</span>
@@ -93,7 +93,12 @@ const Invoice = () => {
                       <td className="px-4 py-3 whitespace-nowrap font-normal text-gray-500 text-left">
                         {product.productId}
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap font-normal text-gray-500">
+                      <td className="px-4 py-3 whitespace-nowrap font-normal text-gray-500 flex items-center gap-2">
+                        <img
+                          src={product.image}
+                          alt="product image"
+                          className="rounded-md w-[64px] h-[64px]"
+                        />
                         {product.name}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap font-bold text-center">

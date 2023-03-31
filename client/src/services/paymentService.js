@@ -1,4 +1,5 @@
 const API = import.meta.env.VITE_APP_BASE_URL;
+import { v4 as uuidv4 } from "uuid";
 
 export const getBraintreeClientToken = async (userId, token) => {
   try {
@@ -48,4 +49,14 @@ export const createOrder = async (userId, token, createOrderData) => {
   } catch (err) {
     return console.log(err);
   }
+};
+
+export const generateUniqueId = () => {
+  const generatedIds = new Set();
+  let id = "";
+  do {
+    id = uuidv4().substr(0, 10);
+  } while (generatedIds.has(id));
+  generatedIds.add(id);
+  return id;
 };

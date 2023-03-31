@@ -26,98 +26,98 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/">
-          <Route
-            path="/"
-            element={
-              <RequireAuth>
-                <Dashboard />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/products"
-            element={
-              <RequireAuth>
-                <Products />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="products/new"
-            element={
-              <RequireAuth>
-                <AddNewProduct />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="products/:productId/edit"
-            element={
-              <RequireAuth>
-                <ProductEdit />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="products/:productId"
-            element={
-              <RequireAuth>
-                <ProductDetail />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/customers"
-            element={
-              <RequireAuth>
-                <Users />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/orders"
-            element={
-              <RequireAuth>
-                <Orders />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/orders/:orderId"
-            element={
-              <RequireAuth>
-                <OrderDetail />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/:userId/orders"
-            element={
-              <RequireAuth>
-                <CustomerOrders />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/category"
-            element={
-              <RequireAuth>
-                <Category />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/coupons"
-            element={
-              <RequireAuth>
-                <Coupons />
-              </RequireAuth>
-            }
-          />
-          <Route path="/login" element={<Login />} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
+        {/* <Route path="/"> */}
+        <Route
+          path="/"
+          element={
+            <RequireAuth>
+              <Dashboard />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            <RequireAuth>
+              <Products />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="products/new"
+          element={
+            <RequireAuth>
+              <AddNewProduct />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="products/:productId/edit"
+          element={
+            <RequireAuth>
+              <ProductEdit />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="products/:productId"
+          element={
+            <RequireAuth>
+              <ProductDetail />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/customers"
+          element={
+            <RequireAuth>
+              <Users />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <RequireAuth>
+              <Orders />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/orders/:orderId"
+          element={
+            <RequireAuth>
+              <OrderDetail />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/:userId/orders"
+          element={
+            <RequireAuth>
+              <CustomerOrders />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/category"
+          element={
+            <RequireAuth>
+              <Category />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/coupons"
+          element={
+            <RequireAuth>
+              <Coupons />
+            </RequireAuth>
+          }
+        />
+        <Route path="/login" element={<Login />} />
+        <Route path="*" element={<NotFound />} />
+        {/* </Route> */}
       </Routes>
       <ToastContainer
         position="bottom-right"

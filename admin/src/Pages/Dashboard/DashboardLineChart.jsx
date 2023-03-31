@@ -39,7 +39,7 @@ const DashboardChart = () => {
     labels: revenue.map((sale) => sale._id),
     datasets: [
       {
-        label: "Weekly Sales",
+        label: "Weekly Sales ($)",
         data: revenue.map((sale) => sale.totalRevenue),
         fill: false,
         borderColor: "rgb(255, 99, 132)",
@@ -48,7 +48,7 @@ const DashboardChart = () => {
       },
       {
         label: "Weekly Orders",
-        data: order.map((sale) => sale.count),
+        data: order.map((sale) => sale.totalOrders),
         fill: false,
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",

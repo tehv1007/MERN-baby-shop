@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Banner = () => {
   return (
-    <div className="bg-banner h-[350px] bg-cover  md:h-screen">
+    <div className="bg-banner h-[350px] bg-cover md:h-screen">
       {/* Container */}
       <div className="max-w-screen-xl mx-auto px-4">
         {/* Layout */}
