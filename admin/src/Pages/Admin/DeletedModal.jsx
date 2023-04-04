@@ -1,25 +1,23 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useRef } from "react";
-import { deleteProductById } from "../../services/productsService";
-import Loader from "../common/Loader";
 import { toast } from "react-toastify";
+import Loader from "../../components/common/Loader";
 
-const DeletedModal = ({ id }) => {
+const DeletedModal = ({ id, handleDelete }) => {
   const ref = useRef();
   const btnRef = useRef();
 
-  const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: (productId) => deleteProductById(productId),
+    mutationFn: (userId) => handleDelete(userId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
       ref.current.checked = false;
-      toast.success("Successfully deleted product!");
+      toast.success("Successfully deleted admin user!");
     },
     onError: (err) => {
       toast.error(`Error deleting product ${err}:`);
     },
   });
+
   return (
     <div>
       <input type="checkbox" ref={ref} id={id} className="modal-toggle" />
@@ -29,7 +27,7 @@ const DeletedModal = ({ id }) => {
             {/* Warning icon */}
             <svg
               aria-hidden="true"
-              className="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200"
+              className="mx-auto mb-4 text-gray-400 w-14 h-14"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -45,7 +43,7 @@ const DeletedModal = ({ id }) => {
 
             {/* Title */}
             <h3 className="mb-6 text-lg font-normal text-gray-500">
-              Are you sure you want to delete this product?
+              Are you sure you want to delete this user?
             </h3>
 
             {/* Action buttons */}

@@ -1,5 +1,8 @@
 const router = require("express").Router();
-const { getAllUsers } = require("../controllers/userController");
+const {
+  getAllUsers,
+  updateUserStatus,
+} = require("../controllers/userController");
 
 const {
   deleteOrder,
@@ -31,6 +34,9 @@ const {
 // Users
 //GET ALL USER
 router.get("/users", getAllUsers);
+
+// UPDATE user status
+router.put("/:userId/disable", updateUserStatus);
 
 /*--------------------------------------*/
 //Order

@@ -1,16 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useState } from "react";
+import  { useState } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../../components/layouts/Layout";
 import Pagination from "../../components/layouts/Pagination";
 import formatDate from "../../services/formatDate";
 import { paginate } from "../../services/productsService";
 import NoOrder from "./Dashboard/NoOrder";
+import { GiCancel } from "react-icons/gi";
+import { BiCommentDetail } from "react-icons/bi";
+import GlobalSpinner from "../../components/common/GlobalSpinner";
+import CancelModal from "./Dashboard/CancelModal";
 
 const MyOrders = ({ user }) => {
   const ITEMS_PER_PAGE = 10;
   const [page, setPage] = useState(1);
+  const [id, setId] = useState("");
 
   const { data, isLoading } = useQuery({
     queryKey: ["orders"],
@@ -19,7 +24,7 @@ const MyOrders = ({ user }) => {
     },
   });
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <GlobalSpinner />;
   const { data: orders } = data;
 
   let totalItems = orders.length;
@@ -99,18 +104,37 @@ const MyOrders = ({ user }) => {
                                 ${order.amount}
                               </span>
                             </td>
-                            <td className="px-5 py-3 whitespace-nowrap text-right text-sm">
+                            <td className="px-5 py-3 whitespace-nowrap text-center text-sm flex">
                               <Link
-                                className="px-3 py-1 bg-emerald-100 text-xs text-emerald-600 hover:bg-emerald-500 hover:text-white transition-all font-semibold rounded-full"
+                                className="group flex relative px-3 py-1 bg-emerald-100 text-xs text-emerald-600 hover:bg-emerald-500 hover:text-white transition-all rounded-full"
                                 to={`/order/${order._id}`}
                               >
-                                Details
+                                <BiCommentDetail />
+                                <span className="group-hover:opacity-100 transition-opacity bg-gray-500 px-1 text-gray-100 rounded-md absolute opacity-0 m-4 mx-auto translate-y-1/2">
+                                  Detail
+                                </span>
                               </Link>
+                              <div className="group flex relative text-xs">
+                                <span className="group-hover:opacity-100 transition-opacity bg-gray-500 px-1 text-gray-100 rounded-md absolute translate-y-1/2 opacity-0 m-4 mx-auto">
+                                  Cancel
+                                </span>
+                                <label
+                                  htmlFor={order._id}
+                                  onClick={() => setId(order._id)}
+                                  className="px-3 py-1 bg-red-100 text-xs text-red-600 hover:bg-red-500 hover:text-white transition-all font-semibold rounded-full"
+                                >
+                                  <span>
+                                    <GiCancel />
+                                  </span>
+                                </label>
+                              </div>
                             </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
+
+                    <CancelModal id={id} />
 
                     <Pagination
                       setPage={setPage}

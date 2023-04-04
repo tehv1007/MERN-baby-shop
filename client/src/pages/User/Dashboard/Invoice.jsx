@@ -20,7 +20,10 @@ const Invoice = () => {
 
   return (
     <>
-      <div className="bg-white mb-4 p-6 lg:p-8 rounded-xl shadow-sm overflow-hidden">
+      <div
+        className="bg-white mb-4 p-6 lg:p-8 rounded-xl shadow-sm overflow-hidden"
+        id="invoice"
+      >
         <div className>
           <div className="flex md:flex-row flex-col lg:items-center justify-between pb-4 border-b border-gray-50">
             <h1 className="font-bold font-serif text-xl uppercase">

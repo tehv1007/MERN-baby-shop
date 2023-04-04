@@ -38,6 +38,22 @@ exports.updateUser = async (req, res) => {
   }
 };
 
+// Update user status
+exports.updateUserStatus = async (req, res) => {
+  const userId = req.params.userId;
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return res.status(404).send("User not found");
+  }
+
+  user.isActive = !user.isActive;
+  await user.save();
+
+  res.send(user);
+};
+
 //DELETE user by ID
 exports.deleteUser = async (req, res) => {
   try {

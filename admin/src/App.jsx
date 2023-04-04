@@ -15,6 +15,8 @@ import CustomerOrders from "./Pages/Orders/CustomerOrders";
 import Category from "./Pages/Category/Category";
 import OrderDetail from "./Pages/Orders/OrderDetail";
 import Coupons from "./Pages/Coupons/Coupons";
+import Admin from "./Pages/Admin/Admin";
+import AddNew from "./Pages/Admin/AddNew";
 
 const App = () => {
   const { currentUser } = useContext(AuthContext);
@@ -76,6 +78,22 @@ const App = () => {
           }
         />
         <Route
+          path="/admin"
+          element={
+            <RequireAuth>
+              <Admin />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/admin/new"
+          element={
+            <RequireAuth>
+              <AddNew />
+            </RequireAuth>
+          }
+        />
+        <Route
           path="/orders"
           element={
             <RequireAuth>
@@ -115,9 +133,9 @@ const App = () => {
             </RequireAuth>
           }
         />
+        {/* </Route> */}
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<NotFound />} />
-        {/* </Route> */}
       </Routes>
       <ToastContainer
         position="bottom-right"

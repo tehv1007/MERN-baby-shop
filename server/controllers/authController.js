@@ -29,7 +29,6 @@ exports.signup = async (req, res) => {
       userId: user._id,
       products: [],
       subPrice: 0,
-
     });
     await cart.save();
 
@@ -96,9 +95,7 @@ exports.signin = async (req, res) => {
       ],
     });
     if (!user)
-      return res
-        .status(401)
-        .send({ message: "Invalid Email, Username or Password" });
+      return res.status(401).send({ message: "Invalid Email or Username" });
 
     const validPassword = bcrypt.compare(req.body.password, user.password);
     if (!validPassword)
@@ -120,6 +117,12 @@ exports.signin = async (req, res) => {
         message:
           "You haven't verified your email yet, so an email sent to your account. Please verify!",
       });
+    }
+
+    if (!user.isActive) {
+      return res
+        .status(403)
+        .send({ message: "Your account has been disabled." });
     }
 
     const token = user.generateAuthToken();

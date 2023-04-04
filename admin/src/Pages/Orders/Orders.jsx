@@ -2,12 +2,11 @@ import PageTitle from "../../components/common/PageTitle";
 import OrderTable from "./OrderTable";
 import { useState } from "react";
 import Pagination from "../../components/common/Pagination";
-import { paginate } from "../../Services/productsService";
 import Layout from "../../components/layout/Layout";
-import GlobalSpinner from "../../components/common/GlobalSpinner";
 import useTableData from "../../hooks/usetableData";
 import Loader from "../../components/common/Loader";
 import useDebounce from "../../hooks/useDebounce";
+import { paginate } from "../../services/productsService";
 
 const Orders = () => {
   const [page, setPage] = useState(1);

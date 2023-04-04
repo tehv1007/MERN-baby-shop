@@ -33,7 +33,7 @@ const RecentOrders = ({ user }) => {
                 <tr>
                   <td className="px-4 py-3">Order ID</td>
                   <td className="px-4 py-3">Order Time</td>
-                  <td className="px-4 py-3">Delivery Address</td>
+                  {/* <td className="px-4 py-3">Delivery Address</td> */}
                   <td className="px-4 py-3">Phone</td>
                   <td className="px-4 py-3">Payment method</td>
                   <td className="px-4 py-3">Order amount</td>
@@ -51,9 +51,9 @@ const RecentOrders = ({ user }) => {
                         {formatDate(order.createdAt)}
                       </span>
                     </td>
-                    <td className="px-4 py-3">
+                    {/* <td className="px-4 py-3">
                       <span className="text-sm ">{order.address}</span>
-                    </td>
+                    </td> */}
                     <td className="px-4 py-3">
                       <span className="text-sm">{order.phoneNumber}</span>
                     </td>

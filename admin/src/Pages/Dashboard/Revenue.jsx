@@ -33,11 +33,11 @@ const Revenue = () => {
   useEffect(() => {
     const fetchData = async () => {
       const resTotal = await axios.get(`/admin/total-revenue`);
-      setTotalRevenue(resTotal.data.totalRevenue);
+      setTotalRevenue(resTotal.data.totalRevenue.toFixed(2));
       const resToday = await axios.get(`/admin/today-revenue`);
-      setTodayRevenue(resToday.data);
+      setTodayRevenue(resToday.data.toFixed(2));
       const resThisMonth = await axios.get(`/admin/this-month-revenue`);
-      setThisMonthRevenue(resThisMonth.data);
+      setThisMonthRevenue(resThisMonth.data.toFixed(2));
     };
     fetchData();
   }, []);

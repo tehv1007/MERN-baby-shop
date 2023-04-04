@@ -31,6 +31,9 @@ const OrderDataRow = ({
     onSuccess: () => {
       toast.success("Successfully update order status!");
     },
+    onError: (err) => {
+      toast.error(`Something went wrong: ${err.response.data.message}`);
+    },
   });
 
   function handleStatusChange(event) {
@@ -66,7 +69,7 @@ const OrderDataRow = ({
       </td>
       <td>
         {/* Detail */}
-        <Link to={`${_id}`}>
+        <Link to={`/orders/${_id}`}>
           <div className="tooltip" data-tip="Detail">
             <label className="btn btn-sm btn-square btn-success hover:opacity-60">
               <FcSearch />

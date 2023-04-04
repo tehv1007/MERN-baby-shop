@@ -8,6 +8,38 @@ body {
   font-family: "Nunito", sans-serif;
 }
 
+/* Invoice print function */
+@media print {
+  /* Ẩn các phần không cần thiết khi in */
+  body * {
+    /* display: none; */
+    visibility: hidden;
+  }
+  #invoice,
+  #invoice * {
+    /* display: block; */
+    visibility: visible;
+  }
+  /* Đặt kích thước giấy in */
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  /* Xóa các margin và padding mặc định */
+  body {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* #invoice {
+  width: 210mm;
+  height: 297mm;
+  margin: auto;
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+} */
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

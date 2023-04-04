@@ -50,6 +50,7 @@ const facebookLogin = new FacebookStrategy(
         name: profile.displayName,
         password: crypto.randomBytes(32).toString("hex"),
         image: profile.photos[0].value,
+        isActive: true,
       }).save();
 
       done(null, newUser);

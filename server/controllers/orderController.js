@@ -443,3 +443,29 @@ exports.getRecentDailyOrders = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+// Hủy bỏ đơn hàng
+exports.cancelOrder = async (req, res) => {
+  const orderId = req.params.orderId;
+
+  try {
+    // Lấy thông tin đơn hàng từ database bằng ID
+    const order = await Order.findById(orderId);
+
+    // Kiểm tra xem đơn hàng đang ở trạng thái "pending" hay không
+    if (order.status === "Pending") {
+      // Cập nhật trạng thái của đơn hàng thành "cancelled"
+      order.status = "Cancelled";
+      await order.save();
+
+      res.json({ message: "Order has been cancelled." });
+    } else {
+      res.status(400).json({
+        message:
+          "The order is being processed, so it cannot be cancelled. Please contact the store owner.",
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

@@ -5,7 +5,6 @@ const {
   getUserById,
   changePassword,
   updateProfile,
-  checkEmailDuplicate,
 } = require("../controllers/userController");
 
 //GET USER by ID

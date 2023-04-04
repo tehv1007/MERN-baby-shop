@@ -3,7 +3,7 @@ import PageTitle from "../../components/common/PageTitle";
 import ProductTable from "./ProductTable";
 import { useState } from "react";
 import Pagination from "../../components/common/Pagination";
-import { paginate } from "../../Services/productsService";
+import { paginate } from "../../services/productsService";
 import Layout from "../../components/layout/Layout";
 import GlobalSpinner from "../../components/common/GlobalSpinner";
 import useDebounce from "../../hooks/useDebounce";

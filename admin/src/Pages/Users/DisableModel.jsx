@@ -1,23 +1,25 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
-import { deleteProductById } from "../../services/productsService";
-import Loader from "../common/Loader";
 import { toast } from "react-toastify";
+import Loader from "../../components/common/Loader";
+import axios from "axios";
 
-const DeletedModal = ({ id }) => {
+const DisableModal = ({ id }) => {
   const ref = useRef();
   const btnRef = useRef();
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: (productId) => deleteProductById(productId),
+    mutationFn: (userId) => axios.put(`/admin/${userId}/disable`),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
       ref.current.checked = false;
-      toast.success("Successfully deleted product!");
+      toast.success(
+        `Successfully ${user.isActive ? "disabled" : "enabled"} user!`
+      );
     },
     onError: (err) => {
-      toast.error(`Error deleting product ${err}:`);
+      toast.error(`Error: ${mutation.response.data}`);
     },
   });
   return (
@@ -45,7 +47,7 @@ const DeletedModal = ({ id }) => {
 
             {/* Title */}
             <h3 className="mb-6 text-lg font-normal text-gray-500">
-              Are you sure you want to delete this product?
+              Are you sure you want to disable this user?
             </h3>
 
             {/* Action buttons */}
@@ -70,4 +72,4 @@ const DeletedModal = ({ id }) => {
   );
 };
 
-export default DeletedModal;
+export default DisableModal;

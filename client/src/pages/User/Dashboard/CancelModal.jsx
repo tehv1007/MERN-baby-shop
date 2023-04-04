@@ -1,23 +1,24 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
-import { deleteProductById } from "../../services/productsService";
-import Loader from "../common/Loader";
 import { toast } from "react-toastify";
+import axios from "axios";
+import Progress from "../../../components/common/Progress";
 
-const DeletedModal = ({ id }) => {
+const CancelModal = ({ id }) => {
   const ref = useRef();
   const btnRef = useRef();
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: (productId) => deleteProductById(productId),
+    mutationFn: (orderId) => axios.put(`/orders/${orderId}/cancel`),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
       ref.current.checked = false;
-      toast.success("Successfully deleted product!");
+      toast.success("Successfully cancelled your order!");
     },
     onError: (err) => {
-      toast.error(`Error deleting product ${err}:`);
+      toast.error(`Error: ${err.response.data.message}:`);
+      ref.current.checked = false;
     },
   });
   return (
@@ -29,7 +30,7 @@ const DeletedModal = ({ id }) => {
             {/* Warning icon */}
             <svg
               aria-hidden="true"
-              className="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200"
+              className="mx-auto mb-4 text-gray-400 w-14 h-14"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -45,7 +46,7 @@ const DeletedModal = ({ id }) => {
 
             {/* Title */}
             <h3 className="mb-6 text-lg font-normal text-gray-500">
-              Are you sure you want to delete this product?
+              Are you sure you want to cancel this order?
             </h3>
 
             {/* Action buttons */}
@@ -55,7 +56,7 @@ const DeletedModal = ({ id }) => {
                 onClick={() => mutation.mutate(id)}
               >
                 <div className="flex items-center gap-2">
-                  {mutation.isLoading && <Loader />}
+                  {mutation.isLoading && <Progress />}
                   <span>Yes, I'm sure</span>
                 </div>
               </button>
@@ -70,4 +71,4 @@ const DeletedModal = ({ id }) => {
   );
 };
 
-export default DeletedModal;
+export default CancelModal;

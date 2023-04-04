@@ -37,6 +37,7 @@ const googleLogin = new GoogleStrategy(
         password: crypto.randomBytes(32).toString("hex"),
         name: profile.displayName,
         image: profile.picture,
+        isActive: true,
       }).save();
       done(null, newUser);
     } catch (err) {

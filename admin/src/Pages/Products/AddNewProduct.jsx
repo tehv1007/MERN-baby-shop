@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState, useEffect } from "react";
-import { createProduct } from "../../Services/productsService";
+import { createProduct } from "../../services/productsService";
 import { storage } from "../../config/firebase";
 import ProductForm from "./ProductForm";
 import Layout from "../../components/layout/Layout";

@@ -10,6 +10,7 @@ import { paginate } from "../../services/productsService";
 import Pagination from "../../components/common/Pagination";
 import { formatDate } from "../../services/formatDate";
 import { FcSearch } from "react-icons/fc";
+import OrderDataRow from "./OrderDataRow";
 
 const CustomerOrders = () => {
   const { userId } = useParams();
@@ -144,45 +145,7 @@ const CustomerOrders = () => {
               </thead>
               <tbody>
                 {paginatedArr.map((item) => (
-                  <tr key={item._id} className="text-center">
-                    <td className="text-sm text-left">{item.transaction_id}</td>
-                    <td className="text-sm">{formatDate(item.createdAt)}</td>
-                    <td className="text-sm">{item.address}</td>
-                    <td className="text-sm">{item.phoneNumber}</td>
-                    <td className="text-sm">${item.amount}</td>
-                    <td className="text-center text-sm">
-                      <span
-                        className={`inline-flex px-2 py-0 rounded-full ${item.status.toLowerCase()}`}
-                      >
-                        {item.status}
-                      </span>
-                    </td>
-                    <td>
-                      <select
-                        className="border rounded py-1 text-sm max-w-xs"
-                        value={item.status}
-                        onChange={(event) =>
-                          handleStatusChange(event, item._id)
-                        }
-                      >
-                        <option>Not processed</option>
-                        <option>Processing</option>
-                        <option>Shipped</option>
-                        <option>Delivered</option>
-                        <option>Cancelled</option>
-                      </select>
-                    </td>
-                    <td>
-                      {/* Detail */}
-                      <Link to={`/orders/${item._id}`}>
-                        <div className="tooltip" data-tip="Detail">
-                          <label className="btn btn-sm btn-square btn-success hover:opacity-60">
-                            <FcSearch />
-                          </label>
-                        </div>
-                      </Link>
-                    </td>
-                  </tr>
+                  <OrderDataRow key={item._id} {...item} />
                 ))}
               </tbody>
             </table>

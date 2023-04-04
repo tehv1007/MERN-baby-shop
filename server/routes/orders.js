@@ -6,6 +6,7 @@ const {
   getOrderById,
   getRecentOrdersByCustomer,
   countOrdersByStatusAndUser,
+  cancelOrder,
 } = require("../controllers/orderController");
 
 //GET user orders
@@ -13,6 +14,9 @@ router.get("/:userId/my-orders", getOrdersByUser);
 
 //GET order by ID
 router.get("/:orderId", getOrderById);
+
+//
+router.put("/:orderId/cancel", cancelOrder);
 
 //GET recent orders of an user
 router.get("/:userId/recent-orders", getRecentOrdersByCustomer);

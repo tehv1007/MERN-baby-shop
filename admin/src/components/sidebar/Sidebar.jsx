@@ -9,10 +9,13 @@ import LogoutIcon from "../common/icons/LogoutIcon";
 import OrderIcon from "../common/icons/OrderIcon";
 import ProductIcon from "../common/icons/ProductIcon";
 import { NavLink } from "react-router-dom";
+import { RiAdminLine } from "react-icons/ri";
+import AdminIcon from "../common/icons/AdminIcon";
 
 const SidebarItem = ({ children, title, href }) => {
   const style =
     "px-6 py-4 inline-flex w-full transition-colors duration-150 hover:text-green-700";
+  const spanStyle = "";
 
   return (
     <li className="relative">
@@ -22,14 +25,16 @@ const SidebarItem = ({ children, title, href }) => {
         }
         to={href ? href : `/${title}`}
       >
-        {({ isActive }) =>
-          isActive && (
-            <span
-              className="absolute inset-y-0 left-0 w-1 bg-green-500 rounded-tr-lg rounded-br-lg"
-              aria-hidden="true"
-            />
-          )
-        }
+        {({ isActive }) => (
+          <span
+            className={
+              isActive
+                ? "absolute inset-y-0 left-0 w-1 bg-green-500 rounded-tr-lg rounded-br-lg"
+                : "hidden"
+            }
+            aria-hidden="true"
+          />
+        )}
         {children}
         <span className="ml-4 capitalize">{title}</span>
       </NavLink>
@@ -66,6 +71,11 @@ const NewSidebar = () => {
           {/* Category */}
           <SidebarItem title="category">
             <CategoryIcon />
+          </SidebarItem>
+
+          {/* Category */}
+          <SidebarItem title="admin">
+            <AdminIcon />
           </SidebarItem>
 
           {/* Customers */}
