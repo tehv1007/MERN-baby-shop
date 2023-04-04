@@ -1,7 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useParams, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
 import { editProductSchema } from "../../validation/productSchema";
@@ -10,15 +8,11 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import Layout from "../../components/layout/Layout";
 import PageTitle from "../../components/common/PageTitle";
 import ProductForm from "./ProductForm";
-import {
-  getProductById,
-  updateProductById,
-} from "../../services/productsService";
 import GlobalSpinner from "../../components/common/GlobalSpinner";
+import { getProductDetail, updateProduct } from "../../hooks/useProduct";
 
 const EditProduct = () => {
   const { productId } = useParams();
-  const navigate = useNavigate();
   const [isFileUploading, setIsFileUploading] = useState(false);
   const [urls, setUrls] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
@@ -27,10 +21,7 @@ const EditProduct = () => {
   const [showPreview, setShowPreview] = useState(true);
   const imageTypeRegex = /image\/(png|jpg|jpeg|webp)/gm;
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["products", productId],
-    queryFn: () => getProductById(productId),
-  });
+  const { data, isLoading } = getProductDetail(productId);
 
   const {
     register,
@@ -47,13 +38,7 @@ const EditProduct = () => {
     reset(data?.data);
   }, [data]);
 
-  const mutation = useMutation({
-    mutationFn: (newProduct) => updateProductById(productId, newProduct),
-    onSuccess: () => {
-      toast.success("Successfully update product!");
-      navigate("/products");
-    },
-  });
+  const mutation = updateProduct(productId);
 
   const handleChange = (e) => {
     const files = [...e.target.files];

@@ -12,7 +12,6 @@ import useTableData from "../../hooks/usetableData";
 const Products = () => {
   const [page, setPage] = useState(1);
   const ITEMS_PER_PAGE = 7;
-
   const [searchString, setSearchString] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const debouncedSearch = useDebounce(searchString, 500);

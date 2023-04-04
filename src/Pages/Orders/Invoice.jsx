@@ -1,18 +1,12 @@
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import GlobalSpinner from "../../components/common/GlobalSpinner";
 import { formatDate } from "../../services/formatDate";
 import Logo from "../../assets/Logo.webp";
+import { getOrderById } from "../../hooks/useOrder";
 
 const Invoice = () => {
   const { orderId } = useParams();
-
-  const { data, isLoading } = useQuery({
-    queryKey: ["order"],
-    queryFn: () => axios.get(`/admin/orders/${orderId}`),
-  });
+  const { data, isLoading } = getOrderById(orderId);
 
   if (isLoading) return <GlobalSpinner />;
   const { data: order } = data;

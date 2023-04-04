@@ -2,9 +2,7 @@ import { formatDate } from "../../services/formatDate";
 import { useState } from "react";
 import { FcSearch } from "react-icons/fc";
 import { Link } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { toast } from "react-toastify";
+import { updateOrderStatus } from "../../hooks/useOrder";
 
 const ORDER_STATUS = [
   { label: "Pending", value: "Pending" },
@@ -19,22 +17,13 @@ const OrderDataRow = ({
   transaction_id,
   createdAt,
   address,
+  phoneNumber,
   amount,
   status: currentStatus,
 }) => {
   const [status, setStatus] = useState(currentStatus);
 
-  const statusMutation = useMutation({
-    mutationFn: (status) => {
-      return axios.put(`/admin/orders/${_id}`, { status: status });
-    },
-    onSuccess: () => {
-      toast.success("Successfully update order status!");
-    },
-    onError: (err) => {
-      toast.error(`Something went wrong: ${err.response.data.message}`);
-    },
-  });
+  const statusMutation = updateOrderStatus(_id);
 
   function handleStatusChange(event) {
     setStatus(event.target.value);
@@ -46,6 +35,7 @@ const OrderDataRow = ({
       <td className="text-sm text-left">{transaction_id}</td>
       <td className="text-sm">{formatDate(createdAt)}</td>
       <td className="text-sm">{address}</td>
+      <td className="text-sm">{phoneNumber}</td>
       <td className="text-sm">${amount}</td>
       <td className="text-center text-sm">
         <span

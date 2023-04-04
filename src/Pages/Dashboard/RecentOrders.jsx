@@ -3,14 +3,6 @@ import { useEffect, useState } from "react";
 import { formatDate } from "../../services/formatDate";
 
 const RecentOrders = () => {
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ["orders"],
-  //   queryFn: () => axios.get("/admin/recent-orders"),
-  // });
-
-  // const { data: recentOrders } = data;
-  // console.log(recentOrders);
-
   const [data, setData] = useState([]);
 
   useEffect(() => {

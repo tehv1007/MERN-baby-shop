@@ -1,8 +1,7 @@
 import { useParams } from "react-router-dom";
 import PageTitle from "../../components/common/PageTitle";
 import Layout from "../../components/layout/Layout";
-
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { saveAs } from "file-saver";
 import { BsCloudDownload, BsPrinter } from "react-icons/bs";
@@ -39,7 +38,7 @@ const OrderDetail = () => {
 
   return (
     <Layout>
-      <PageTitle title="Order Detail"/>
+      <PageTitle title="Order Detail" />
       <Invoice />
       <div className="mb-4 mt-3 flex justify-between items-center text-sm leading-5 font-medium text-white">
         {/* <a

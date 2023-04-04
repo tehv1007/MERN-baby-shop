@@ -17,6 +17,7 @@ import Coupons from "./Pages/Coupons/Coupons";
 import Admin from "./Pages/Admin/Admin";
 import AddNew from "./Pages/Admin/AddNew";
 import Login from "./Pages/Login/Login";
+import ForceRedirect from "./components/auth/ForceRedirect";
 
 const App = () => {
   const { currentUser } = useContext(AuthContext);
@@ -134,7 +135,14 @@ const App = () => {
           }
         />
         {/* </Route> */}
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={
+            <ForceRedirect user={currentUser}>
+              <Login />
+            </ForceRedirect>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer
