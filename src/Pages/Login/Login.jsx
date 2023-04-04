@@ -57,6 +57,7 @@ const Login = () => {
                     className="block w-full px-3 py-1 text-sm focus:outline-none leading-5 rounded-md focus:border-gray-200 border-gray-200 focus:ring focus:ring-green-300 border h-12 bg-gray-100 border-transparent focus:bg-white"
                     type="email"
                     name="email"
+                    defaultValue="hoangte@gmail.com"
                     placeholder="john@doe.com"
                     autoComplete="new-password"
                     onChange={(e) => setEmail(e.target.value)}
@@ -69,6 +70,7 @@ const Login = () => {
                     className="px-3 py-1 leading-5 rounded-md focus:border-gray-200 border-gray-200 focus:ring border h-12 text-sm focus:outline-none block w-full bg-gray-100 border-transparent focus:bg-white"
                     type="password"
                     name="password"
+                    defaultValue="0240576245"
                     placeholder="***************"
                     autoComplete="new-password"
                     onChange={(e) => setPassword(e.target.value)}
