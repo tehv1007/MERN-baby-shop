@@ -9,29 +9,31 @@ import LogoutIcon from "../common/icons/LogoutIcon";
 import OrderIcon from "../common/icons/OrderIcon";
 import ProductIcon from "../common/icons/ProductIcon";
 import { NavLink } from "react-router-dom";
-import { RiAdminLine } from "react-icons/ri";
 import AdminIcon from "../common/icons/AdminIcon";
+import { useEffect, useState } from "react";
 
 const SidebarItem = ({ children, title, href }) => {
   const style =
     "px-6 py-4 inline-flex w-full transition-colors duration-150 hover:text-green-700";
-  const spanStyle = "";
+
+  const [activeState, setActiveState] = useState(false);
+
+  useEffect(() => {
+    const isActive = window.location.pathname === `${href}`;
+    setActiveState(isActive);
+  }, [href]);
 
   return (
     <li className="relative">
       <NavLink
-        className={({ isActive }) =>
-          isActive ? `text-green-500 bg-green-100 ${style}` : `${style}`
+        className={
+          activeState ? `text-green-500 bg-green-100 ${style}` : `${style}`
         }
-        to={href ? href : `/${title}`}
+        to={`${href}`}
       >
-        {({ isActive }) => (
+        {activeState && (
           <span
-            className={
-              isActive
-                ? "absolute inset-y-0 left-0 w-1 bg-green-500 rounded-tr-lg rounded-br-lg"
-                : "hidden"
-            }
+            className="absolute inset-y-0 left-0 w-1 bg-green-500 rounded-tr-lg rounded-br-lg"
             aria-hidden="true"
           />
         )}
@@ -64,32 +66,32 @@ const NewSidebar = () => {
           </SidebarItem>
 
           {/* Products */}
-          <SidebarItem title="products">
+          <SidebarItem title="products" href="/products">
             <ProductIcon />
           </SidebarItem>
 
           {/* Category */}
-          <SidebarItem title="category">
+          <SidebarItem title="category" href="/category">
             <CategoryIcon />
           </SidebarItem>
 
           {/* Category */}
-          <SidebarItem title="admin">
+          <SidebarItem title="admin" href="/admin">
             <AdminIcon />
           </SidebarItem>
 
           {/* Customers */}
-          <SidebarItem title="customers">
+          <SidebarItem title="customers" href="/customers">
             <CustomerIcon />
           </SidebarItem>
 
           {/* Orders */}
-          <SidebarItem title="orders">
+          <SidebarItem title="orders" href="/orders">
             <OrderIcon />
           </SidebarItem>
 
           {/* Coupon */}
-          <SidebarItem title="coupons">
+          <SidebarItem title="coupons" href="/coupons">
             <CouponIcon />
           </SidebarItem>
         </ul>
@@ -109,7 +111,6 @@ const NewSidebar = () => {
         </span>
       </div>
     </aside>
-    // </div>
   );
 };
 

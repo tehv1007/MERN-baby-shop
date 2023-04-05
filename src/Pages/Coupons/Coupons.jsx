@@ -45,7 +45,7 @@ const Coupons = () => {
               </thead>
 
               <tbody className="bg-white divide-y divide-gray-100 text-gray-700 ">
-                <tr className>
+                <tr>
                   <td className="px-4 py-3">
                     <span className="font-semibold uppercase text-xs">
                       284b
@@ -110,7 +110,7 @@ const Coupons = () => {
                   </td>
                 </tr>
                 {/* item 2 */}
-                <tr className>
+                <tr>
                   <td className="px-4 py-3">
                     <span className="font-semibold uppercase text-xs">
                       284a
@@ -176,7 +176,7 @@ const Coupons = () => {
                 </tr>
 
                 {/* item 3 */}
-                <tr className>
+                <tr>
                   <td className="px-4 py-3">
                     <span className="font-semibold uppercase text-xs">
                       2849
@@ -242,7 +242,7 @@ const Coupons = () => {
                 </tr>
 
                 {/* item 4 */}
-                <tr className>
+                <tr>
                   <td className="px-4 py-3">
                     <span className="font-semibold uppercase text-xs">
                       2848
