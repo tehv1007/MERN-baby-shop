@@ -1,7 +1,5 @@
 const Review = require("../models/Review");
 const Product = require("../models/Product");
-const User = require("../models/User");
-const { create } = require("../models/Product");
 
 // Get all reviews at one product
 exports.getReviewById = async (req, res) => {
@@ -51,23 +49,6 @@ exports.deleteReview = async (req, res) => {
 
 // Edit review
 exports.editReview = async (req, res) => {
-  // const { error } = validateMessage(req.body);
-  // if (error) return res.status(400).json({ message: error.details[0].message });
-
-  // try {
-  //   let review = await Review.findByIdAndUpdate(
-  //     req.params.reviewId,
-  //     { text: req.body.text, user: tempReview.user.id },
-  //     { new: true }
-  //   );
-  //   if (!review) return res.status(404).json({ message: "No message found." });
-  //   review = await review.populate("user").execPopulate();
-
-  //   res.status(200).json({ review });
-  // } catch (err) {
-  //   res.status(500).json({ message: "Something went wrong." });
-  // }
-
   const id = req.params.reviewId;
 
   try {

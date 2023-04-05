@@ -1,5 +1,6 @@
 const Order = require("../models/Order");
 const User = require("../models/User");
+const Cart = require("../models/Cart");
 const moment = require("moment");
 
 //GET ALL orders
@@ -21,6 +22,8 @@ exports.addOrder = async (req, res) => {
     const data = req.body.order;
     console.log(data);
 
+    // const cart = await Cart.find({ userId: userId });
+
     const order = await Order.create({
       phoneNumber: data.phoneNumber,
       userId: userId,
@@ -30,6 +33,7 @@ exports.addOrder = async (req, res) => {
       products: data.products,
       paymentMethod: data.paymentMethod,
     });
+
     return res.status(201).json(order);
   } catch (err) {
     console.log(err);
@@ -205,10 +209,15 @@ exports.countOrdersByStatusAndUser = async (req, res) => {
   }
 };
 
-// Get total revenue
+// Get total revenue (excluding cancelled orders)
 exports.getTotalRevenue = async (req, res) => {
   try {
     const result = await Order.aggregate([
+      {
+        $match: {
+          status: { $ne: "Cancelled" }, // only include orders with status not equal to "cancelled"
+        },
+      },
       {
         $group: {
           _id: null,
@@ -217,40 +226,6 @@ exports.getTotalRevenue = async (req, res) => {
       },
     ]);
     res.status(200).json(result[0]);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-// Get monthly revenue
-exports.getMonthlyRevenue = async (req, res) => {
-  try {
-    const result = await Order.aggregate([
-      {
-        $group: {
-          _id: { $dateToString: { format: "%Y-%m", date: "$createdAt" } },
-          totalRevenue: { $sum: "$amount" },
-        },
-      },
-    ]);
-    res.status(200).json(result);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-// Get daily revenue for 30 days
-exports.getDailyRevenue = async (req, res) => {
-  try {
-    const result = await Order.aggregate([
-      {
-        $group: {
-          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-          totalRevenue: { $sum: "$amount" },
-        },
-      },
-    ]);
-    res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -268,6 +243,7 @@ exports.getTodayRevenue = async (req, res) => {
       {
         $match: {
           createdAt: { $gte: start, $lte: end },
+          status: { $ne: "Cancelled" },
         },
       },
       {
@@ -296,6 +272,7 @@ exports.getThisMonthRevenue = async (req, res) => {
       {
         $match: {
           createdAt: { $gte: startOfMonth, $lt: endOfMonth },
+          status: { $ne: "Cancelled" },
         },
       },
       {
@@ -305,7 +282,10 @@ exports.getThisMonthRevenue = async (req, res) => {
         },
       },
     ]);
-    res.status(200).json(result[0].totalRevenue);
+
+    const revenue = result.length > 0 ? result[0].totalRevenue : 0;
+
+    res.status(200).json(revenue);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -318,12 +298,16 @@ exports.getTopSellingProducts = async (req, res) => {
 
   try {
     const result = await Order.aggregate([
-      { $match: { createdAt: { $gte: startDate } } },
+      {
+        $match: {
+          createdAt: { $gte: startDate },
+          status: { $ne: "Cancelled" },
+        },
+      },
       { $unwind: "$products" },
       {
         $group: {
-          _id: "$products.productId",
-          // name: "$products.name",
+          _id: "$products.name",
           quantity: { $sum: "$products.quantity" },
         },
       },
@@ -344,6 +328,7 @@ exports.getWeeklySales = async (req, res) => {
       {
         $match: {
           createdAt: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
+          status: { $ne: "Cancelled" },
         },
       },
       {
@@ -371,6 +356,7 @@ exports.getRecentDailyRevenue = async (req, res) => {
       {
         $match: {
           createdAt: { $gte: sevenDaysAgo },
+          status: { $ne: "Cancelled" },
         },
       },
       {
@@ -403,7 +389,7 @@ exports.getRecentDailyRevenue = async (req, res) => {
   }
 };
 
-// Get  số đơn hàng mỗi ngày cho 7 ngày gần nhất
+// Get số đơn hàng mỗi ngày cho 7 ngày gần nhất
 exports.getRecentDailyOrders = async (req, res) => {
   try {
     const sevenDaysAgo = moment().subtract(7, "days").startOf("day").toDate();
@@ -412,6 +398,7 @@ exports.getRecentDailyOrders = async (req, res) => {
       {
         $match: {
           createdAt: { $gte: sevenDaysAgo },
+          status: { $ne: "Cancelled" },
         },
       },
       {
