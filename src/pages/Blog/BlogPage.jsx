@@ -12,14 +12,14 @@ const BlogPage = () => {
   });
 
   if (isLoading) {
-    return <GlobalSpinner/>;
+    return <GlobalSpinner />;
   }
 
   if (isError) {
     return <span>Error: {error.message}</span>;
   }
-  const { data: posts } = data;
-  // console.log(posts);
+
+  const posts = data.data;
 
   return (
     <div className="max-w-screen-xl mx-auto px-4">

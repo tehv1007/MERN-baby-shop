@@ -5,6 +5,7 @@ import axios from "axios";
 const PasswordReset = () => {
   const [validUrl, setValidUrl] = useState(true);
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [msg, setMsg] = useState("");
   const [error, setError] = useState("");
   const param = useParams();
@@ -27,19 +28,23 @@ const PasswordReset = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const { data } = await axios.post(url, { password });
-      setMsg(data.message);
-      setError("");
-      window.location = "/signin";
-    } catch (error) {
-      if (
-        error.response &&
-        error.response.status >= 400 &&
-        error.response.status <= 500
-      ) {
-        setError(error.response.data.message);
-        setMsg("");
+    if (password !== confirmPassword) {
+      setError("Password and confirm password do not match");
+    } else {
+      try {
+        const { data } = await axios.post(url, { password });
+        setMsg(data.message);
+        setError("");
+        window.location = "/signin";
+      } catch (error) {
+        if (
+          error.response &&
+          error.response.status >= 400 &&
+          error.response.status <= 500
+        ) {
+          setError(error.response.data.message);
+          setMsg("");
+        }
       }
     }
   };
@@ -59,6 +64,15 @@ const PasswordReset = () => {
             name="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
+            required
+            className="p-4 bg-gray-200 text-sm rounded-xl my-1 w-[370px]"
+          />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            name="confirmPassword"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={confirmPassword}
             required
             className="p-4 bg-gray-200 text-sm rounded-xl my-1 w-[370px]"
           />

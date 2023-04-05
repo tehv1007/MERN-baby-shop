@@ -5,7 +5,6 @@ import fetchImage from "../../services/fetchImage";
 import axios from "axios";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import GlobalSpinner from "../../components/common/GlobalSpinner";
-import Loader from "../../components/common/Skeleton/Loader";
 import Progress from "../../components/common/Progress";
 
 const SocialSharing = ({ post, postId }) => {

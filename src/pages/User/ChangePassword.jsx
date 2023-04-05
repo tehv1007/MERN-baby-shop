@@ -1,11 +1,9 @@
 import InputCard from "./Dashboard/InputCard";
 import Layout from "../../components/layouts/Layout";
-import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
 import { changePasswordSchema } from "../../validation/userSchema";
+import { changePassword } from "../../hooks/useUser";
 
 const ChangePassword = ({ user }) => {
   const {
@@ -17,17 +15,7 @@ const ChangePassword = ({ user }) => {
     resolver: yupResolver(changePasswordSchema),
   });
 
-  const mutation = useMutation({
-    mutationFn: (newPassword) =>
-      axios.put(`/users/${user._id}/password`, newPassword),
-    onSuccess: () => {
-      reset();
-      toast.success("Successfully updated password");
-    },
-    onError: (err) => {
-      toast.error(`Something went wrong: ${err.response.data.message}`);
-    },
-  });
+  const mutation = changePassword(reset);
 
   const onSubmit = (data) => {
     mutation.mutate(data);

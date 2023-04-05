@@ -1,35 +1,16 @@
 import { useEffect, useState } from "react";
-import {
-  removeCartItem,
-  removeItem,
-  updateCartItem,
-} from "../../services/cartService";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import MinusIcon from "../../components/common/icons/MinusIcon";
 import PlusIcon from "../../components/common/icons/PlusIcon";
-import { toast } from "react-toastify";
+import { removeCartItem, updateCartItem } from "../../hooks/useCart";
+import { removeItem } from "../../services/cartService";
 
 const CartItem = ({ product, user }) => {
   const [quantity, setQuantity] = useState(product.quantity);
-  const queryClient = useQueryClient();
 
-  const deleteItem = useMutation({
-    mutationFn: (product) => removeCartItem(user, product),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart", "products"] });
-      toast.success("Successfully removed product");
-    },
-  });
-
-  const updateItems = useMutation({
-    mutationFn: (product) => updateCartItem(user, product, quantity),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart", "products"] });
-    },
-  });
+  const deleteItem = removeCartItem(user);
+  const updateItems = updateCartItem(user);
 
   useEffect(() => {
-    // updateItem(product._id, quantity - product.count);
     quantity > 0 ? updateItems.mutate(product) : deleteItem.mutate(product);
   }, [quantity]);
 
@@ -55,12 +36,14 @@ const CartItem = ({ product, user }) => {
                 focusable="false"
                 role="presentation"
                 className="icon icon-discount w-5 h-5"
-                viewBox="0 0 12 12">
+                viewBox="0 0 12 12"
+              >
                 <path
                   fillRule="evenodd"
                   clipRule="evenodd"
                   d="M7 0h3a2 2 0 012 2v3a1 1 0 01-.3.7l-6 6a1 1 0 01-1.4 0l-4-4a1 1 0 010-1.4l6-6A1 1 0 017 0zm2 2a1 1 0 102 0 1 1 0 00-2 0z"
-                  fill="currentColor"></path>
+                  fill="currentColor"
+                ></path>
               </svg>
 
               <span className="text-base">{product.product.category}</span>
@@ -76,7 +59,8 @@ const CartItem = ({ product, user }) => {
                   setQuantity(quantity - 1);
                 }}
                 className={` ${quantity <= 0 && "opacity-50"}`}
-                disabled={quantity <= 0}>
+                disabled={quantity <= 0}
+              >
                 <MinusIcon />
               </button>
               <input
@@ -90,7 +74,8 @@ const CartItem = ({ product, user }) => {
               <button
                 onClick={() => {
                   setQuantity(quantity + 1);
-                }}>
+                }}
+              >
                 <PlusIcon />
               </button>
             </div>
@@ -100,14 +85,16 @@ const CartItem = ({ product, user }) => {
                 else {
                   removeItem(product._id);
                 }
-              }}>
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="w-5 h-5">
+                className="w-5 h-5"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"

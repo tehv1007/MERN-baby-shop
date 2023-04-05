@@ -34,7 +34,6 @@ const Products = ({ user }) => {
   });
 
   if (isLoading) return <GlobalSpinner />;
-
   const products = data.data.products;
 
   const filteredProducts = products.filter((product) => {

@@ -1,6 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import  { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../../components/layouts/Layout";
 import Pagination from "../../components/layouts/Pagination";
@@ -9,7 +8,6 @@ import { paginate } from "../../services/productsService";
 import NoOrder from "./Dashboard/NoOrder";
 import { GiCancel } from "react-icons/gi";
 import { BiCommentDetail } from "react-icons/bi";
-import GlobalSpinner from "../../components/common/GlobalSpinner";
 import CancelModal from "./Dashboard/CancelModal";
 
 const MyOrders = ({ user }) => {
@@ -17,15 +15,15 @@ const MyOrders = ({ user }) => {
   const [page, setPage] = useState(1);
   const [id, setId] = useState("");
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["orders"],
-    queryFn: () => {
-      return axios.get(`orders/${user._id}/my-orders`);
-    },
-  });
+  const [orders, setOrders] = useState([]);
 
-  if (isLoading) return <GlobalSpinner />;
-  const { data: orders } = data;
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const res = await axios.get(`/orders/${user._id}/my-orders`);
+      setOrders(res.data);
+    };
+    fetchOrders();
+  }, []);
 
   let totalItems = orders.length;
 
@@ -69,7 +67,7 @@ const MyOrders = ({ user }) => {
                           <th className="text-center text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">
                             Total
                           </th>
-                          <th className="text-right text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">
+                          <th className="text-center text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">
                             Action
                           </th>
                         </tr>
@@ -104,28 +102,34 @@ const MyOrders = ({ user }) => {
                                 ${order.amount}
                               </span>
                             </td>
-                            <td className="px-5 py-3 whitespace-nowrap text-center text-sm flex">
-                              <Link
-                                className="group flex relative px-3 py-1 bg-emerald-100 text-xs text-emerald-600 hover:bg-emerald-500 hover:text-white transition-all rounded-full"
-                                to={`/order/${order._id}`}
-                              >
-                                <BiCommentDetail />
-                                <span className="group-hover:opacity-100 transition-opacity bg-gray-500 px-1 text-gray-100 rounded-md absolute opacity-0 m-4 mx-auto translate-y-1/2">
-                                  Detail
-                                </span>
+                            <td className="px-5 py-3 whitespace-nowrap text-center text-sm flex gap-2">
+                              {/* Order Detail */}
+                              <Link to={`/order/${order._id}`}>
+                                <div className="tooltip" data-tip="Detail">
+                                  <label className="btn btn-sm btn-square btn-success hover:opacity-60">
+                                    <BiCommentDetail />
+                                  </label>
+                                </div>
                               </Link>
-                              <div className="group flex relative text-xs">
-                                <span className="group-hover:opacity-100 transition-opacity bg-gray-500 px-1 text-gray-100 rounded-md absolute translate-y-1/2 opacity-0 m-4 mx-auto">
-                                  Cancel
-                                </span>
+
+                              {/* Cancel order */}
+                              <div
+                                className={`tooltip`}
+                                data-tip="Cancel"
+                                disabled={order.status == "Cancelled"}
+                              >
                                 <label
-                                  htmlFor={order._id}
+                                  htmlFor={
+                                    order.status == "Cancelled" ? "" : order._id
+                                  }
+                                  className={`btn btn-sm btn-square ${
+                                    order.status == "Cancelled"
+                                      ? "btn-base-300"
+                                      : "btn-error"
+                                  } hover:opacity-80`}
                                   onClick={() => setId(order._id)}
-                                  className="px-3 py-1 bg-red-100 text-xs text-red-600 hover:bg-red-500 hover:text-white transition-all font-semibold rounded-full"
                                 >
-                                  <span>
-                                    <GiCancel />
-                                  </span>
+                                  <GiCancel />
                                 </label>
                               </div>
                             </td>

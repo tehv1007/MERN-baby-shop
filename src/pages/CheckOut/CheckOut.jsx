@@ -1,4 +1,4 @@
-import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
+import { HiChevronLeft } from "react-icons/hi";
 import SidebarCheckOut from "./SidebarCheckOut";
 import DropIn from "braintree-web-drop-in-react";
 import {
@@ -8,12 +8,11 @@ import {
 } from "../../services/paymentService";
 import { isAuthenticated } from "../../services/authService";
 import { useEffect, useState } from "react";
-import { getCartItems, removeCartItems } from "../ViewCart/useCart";
 import { Link, useNavigate } from "react-router-dom";
-import Progress from "../../components/common/Progress";
 import GlobalSpinner from "../../components/common/GlobalSpinner";
 import ShippingInfo from "./ShippingInfo";
 import { showError, showSuccess, showLoading } from "./Services";
+import { getCartItems, removeCartItems } from "../../hooks/useCart";
 
 const CheckOut = ({ user }) => {
   const navigate = useNavigate();
@@ -152,31 +151,6 @@ const CheckOut = ({ user }) => {
     </div>
   );
 
-  // const showError = (error) => (
-  //   <div
-  //     className="alert alert-danger"
-  //     style={{ display: error ? "" : "none" }}
-  //   >
-  //     {error}
-  //   </div>
-  // );
-
-  // const showSuccess = (success) => (
-  //   <div
-  //     className="alert alert-info"
-  //     style={{ display: success ? "" : "none" }}
-  //   >
-  //     Thanks! Your payment was successful!
-  //   </div>
-  // );
-
-  // const showLoading = (loading) =>
-  //   loading && (
-  //     <h2 className="text-danger">
-  //       <Progress />
-  //     </h2>
-  //   );
-
   return (
     <section>
       {/* container */}
@@ -188,17 +162,6 @@ const CheckOut = ({ user }) => {
 
           {/* main */}
           <div className="max-w-screen-sm mx-auto px-4 lg:row-start-1 lg:col-span-3">
-            <div className="flex items-center gap-2 mt-4 text-xs max-w-screen-sm mx-auto">
-              <p>Cart</p>
-              <HiChevronRight />
-              <p>Information</p>
-              <HiChevronRight />
-              <p>Shipping</p>
-              <HiChevronRight />
-              <p className="font-bold">Payment</p>
-              <HiChevronRight />
-            </div>
-
             {/* Shipping address */}
             <p className="my-4">Shipping Details</p>
             <ShippingInfo user={user} info={info} address={address} />
@@ -214,13 +177,13 @@ const CheckOut = ({ user }) => {
               </div>
             </div>
             <div className="max-w-screen-sm mx-auto my-11 pb-5 md:flex justify-between items-center ">
-              <a
-                href={`/checkout/${user._id}/shipping`}
+              <Link
+                to={`/checkout/${user._id}/shipping`}
                 className="flex justify-center items-center text-md py-3"
               >
                 <HiChevronLeft size={30} />
                 Return to information
-              </a>
+              </Link>
             </div>
           </div>
         </div>

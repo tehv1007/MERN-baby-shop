@@ -4,14 +4,6 @@ import formatDate from "../../../services/formatDate";
 import NoOrder from "./NoOrder";
 
 const RecentOrders = ({ user }) => {
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ["orders"],
-  //   queryFn: () => axios.get(`/orders/${user._id}/recent-orders`),
-  // });
-  // console.log(data);
-  // const { data: recentOrders } = data;
-  // console.log(recentOrders);
-
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {

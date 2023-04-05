@@ -1,4 +1,3 @@
-// import Rating from "../../../components/common/Rating";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import GlobalSpinner from "../../../components/common/GlobalSpinner";
@@ -10,7 +9,6 @@ const TopRatedProducts = ({ user }) => {
     queryFn: () => {
       return axios.get(`/products/rated`);
     },
-    cacheTime: 5 * 60 * 1000,
   });
 
   if (isLoading) return <GlobalSpinner />;

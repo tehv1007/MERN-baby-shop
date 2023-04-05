@@ -1,9 +1,9 @@
-import brandBackyard from "../../assets/img/brand-backyard.webp";
-import brandNatural from "../../assets/img/brand-natural.webp";
-import brandOrganic from "../../assets/img/brand-organic.webp";
-import brandSummer from "../../assets/img/brand-summer.avif";
-import brandTravel from "../../assets/img/brand-travel.avif";
-import brandAntony from "../../assets/img/brand-antony.webp";
+import brandBackyard from "../../../assets/img/brand-backyard.webp";
+import brandNatural from "../../../assets/img/brand-natural.webp";
+import brandOrganic from "../../../assets/img/brand-organic.webp";
+import brandSummer from "../../../assets/img/brand-summer.avif";
+import brandTravel from "../../../assets/img/brand-travel.avif";
+import brandAntony from "../../../assets/img/brand-antony.webp";
 
 const Brand = () => {
   return (

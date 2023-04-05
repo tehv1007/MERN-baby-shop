@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LocationForm from "../../components/location/LocationForm";
 import FormCheckOut from "./FormCheckOut";
 import SidebarCheckOut from "./SidebarCheckOut";
@@ -36,7 +36,6 @@ const OrderInformation = ({ user }) => {
             onSubmit={handleSubmit(onSubmit)}
             className="max-w-screen-sm mx-auto px-4 lg:row-start-1 lg:col-span-3"
           >
-
             <h3 className="flex justify-between items-center my-6 lg:text-lg">
               Contact information
             </h3>
@@ -56,18 +55,19 @@ const OrderInformation = ({ user }) => {
               </div>
             </div>
             <div className="max-w-screen-sm mx-auto my-11 pb-5 md:flex justify-between items-center ">
-              <a
-                href="/viewcart"
+              <Link
+                to="/viewcart"
                 className="flex justify-center items-center text-md py-3"
               >
                 <HiChevronLeft size={30} />
                 Return to cart
-              </a>
+              </Link>
               <button
                 type="submit"
-                className="w-full text-sm font-medium text-white border rounded-md bg-[#3d405d] px-8 py-5 mb-2 md:w-1/3 lg:px-0 lg:w-2/5"
+                className="w-full flex items-center justify-center text-sm font-medium text-white border rounded-md bg-[#3d405d] px-8 py-5 mb-2 md:w-1/3 lg:px-0 lg:w-2/5"
               >
                 Continue to shipping
+                <HiChevronRight size={30} />
               </button>
             </div>
           </form>

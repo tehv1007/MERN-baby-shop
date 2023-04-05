@@ -1,7 +1,7 @@
-import delivery from "../../assets/img/delivery.webp";
-import money from "../../assets/img/money.avif";
-import support from "../../assets/img/support.avif";
-import gifcard from "../../assets/img/grifCard.avif";
+import delivery from "../../../assets/img/delivery.webp";
+import money from "../../../assets/img/money.avif";
+import support from "../../../assets/img/support.avif";
+import gifcard from "../../../assets/img/grifCard.avif";
 
 const Delivery = () => {
   return (

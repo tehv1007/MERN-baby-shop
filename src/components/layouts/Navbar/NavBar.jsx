@@ -6,8 +6,8 @@ import DropMenu from "./DropMenu";
 import subNavLink from "./link";
 import NavLink from "./NavLink";
 import { getTotalQuantity } from "../../../services/cartService";
-import { getCartItems } from "../../../pages/ViewCart/useCart";
 import Progress from "../../common/Progress";
+import { getCartItems } from "../../../hooks/useCart";
 
 const Navbar = ({ user, isConnected }) => {
   let isLoadingState;

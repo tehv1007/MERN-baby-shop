@@ -20,7 +20,7 @@ const ProductDetail = ({ user }) => {
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: ["product", "reviews", productId],
+    queryKey: ["product", productId],
     queryFn: () => axios.get(`/products/${productId}`),
   });
 
@@ -33,12 +33,7 @@ const ProductDetail = ({ user }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Layout */}
         <div className="w-full">
-          {/* === Image === */}
-          <div>
-            {/* main img */}
-            <img src={product.photos[imageIndex]} className="rounded-md" />
-          </div>
-          {/*slider images */}
+          <img src={product.photos[imageIndex]} className="rounded-md block" />
           <div>
             <span className="lg:mt-2 flex rounded-md md:gap-4 gap-5 py-2">
               <ImageSlider
@@ -69,8 +64,7 @@ const ProductDetail = ({ user }) => {
               </div>
             </span>
             <div className="mb-[10px] flex gap-1">
-              {/* rating */}
-              <Rating productId={productId} />
+              <Rating productId={productId} type="type2" />
             </div>
             <div>
               {/* description */}
@@ -93,18 +87,18 @@ const ProductDetail = ({ user }) => {
       </div>
 
       {/* ========= */}
-      <div className=" mt-7">
+      <div className=" mt-7" id="reviews">
         <div className="border p-4 rounded-xl mb-7">
           {/* Review */}
           <div>
             <div className="md:flex justify-between">
               <span>
                 <h3 className="text-2xl mb-2">Customer Reviews</h3>
-                {product.numReviews <= 0 ? (
+                {/* {product.numReviews <= 0 ? (
                   <p>No reviews yet</p>
-                ) : (
-                  <Rating productId={productId} />
-                )}
+                ) : ( */}
+                <Rating productId={productId} type="type1" />
+                {/* )} */}
               </span>
               <span>
                 <button
