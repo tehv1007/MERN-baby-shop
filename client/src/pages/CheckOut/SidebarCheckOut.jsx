@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { HiChevronDown, HiChevronUp } from "react-icons/hi";
 import { getTotalPrice } from "../../services/cartService";
-import { getCartItems } from "../ViewCart/useCart";
+import { getCartItems } from "../../hooks/useCart";
 
 const shippingFee = 5;
 
@@ -11,7 +11,7 @@ const CartSummary = ({ user }) => {
   if (!user) items = [];
   const { data, isLoading } = getCartItems(user);
   if (isLoading) return <h1>Loading...</h1>;
-  // console.log(data);
+
   items = data.data.products;
   const subTotal = getTotalPrice(items);
   localStorage.setItem("total", Number((shippingFee + subTotal).toFixed(2)));

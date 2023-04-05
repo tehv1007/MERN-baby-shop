@@ -5,7 +5,7 @@ import { ImCreditCard, ImStack } from "react-icons/im";
 
 const CountItem = ({ children, title, total, bgColor }) => {
   return (
-    <div className="min-w-0 rounded-lg ring-1 ring-black ring-opacity-4 overflow-hidden bg-white flex justify-center text-center h-full">
+    <div className="min-w-0 rounded-lg overflow-hidden bg-white flex justify-center text-center h-full">
       <div
         className={`p-4 border border-gray-200 w-full rounded-lg text-white ${bgColor}`}
       >

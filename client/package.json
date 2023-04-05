@@ -34,6 +34,7 @@
     "react-icons": "^4.7.1",
     "react-loading-skeleton": "^3.1.0",
     "react-router-dom": "^6.6.1",
+    "react-scroll": "^1.8.9",
     "react-select": "^5.7.0",
     "react-toastify": "^9.1.1",
     "sharethis-reactjs": "^1.6.0",

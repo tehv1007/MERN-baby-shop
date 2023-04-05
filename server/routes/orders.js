@@ -15,7 +15,7 @@ router.get("/:userId/my-orders", getOrdersByUser);
 //GET order by ID
 router.get("/:orderId", getOrderById);
 
-//
+// PUT cancel an order by customer
 router.put("/:orderId/cancel", cancelOrder);
 
 //GET recent orders of an user

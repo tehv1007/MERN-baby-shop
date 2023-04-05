@@ -2,7 +2,9 @@ const Product = require("../models/Product");
 
 // GET all products
 exports.getAllProduct = async (req, res) => {
-  const products = await Product.find({});
+  const products = await Product.find({}).sort({
+    createdAt: -1,
+  });
   res.json(products);
 };
 
@@ -84,31 +86,6 @@ exports.listRelated = async (req, res) => {
   }).limit(8);
   res.json(products);
 };
-
-// exports.listRelated = (req, res) => {
-//   let limit = req.query.limit ? parseInt(req.query.limit) : 4;
-
-//   Product.countDocuments().exec(function (err) {
-//     // Get a random entry
-//     const random = Math.floor(Math.random() * 4);
-//     console.log(random);
-//     const totalItems = Product.countDocuments().limit(limit + random);
-//     Product.find({
-//       _id: { $ne: req.params._id },
-//       category: req.params.category,
-//     })
-//       .limit(limit + random)
-//       .skip(totalItems > 4 ? random : 0)
-//       .exec((err, products) => {
-//         if (err) {
-//           return res.status(400).json({
-//             error: "Products not found",
-//           });
-//         }
-//         res.json(products);
-//       });
-//   });
-// };
 
 exports.getAllProducts = async (req, res) => {
   // const page = +req.query.page || 1;

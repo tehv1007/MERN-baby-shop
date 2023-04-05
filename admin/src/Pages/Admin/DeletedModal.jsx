@@ -1,22 +1,12 @@
-import { useMutation } from "@tanstack/react-query";
 import { useRef } from "react";
-import { toast } from "react-toastify";
 import Loader from "../../components/common/Loader";
+import { deleteAdminUser } from "../../hooks/useUser";
 
 const DeletedModal = ({ id, handleDelete }) => {
   const ref = useRef();
   const btnRef = useRef();
 
-  const mutation = useMutation({
-    mutationFn: (userId) => handleDelete(userId),
-    onSuccess: () => {
-      ref.current.checked = false;
-      toast.success("Successfully deleted admin user!");
-    },
-    onError: (err) => {
-      toast.error(`Error deleting product ${err}:`);
-    },
-  });
+  const mutation = deleteAdminUser(handleDelete, ref);
 
   return (
     <div>

@@ -11,8 +11,6 @@ const {
   getOrderById,
   getOrdersByUser,
   getTotalRevenue,
-  getMonthlyRevenue,
-  getDailyRevenue,
   countOrdersByStatus,
   getRecentOrders,
   getTodayRevenue,
@@ -31,15 +29,14 @@ const {
   deleteProducts,
 } = require("../controllers/productController");
 
-// Users
+/*-------------------USER-------------------*/
 //GET ALL USER
 router.get("/users", getAllUsers);
 
 // UPDATE user status
 router.put("/:userId/disable", updateUserStatus);
 
-/*--------------------------------------*/
-//Order
+/*-------------------ORDER-------------------*/
 router.put("/orders/:id", updateOrderStatus);
 
 //DELETE an order by ID
@@ -56,12 +53,6 @@ router.get("/this-month-revenue", getThisMonthRevenue);
 
 // Get today's revenue
 router.get("/today-revenue", getTodayRevenue);
-
-// Get monthly revenue
-router.get("/monthly-revenue", getMonthlyRevenue);
-
-// Get daily revenue
-router.get("/daily-revenue", getDailyRevenue);
 
 // Count Orders By Status
 router.get("/count-orders", countOrdersByStatus);
@@ -84,8 +75,7 @@ router.get("/:userId/orders", getOrdersByUser);
 //GET ALL orders
 router.get("/orders", getAllOrders);
 
-/*--------------------------------------*/
-//Products
+/*-------------------PRODUCT-------------------*/
 // GET all products
 router.get("/products", getAllProduct);
 

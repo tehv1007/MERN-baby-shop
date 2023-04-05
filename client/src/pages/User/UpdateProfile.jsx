@@ -1,10 +1,7 @@
 import InputCard from "./Dashboard/InputCard";
 import Layout from "../../components/layouts/Layout";
-import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
 import { useState } from "react";
 import { updateProfileSchema } from "../../validation/userSchema";
 import { storage } from "../../config/firebase";
@@ -16,6 +13,7 @@ import {
   listAll,
 } from "firebase/storage";
 import Progress from "../../components/common/Progress";
+import { updateProfile } from "../../hooks/useUser";
 
 const UpdateProfile = ({ user, setUser }) => {
   const [isFileLoading, setIsFileLoading] = useState(false);
@@ -35,17 +33,7 @@ const UpdateProfile = ({ user, setUser }) => {
     resolver: yupResolver(updateProfileSchema),
   });
 
-  const mutation = useMutation({
-    mutationFn: (newProfile) =>
-      axios.put(`/users/${user._id}/profile`, newProfile),
-    onSuccess: () => {
-      reset();
-      toast.success("Successfully updated profile");
-    },
-    onError: (err) => {
-      toast.error(`Something went wrong: ${err.response.data.message}`);
-    },
-  });
+  const mutation = updateProfile(reset);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];

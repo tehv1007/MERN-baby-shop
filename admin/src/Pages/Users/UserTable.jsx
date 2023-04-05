@@ -7,6 +7,8 @@ import DisableModal from "./DisableModel";
 
 const UserTable = ({ users, sortConfig, requestSort, getSortDirection }) => {
   const [id, setId] = useState("");
+  const [isActive, setIsActive] = useState();
+
   return (
     <>
       <div className="overflow-x-auto w-full mt-4">
@@ -74,7 +76,10 @@ const UserTable = ({ users, sortConfig, requestSort, getSortDirection }) => {
                         <label
                           htmlFor={user._id}
                           className="btn btn-sm btn-square btn-error hover:opacity-80"
-                          onClick={() => setId(user._id)}
+                          onClick={() => {
+                            setId(user._id);
+                            setIsActive(user.isActive);
+                          }}
                         >
                           <BsEyeSlash />
                         </label>
@@ -84,7 +89,10 @@ const UserTable = ({ users, sortConfig, requestSort, getSortDirection }) => {
                         <label
                           htmlFor={user._id}
                           className="btn btn-sm btn-square btn-primary hover:opacity-80"
-                          onClick={() => setId(user._id)}
+                          onClick={() => {
+                            setId(user._id);
+                            setIsActive(user.isActive);
+                          }}
                         >
                           <BsEye />
                         </label>
@@ -98,7 +106,7 @@ const UserTable = ({ users, sortConfig, requestSort, getSortDirection }) => {
         </table>
 
         {/* Disable one */}
-        <DisableModal id={id} />
+        <DisableModal id={id} isActive={isActive} />
       </div>
     </>
   );

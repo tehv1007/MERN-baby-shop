@@ -3,15 +3,11 @@ import SidebarCheckOut from "./SidebarCheckOut";
 import COD from "../../assets/img/COD.jpg";
 import braintree from "../../assets/img/braintree_payment.png";
 import ShippingInfo from "./ShippingInfo";
-import { getCartItems } from "../ViewCart/useCart";
 import { generateUniqueId } from "../../services/paymentService";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { emptyCart } from "../../services/cartService";
-import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Progress from "../../components/common/Progress";
+import { getCartItems, removeCartItems } from "../../hooks/useCart";
+import { paymentWithCOD } from "../../hooks/useCheckout";
 
 const OrderShipping = ({ user }) => {
   const navigate = useNavigate();
@@ -41,17 +37,11 @@ const OrderShipping = ({ user }) => {
     phoneNumber: Number(info.phoneNumber),
   };
 
-  const mutation = useMutation({
-    mutationFn: () => axios.post(`/orders/${userId}`, { order: orderData }),
-    onSuccess: () => {
-      emptyCart(user);
-      toast.success("Successfully order created");
-    },
-  });
+  const removeItems = removeCartItems(user);
+  const mutation = paymentWithCOD(userId, removeItems);
 
   const handleSubmit = () => {
     mutation.mutate(orderData);
-    navigate(`/user/my-orders`);
   };
 
   const handleMoving = () => {
@@ -114,13 +104,13 @@ const OrderShipping = ({ user }) => {
 
             {/* Navigation */}
             <div className="max-w-screen-sm mx-auto my-11 pb-5 md:flex justify-between items-center ">
-              <a
-                href={`/checkout/${user._id}/information`}
+              <Link
+                to={`/checkout/${user._id}/information`}
                 className="flex justify-center items-center text-md py-3"
               >
                 <HiChevronLeft size={30} />
                 Return to information
-              </a>
+              </Link>
               {paymentMethod === "COD" && (
                 <button
                   onClick={handleSubmit}
@@ -133,9 +123,10 @@ const OrderShipping = ({ user }) => {
               {paymentMethod === "Credit card" && (
                 <button
                   onClick={handleMoving}
-                  className="w-full text-sm font-medium text-white border rounded-md bg-[#3d405d] px-8 py-5 mb-2 md:w-1/3 lg:px-0 lg:w-2/5"
+                  className="w-full flex items-center justify-center text-sm font-medium text-white border rounded-md bg-[#3d405d] px-8 py-5 mb-2 md:w-1/3 lg:px-0 lg:w-2/5"
                 >
                   Continue to payment
+                  <HiChevronRight size={30} />
                 </button>
               )}
             </div>

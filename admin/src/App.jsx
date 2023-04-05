@@ -6,7 +6,6 @@ import Orders from "./Pages/Orders/Orders";
 import ProductEdit from "./Pages/Products/ProductEdit";
 import AddNewProduct from "./Pages/Products/AddNewProduct";
 import { ToastContainer } from "react-toastify";
-import Login from "./Pages/login/Login";
 import NotFound from "./Pages/NotFound";
 import { AuthContext } from "./context/AuthContext";
 import { useContext } from "react";
@@ -17,6 +16,8 @@ import OrderDetail from "./Pages/Orders/OrderDetail";
 import Coupons from "./Pages/Coupons/Coupons";
 import Admin from "./Pages/Admin/Admin";
 import AddNew from "./Pages/Admin/AddNew";
+import Login from "./Pages/Login/Login";
+import ForceRedirect from "./components/auth/ForceRedirect";
 
 const App = () => {
   const { currentUser } = useContext(AuthContext);
@@ -134,7 +135,14 @@ const App = () => {
           }
         />
         {/* </Route> */}
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={
+            <ForceRedirect user={currentUser}>
+              <Login />
+            </ForceRedirect>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer

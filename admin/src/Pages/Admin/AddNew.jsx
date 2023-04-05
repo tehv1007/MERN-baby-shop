@@ -62,9 +62,6 @@ const AddNew = () => {
         ...data,
         timeStamp: serverTimestamp(),
         image: data.image,
-        // downloadURL
-        //   ? downloadURL
-        //   : "https://sayhikorean.com/wp-content/uploads/2023/04/admin.png",
       });
     },
     onSuccess: () => {

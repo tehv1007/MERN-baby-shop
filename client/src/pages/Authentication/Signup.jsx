@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
 import { signupSchema } from "../../validation/authSchema";
 import InputCard from "../../components/auth/InputCard";
 import { useState } from "react";
-import axios from "axios";
-import { toast } from "react-toastify";
+import { signUp } from "../../hooks/useAuth";
 
 const Signup = () => {
   const google = () => {
@@ -30,21 +28,7 @@ const Signup = () => {
     resolver: yupResolver(signupSchema),
   });
 
-  const mutation = useMutation({
-    mutationFn: async (newUser) => {
-      const { data: res } = await axios.post("/auth/signup", newUser);
-      setMsg(res.message);
-      setShow(true);
-    },
-    onSuccess: () => {
-      toast.success("Successfully Create Account");
-    },
-    onError: (err) => {
-      toast.error(`${err.response.data.message}`);
-      setError(err.response.data.message);
-      setShow(false);
-    },
-  });
+  const mutation = signUp(setError, setShow, setMsg);
 
   const onSubmit = (data) => {
     mutation.mutate(data);

@@ -1,9 +1,8 @@
-import { getUser } from "../../services/authService";
-import Banner from "./Banner";
-import Brand from "./Brand";
-import Delivery from "./Delivery";
-import Hero from "./Hero";
-import TopRatedProducts from "./TopProducts/TopRatedProducts";
+import Banner from "./Components/Banner";
+import Brand from "./Components/Brand";
+import Delivery from "./Components/Delivery";
+import Hero from "./Components/Hero";
+import TopRatedProducts from "./Components/TopRatedProducts";
 
 const Home = ({ user }) => {
   return (

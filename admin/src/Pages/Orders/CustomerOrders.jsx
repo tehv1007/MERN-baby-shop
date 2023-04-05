@@ -1,28 +1,21 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { BsBagCheckFill } from "react-icons/bs";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import GlobalSpinner from "../../components/common/GlobalSpinner";
 import Layout from "../../components/layout/Layout";
 import TableHeaderCell from "../../components/TableHeaderCell";
 import { useState } from "react";
 import { paginate } from "../../services/productsService";
 import Pagination from "../../components/common/Pagination";
-import { formatDate } from "../../services/formatDate";
-import { FcSearch } from "react-icons/fc";
 import OrderDataRow from "./OrderDataRow";
+import { getCustomerOrder } from "../../hooks/useOrder";
 
 const CustomerOrders = () => {
   const { userId } = useParams();
   const [page, setPage] = useState(1);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-
   const ITEMS_PER_PAGE = 10;
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["orders"],
-    queryFn: () => axios.get(`/admin/${userId}/orders`),
-  });
+  const { data, isLoading } = getCustomerOrder(userId);
 
   if (isLoading) return <GlobalSpinner />;
   const { data: orders } = data;

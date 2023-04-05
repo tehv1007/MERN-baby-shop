@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import Rating from "../../components/review/Rating";
-import { addCartItem } from "../ViewCart/useCart";
+import { addCartItem } from "../../hooks/useCart";
 
 const ProductCard = ({ product, user }) => {
   const mutation = addCartItem(user, 1);

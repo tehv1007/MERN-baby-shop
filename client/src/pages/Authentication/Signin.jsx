@@ -1,15 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import FormRowError from "../../components/common/RowError";
 import { signinSchema } from "../../validation/authSchema";
-import { toast } from "react-toastify";
+import { signIn } from "../../hooks/useAuth";
 
 const Signin = () => {
-  const navigate = useNavigate();
   const [error, setError] = useState("");
 
   const {
@@ -21,24 +18,7 @@ const Signin = () => {
     resolver: yupResolver(signinSchema),
   });
 
-  const mutation = useMutation({
-    mutationFn: async (loginUser) => {
-      const { data: res } = await axios.post("/auth/signin", loginUser);
-      localStorage.setItem("token", JSON.stringify(res.user_token));
-      localStorage.setItem("user", JSON.stringify(res.user));
-      window.location.reload(false);
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
-    },
-    onSuccess: () => {
-      toast.success("Successfully Login");
-    },
-    onError: (err) => {
-      toast.error(`${err.response.data.message}`);
-      setError(err.response.data.message);
-    },
-  });
+  const mutation = signIn(setError);
 
   const onSubmit = async (data) => {
     mutation.mutate(data);

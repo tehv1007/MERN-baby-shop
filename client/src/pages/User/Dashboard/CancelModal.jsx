@@ -1,28 +1,14 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
-import { toast } from "react-toastify";
-import axios from "axios";
 import Progress from "../../../components/common/Progress";
+import { cancelModal } from "../../../hooks/useUser";
 
 const CancelModal = ({ id }) => {
   const ref = useRef();
   const btnRef = useRef();
+  const mutation = cancelModal(ref);
 
-  const queryClient = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: (orderId) => axios.put(`/orders/${orderId}/cancel`),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orders"] });
-      ref.current.checked = false;
-      toast.success("Successfully cancelled your order!");
-    },
-    onError: (err) => {
-      toast.error(`Error: ${err.response.data.message}:`);
-      ref.current.checked = false;
-    },
-  });
   return (
-    <div>
+    <>
       <input type="checkbox" ref={ref} id={id} className="modal-toggle" />
       <label htmlFor={id} className="modal cursor-pointer">
         <label className="modal-box relative" htmlFor="">
@@ -67,7 +53,7 @@ const CancelModal = ({ id }) => {
           </div>
         </label>
       </label>
-    </div>
+    </>
   );
 };
 

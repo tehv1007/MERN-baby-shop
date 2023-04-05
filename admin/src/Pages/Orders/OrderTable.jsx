@@ -31,6 +31,13 @@ const OrderTable = ({ orders, requestSort, getSortDirection, sortConfig }) => {
                 requestSort={requestSort}
               />
               <TableHeaderCell
+                title="Phone Number"
+                column="phoneNumber"
+                sortConfig={sortConfig}
+                getSortDirection={getSortDirection}
+                requestSort={requestSort}
+              />
+              <TableHeaderCell
                 title="Amount"
                 column="amount"
                 sortConfig={sortConfig}

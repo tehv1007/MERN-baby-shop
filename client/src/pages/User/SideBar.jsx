@@ -2,28 +2,34 @@ import { RxDashboard, RxLockOpen1 } from "react-icons/rx";
 import { VscListUnordered } from "react-icons/vsc";
 import { FiSettings } from "react-icons/fi";
 import { GrDocumentText } from "react-icons/gr";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const SidebarItem = ({ children, title, href }) => {
   const style =
     "p-2 my-2 flex items-center rounded-md hover:bg-gray-50 w-full hover:text-emerald-600";
 
+  const [activeState, setActiveState] = useState(false);
+
+  useEffect(() => {
+    const isActive = window.location.pathname === `/${href}`;
+    setActiveState(isActive);
+  }, [href]);
+
   return (
     <div className="relative">
       <NavLink
-        className={({ isActive }) =>
-          isActive ? `text-green-500 bg-green-100 ${style}` : `${style}`
+        className={
+          activeState ? `text-green-500 bg-green-100 ${style}` : `${style}`
         }
         to={`/${href}`}
       >
-        {({ isActive }) =>
-          isActive && (
-            <span
-              className="absolute inset-y-0 left-0 w-1 bg-green-500 rounded-tr-lg rounded-br-lg"
-              aria-hidden="true"
-            />
-          )
-        }
+        {activeState && (
+          <span
+            className="absolute inset-y-0 left-0 w-1 bg-green-500 rounded-tr-lg rounded-br-lg"
+            aria-hidden="true"
+          />
+        )}
         {children}
         <label className="inline-flex items-center justify-between ml-2 text-sm font-medium hover:text-emerald-600 cursor-pointer">
           {title}

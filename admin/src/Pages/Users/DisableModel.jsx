@@ -1,27 +1,12 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
-import { toast } from "react-toastify";
 import Loader from "../../components/common/Loader";
-import axios from "axios";
+import { disableUser } from "../../hooks/useUser";
 
-const DisableModal = ({ id }) => {
+const DisableModal = ({ id, isActive }) => {
   const ref = useRef();
   const btnRef = useRef();
+  const mutation = disableUser(ref, isActive);
 
-  const queryClient = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: (userId) => axios.put(`/admin/${userId}/disable`),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-      ref.current.checked = false;
-      toast.success(
-        `Successfully ${user.isActive ? "disabled" : "enabled"} user!`
-      );
-    },
-    onError: (err) => {
-      toast.error(`Error: ${mutation.response.data}`);
-    },
-  });
   return (
     <div>
       <input type="checkbox" ref={ref} id={id} className="modal-toggle" />
@@ -47,7 +32,8 @@ const DisableModal = ({ id }) => {
 
             {/* Title */}
             <h3 className="mb-6 text-lg font-normal text-gray-500">
-              Are you sure you want to disable this user?
+              Are you sure you want to {isActive ? "disable" : "enable"} this
+              user?
             </h3>
 
             {/* Action buttons */}

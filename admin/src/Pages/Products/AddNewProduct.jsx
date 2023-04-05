@@ -1,15 +1,13 @@
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState, useEffect } from "react";
-import { createProduct } from "../../services/productsService";
 import { storage } from "../../config/firebase";
 import ProductForm from "./ProductForm";
 import Layout from "../../components/layout/Layout";
 import PageTitle from "../../components/common/PageTitle";
 import { addProductSchema } from "../../validation/productSchema";
+import { addProduct } from "../../hooks/useProduct";
 
 const AddNewProduct = () => {
   const [isFileUploading, setIsFileUploading] = useState(false);
@@ -29,13 +27,7 @@ const AddNewProduct = () => {
     resolver: yupResolver(addProductSchema),
   });
 
-  const mutation = useMutation({
-    mutationFn: (newProduct) => createProduct(newProduct),
-    onSuccess: () => {
-      reset();
-      toast.success("Successfully created new product");
-    },
-  });
+  const mutation = addProduct(reset);
 
   const handleChange = (e) => {
     const files = [...e.target.files];
@@ -114,7 +106,7 @@ const AddNewProduct = () => {
       );
     });
   };
-  console.log(urls);
+  // console.log(urls);
 
   const onSubmit = (data) => {
     mutation.mutate({ ...data, photos: urls });

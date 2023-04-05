@@ -1,21 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import axios from "axios";
 import ImageSlider from "../../components/common/ImageSlider";
 import Rating from "../../components/products/Rating";
 import GlobalSpinner from "../../components/common/GlobalSpinner";
 import Layout from "../../components/layout/Layout";
 import PageTitle from "../../components/common/PageTitle";
+import { getProductDetail } from "../../hooks/useProduct";
 
 const ProductDetail = () => {
   const [imageIndex, setImageIndex] = useState(0);
-
   const { productId } = useParams();
-  const { data, isLoading } = useQuery({
-    queryKey: ["products", "reviews"],
-    queryFn: () => axios.get(`/products/${productId}`),
-  });
+  const { data, isLoading } = getProductDetail(productId);
 
   if (isLoading) return <GlobalSpinner />;
   const { data: product } = data;

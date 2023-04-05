@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import GlobalSpinner from "../../components/common/GlobalSpinner";
 import { getTotalPrice } from "../../services/cartService";
 import CartItem from "./CartItem";
-import { getCartItems } from "./useCart";
+import { getCartItems } from "../../hooks/useCart";
 
 const ViewCart = ({ user }) => {
   let items;
