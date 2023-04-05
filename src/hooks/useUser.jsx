@@ -51,3 +51,35 @@ export const updateProfile = (reset) => {
 
   return updateProfile;
 };
+
+export const addReview = (
+  user,
+  productId,
+  reset,
+  setHoverValue,
+  setCurrentValue
+) => {
+  const queryClient = useQueryClient();
+  const addReview = useMutation({
+    mutationFn: (newReview) =>
+      axios.post(`/reviews/${productId}/${user._id}`, newReview),
+    onSuccess: () => {
+      reset();
+      setHoverValue(0);
+      setCurrentValue(0);
+      toast.success("Successfully add a review");
+      queryClient.invalidateQueries({
+        queryKey: ["reviews"],
+      });
+    },
+
+    onError: (error) => {
+      reset();
+      setHoverValue(0);
+      setCurrentValue(0);
+      toast.error(error.response.data);
+    },
+  });
+
+  return addReview;
+};

@@ -1,10 +1,7 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { toast } from "react-toastify";
 import FormRowError from "../../../components/common/RowError";
-import axios from "axios";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 
@@ -40,28 +37,13 @@ const CustomerReview = ({ productId, user }) => {
     setHoverValue(value);
   };
 
-  const queryClient = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: (newReview) =>
-      axios.post(`/reviews/${productId}/${user._id}`, newReview),
-    onSuccess: () => {
-      reset();
-      setHoverValue(0);
-      setCurrentValue(0);
-      toast.success("Successfully add a review");
-      queryClient.invalidateQueries({
-        queryKey: ["reviews"],
-      });
-    },
-
-    onError: (error) => {
-      reset();
-      toast.error(error.response.data);
-      setHoverValue(0);
-    },
-  });
-
-  const date = new Date().toISOString();
+  const mutation = addReview(
+    user,
+    productId,
+    reset,
+    setHoverValue,
+    setCurrentValue
+  );
 
   const onSubmit = (data) => {
     mutation.mutate({
@@ -81,7 +63,6 @@ const CustomerReview = ({ productId, user }) => {
         <form onSubmit={handleSubmit(onSubmit)} className="mt-5 lg:pl-[30%]">
           {/* review form */}
           <h5>Write a review</h5>
-          {/* rating&review */}
           <p className="text-sm mt-2.5">Rating</p>
           <div className="flex my-1.5">
             {stars.map((_, index) => {
