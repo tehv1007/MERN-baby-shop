@@ -59,7 +59,7 @@ const DashboardPieChart = () => {
         <p className="mb-4 font-semibold text-gray-800">
           Best Selling Products
         </p>
-        <div>
+        <div className="max-h-">
           <BestSellingProductsPieChart data={products} />
         </div>
       </div>
