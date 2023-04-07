@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer } from "react";
 import GlobalSpinner from "../components/common/GlobalSpinner";
-import { getCartItems } from "../pages/ViewCart/useCart";
+import { getCartItems } from "../pages/Cart/useCart";
 
 const ProductsContext = createContext(null);
 const ProductsDispatchContext = createContext(null);

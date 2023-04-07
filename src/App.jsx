@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import NotFound from "./pages/NotFound/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -11,7 +11,7 @@ import BlogPage from "./pages/Blog/BlogPage";
 import Home from "./pages/Home/Home";
 import Products from "./pages/Products/Products";
 import ProductDetail from "./pages/Products/product-detail/ProductDetail";
-import ViewCart from "./pages/ViewCart/Cart";
+import Cart from "./pages/Cart/Cart";
 import OrderShipping from "./pages/CheckOut/OrderShipping";
 import CheckOut from "./pages/CheckOut/CheckOut";
 import Navbar from "./components/layouts/Navbar/NavBar";
@@ -29,12 +29,12 @@ import OrderDetail from "./pages/User/OrderDetail";
 import EmailVerify from "./pages/Authentication/EmailVerify";
 import axios from "axios";
 
-function App() {
-  getUser();
-  const localUser = JSON.parse(localStorage.getItem("user"));
-  const token = JSON.parse(localStorage.getItem("token"));
-  const [isConnected, setIsconnected] = useState(false);
+const localUser = JSON.parse(localStorage.getItem("user"));
+const token = JSON.parse(localStorage.getItem("token"));
+getUser();
 
+function App() {
+  const [isConnected, setIsconnected] = useState(false);
   const [user, setUser] = useState(localUser);
 
   useEffect(() => {
@@ -46,20 +46,20 @@ function App() {
       };
       getUser();
     }
-  }, [user]);
+  }, []);
 
-  const checkUserToken = () => {
-    if (typeof window !== "undefined") {
-      if (token) {
-        setIsconnected(true);
-      } else {
-        setIsconnected(false);
-      }
-    }
-  };
   useEffect(() => {
+    const checkUserToken = () => {
+      if (typeof window !== "undefined") {
+        if (token) {
+          setIsconnected(true);
+        } else {
+          setIsconnected(false);
+        }
+      }
+    };
     checkUserToken();
-  }, [isConnected]);
+  }, []);
 
   return (
     <BrowserRouter>
@@ -130,7 +130,7 @@ function App() {
             path="/products/:productId"
             element={<ProductDetail user={user} />}
           />
-          <Route path="/viewcart" element={<ViewCart user={user} />} />
+          <Route path="/cart" element={<Cart user={user} />} />
           <Route
             path="/checkout/:userId/information"
             element={<OrderInformation user={user} />}

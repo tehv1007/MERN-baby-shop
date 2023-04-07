@@ -34,7 +34,7 @@ const Navbar = ({ user, isConnected }) => {
             <DropMenu />
             {/* Logo */}
             <Link to="/">
-              <img className="text-[40px]" src={Logo} alt="" />
+              <img className="text-[40px]" src={Logo} alt="Birth blessing" />
             </Link>
           </div>
           {/* Navbar */}
@@ -55,7 +55,7 @@ const Navbar = ({ user, isConnected }) => {
           </div>
 
           {/* Button */}
-          <div className="flex items-center gap-4 ">
+          <div className="flex items-center gap-4 pl-2">
             <div className=" items-center">
               {isConnected ? (
                 isLoadingState ? (
@@ -81,11 +81,11 @@ const Navbar = ({ user, isConnected }) => {
             </div>
             <div className="">
               <button className="relative">
-                <Link to="/viewcart">
+                <Link to="/cart">
                   <BsCartPlus className="text-3xl text-[#212529]" />
                 </Link>
               </button>
-              <span className="absolute top-3 right-2 sm:right-[7px]  lg:right-[8px] xl:right-[8px] bg-[#212529] text-white w-5 h-5 text-center rounded-full">
+              <span className="absolute top-3 right-2 sm:right-[7px] lg:right-[8px] xl:right-[8px] bg-[#212529] text-white w-5 h-5 text-center rounded-full">
                 {totalQuantity}
               </span>
             </div>

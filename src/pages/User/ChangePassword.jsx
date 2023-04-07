@@ -15,7 +15,7 @@ const ChangePassword = ({ user }) => {
     resolver: yupResolver(changePasswordSchema),
   });
 
-  const mutation = changePassword(reset);
+  const mutation = changePassword(reset, user);
 
   const onSubmit = (data) => {
     mutation.mutate(data);

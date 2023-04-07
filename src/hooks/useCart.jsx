@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 export const getCartItems = (user) => {
   if (user) {
     const { data, isLoading } = useQuery({
-      queryKey: ["cart", "products"],
+      queryKey: ["cart"],
       queryFn: () => axios.get(`/cart/${user._id}`),
     });
     return { data, isLoading };
@@ -17,12 +17,11 @@ export const addCartItem = (user, quantity) => {
   const queryClient = useQueryClient();
   const addCartItem = useMutation({
     mutationFn: (product) =>
-      axios.post(`/cart/${user._id}`, {
+      axios.post(`/cart/${user._id}/add-to-cart/${product._id}`, {
         quantity: quantity,
-        productId: product._id,
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart", "products"] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
       toast.success("Successfully add product to cart");
     },
   });
@@ -40,12 +39,15 @@ export const removeCartItems = (user) => {
   return removeCartItems;
 };
 
-export const removeCartItem = (user) => {
+export const removeCartItem = (user, product) => {
   const queryClient = useQueryClient();
   const removeCartItem = useMutation({
-    mutationFn: (product) => axios.delete(`/cart/${user._id}/${product._id}`),
+    mutationFn: () =>
+      axios.delete(`/cart/${user._id}/remove-from-cart/${product.productId}`),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart", "products"] });
+      queryClient.invalidateQueries({
+        queryKey: ["cart"],
+      });
       toast.success("Successfully removed product");
     },
   });
@@ -53,14 +55,53 @@ export const removeCartItem = (user) => {
   return removeCartItem;
 };
 
-export const updateCartItem = (user) => {
+export const increaseQuantity = (user, product) => {
   const queryClient = useQueryClient();
-  const updateCartItem = useMutation({
-    mutationFn: (product) => axios.put(`/cart/${user._id}/${product._id}`),
+  const increaseQuantity = useMutation({
+    mutationFn: () =>
+      axios.put(`/cart/${user._id}/increase-quantity/${product.productId}`, {
+        quantity: product.quantity + 1,
+      }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart", "products"] });
+      queryClient.invalidateQueries({
+        queryKey: ["cart"],
+      });
     },
   });
 
-  return updateCartItem;
+  return increaseQuantity;
+};
+
+export const decreaseQuantity = (user, product) => {
+  const queryClient = useQueryClient();
+  const decreaseQuantity = useMutation({
+    mutationFn: () =>
+      axios.put(`/cart/${user._id}/decrease-quantity/${product.productId}`, {
+        quantity: product.quantity - 1,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["cart"],
+      });
+    },
+  });
+
+  return decreaseQuantity;
+};
+
+export const quantityChange = (user, product) => {
+  const queryClient = useQueryClient();
+  const quantityChange = useMutation({
+    mutationFn: (newQuantity) =>
+      axios.put(`/cart/${user._id}/change-quantity/${product.productId}`, {
+        quantity: newQuantity,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["cart"],
+      });
+    },
+  });
+
+  return quantityChange;
 };

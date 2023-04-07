@@ -20,7 +20,7 @@ export const cancelModal = (ref) => {
   return cancelModal;
 };
 
-export const changePassword = (reset) => {
+export const changePassword = (reset, user) => {
   const changePassword = useMutation({
     mutationFn: (newPassword) =>
       axios.put(`/users/${user._id}/password`, newPassword),
@@ -36,7 +36,7 @@ export const changePassword = (reset) => {
   return changePassword;
 };
 
-export const updateProfile = (reset) => {
+export const updateProfile = (reset, user) => {
   const updateProfile = useMutation({
     mutationFn: (newProfile) =>
       axios.put(`/users/${user._id}/profile`, newProfile),
