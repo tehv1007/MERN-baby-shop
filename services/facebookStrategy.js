@@ -59,5 +59,16 @@ const facebookLogin = new FacebookStrategy(
     }
   }
 );
-
 passport.use(facebookLogin);
+
+passport.serializeUser(function (user, cb) {
+  process.nextTick(function () {
+    cb(null, { id: user._id, username: user.username, name: user.name });
+  });
+});
+
+passport.deserializeUser(function (user, cb) {
+  process.nextTick(function () {
+    return cb(null, user);
+  });
+});

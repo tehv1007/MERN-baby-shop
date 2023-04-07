@@ -45,5 +45,16 @@ const googleLogin = new GoogleStrategy(
     }
   }
 );
-
 passport.use(googleLogin);
+
+passport.serializeUser(function (user, cb) {
+  process.nextTick(function () {
+    cb(null, { id: user._id, username: user.username, name: user.name });
+  });
+});
+
+passport.deserializeUser(function (user, cb) {
+  process.nextTick(function () {
+    return cb(null, user);
+  });
+});

@@ -19,7 +19,7 @@ const cartSchema = new Schema(
         product: { type: Object },
       },
     ],
-    subPrice: { type: Number },
+    subPrice: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
