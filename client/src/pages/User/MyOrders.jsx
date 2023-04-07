@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../../components/layouts/Layout";
 import Pagination from "../../components/layouts/Pagination";
@@ -9,24 +9,22 @@ import NoOrder from "./Dashboard/NoOrder";
 import { GiCancel } from "react-icons/gi";
 import { BiCommentDetail } from "react-icons/bi";
 import CancelModal from "./Dashboard/CancelModal";
+import { useQuery } from "@tanstack/react-query";
+import GlobalSpinner from "../../components/common/GlobalSpinner";
 
 const MyOrders = ({ user }) => {
   const ITEMS_PER_PAGE = 10;
   const [page, setPage] = useState(1);
   const [id, setId] = useState("");
 
-  const [orders, setOrders] = useState([]);
+  const { data: orders, isLoading } = useQuery(["order"], async () => {
+    const res = await axios.get(`/orders/${user._id}/my-orders`);
+    return res.data;
+  });
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      const res = await axios.get(`/orders/${user._id}/my-orders`);
-      setOrders(res.data);
-    };
-    fetchOrders();
-  }, []);
+  if (isLoading) return <GlobalSpinner />;
 
   let totalItems = orders.length;
-
   const paginationParams = {
     currentPage: page,
     hasNextPage: ITEMS_PER_PAGE * page < totalItems,

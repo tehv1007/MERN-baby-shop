@@ -56,7 +56,7 @@ const OrderInformation = ({ user }) => {
             </div>
             <div className="max-w-screen-sm mx-auto my-11 pb-5 md:flex justify-between items-center ">
               <Link
-                to="/viewcart"
+                to="/cart"
                 className="flex justify-center items-center text-md py-3"
               >
                 <HiChevronLeft size={30} />

@@ -1,21 +1,22 @@
 import { Link } from "react-router-dom";
 import GlobalSpinner from "../../components/common/GlobalSpinner";
-import { getTotalPrice } from "../../services/cartService";
 import CartItem from "./CartItem";
 import { getCartItems } from "../../hooks/useCart";
 
-const ViewCart = ({ user }) => {
-  let items;
-  const { data, isLoading } = getCartItems(user);
-  if (isLoading) return <GlobalSpinner />;
-  items = data?.data?.products || [];
+const Cart = ({ user }) => {
+  let cart;
+  if (!user) cart = null;
+  else {
+    const { data, isLoading } = getCartItems(user);
+    if (isLoading) return <GlobalSpinner />;
 
-  const total = getTotalPrice(items);
+    cart = data?.data;
+  }
 
   return (
     <>
       {/* Container */}
-      <div className="max-w-screen-lg mx-auto flex-grow w-full">
+      <div className="max-w-screen-xl mx-auto flex-grow w-full">
         {/* Layout */}
         <div className="p-4">
           {/* header */}
@@ -25,7 +26,15 @@ const ViewCart = ({ user }) => {
               Continue shopping
             </a>
           </div>
-          {items.length <= 0 ? (
+          {cart == null ? (
+            <div className="text-3xl font-medium leading-9 m-8 text-center">
+              Please{" "}
+              <Link className="underline text-blue-500" to="/signin">
+                login
+              </Link>{" "}
+              for shopping and payment
+            </div>
+          ) : cart.products.length <= 0 ? (
             <div className="text-3xl font-medium leading-9 m-8 text-center">
               Your cart is empty
             </div>
@@ -45,7 +54,7 @@ const ViewCart = ({ user }) => {
                 </thead>
 
                 <tbody>
-                  {items?.map((product, index) => (
+                  {cart.products.map((product, index) => (
                     <CartItem user={user} key={index} product={product} />
                   ))}
                 </tbody>
@@ -56,7 +65,9 @@ const ViewCart = ({ user }) => {
                 <div>
                   <p className=" text-base font-medium">
                     Subtotal:
-                    <span className=" text-2xl ml-4">${total.toFixed(2)}</span>
+                    <span className=" text-2xl ml-4">
+                      ${cart.subPrice.toFixed(2)}
+                    </span>
                   </p>
                   <p className=" text-sm my-4 ">
                     Tax included and shipping calculated at checkout
@@ -78,4 +89,4 @@ const ViewCart = ({ user }) => {
   );
 };
 
-export default ViewCart;
+export default Cart;

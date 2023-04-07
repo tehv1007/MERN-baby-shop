@@ -151,12 +151,14 @@ const Products = ({ user }) => {
                       setSortType(e.target.value);
                     }}
                     defaultValue="default"
-                    className="select select-bordered border rounded-lg p-1"
+                    className="select select-bordered border rounded-lg p-1 cursor-pointer"
                   >
                     <option value="default" disabled>
-                      Choose your option
+                      Choose option
                     </option>
-                    <option value="lowtohigh">Price: low to high</option>
+                    <option value="lowtohigh" className="cursor-pointer">
+                      Price: low to high
+                    </option>
                     <option value="hightolow">Price: high to low</option>
                     <option value="AtoZ">Alphabetically, A-Z</option>
                     <option value="ZtoA">Alphabetically, Z-A</option>

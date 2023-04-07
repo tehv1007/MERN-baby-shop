@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getCartItems, removeCartItems } from "../../hooks/useCart";
 import { paymentWithCOD } from "../../hooks/useCheckout";
+import GlobalSpinner from "../../components/common/GlobalSpinner";
 
 const OrderShipping = ({ user }) => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const OrderShipping = ({ user }) => {
   let products;
   if (!user) products = [];
   const { data, isLoading } = getCartItems(user);
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <GlobalSpinner />;
   products = data.data.products;
 
   // COD payment methods

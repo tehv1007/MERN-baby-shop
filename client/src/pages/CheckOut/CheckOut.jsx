@@ -109,7 +109,7 @@ const CheckOut = ({ user }) => {
                   loading: false,
                   success: true,
                 });
-                navigate("/user/dashboard");
+                navigate("/user/my-orders");
               })
               .catch((error) => {
                 console.log(error);

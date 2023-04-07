@@ -53,27 +53,6 @@ exports.addCart = async (req, res) => {
   }
 };
 
-//DELETE cart item
-exports.deleteCartItem = async (req, res) => {
-  const userId = req.params.userId;
-  const productId = req.params.productId;
-  try {
-    let cart = await Cart.findOne({ userId });
-    let itemIndex = myIndexOf(cart.products, productId);
-
-    if (itemIndex > -1) {
-      let productItem = cart.products[itemIndex];
-      cart.subPrice -= productItem.quantity * productItem.price;
-      cart.products.splice(itemIndex, 1);
-    }
-    updatedCart = await cart.save();
-    return res.status(201).json(updatedCart);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Something went wrong");
-  }
-};
-
 // Delete all items in the cart
 exports.deleteCart = async (req, res) => {
   const userId = req.params.userId;
@@ -91,18 +70,6 @@ exports.deleteCart = async (req, res) => {
   }
 };
 
-// Delete user cart
-// exports.deleteCart = async (req, res) => {
-//   try {
-//     const userId = req.params.userId;
-//     let cart = await Cart.findOne({ userId });
-//     await Cart.findByIdAndDelete({ _id: cart._id });
-//     res.status(200).json("Cart has been deleted...");
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// };
-
 //GET user cart
 exports.getCartByUser = async (req, res) => {
   try {
@@ -113,40 +80,216 @@ exports.getCartByUser = async (req, res) => {
   }
 };
 
-// Update cart item
-exports.updateCartItem = async (req, res) => {
-  const userId = req.params.userId;
-  const productId = req.params.productId;
-  const { quantity } = req.body;
-
+// Route: POST /api/cart/add-to-cart/:productId
+// Description: Add product to cart
+exports.addToCart = async (req, res) => {
   try {
-    let cart = await Cart.findOne({ userId });
-    let itemIndex = myIndexOf(cart.products, productId);
-    if (itemIndex > -1) {
-      let productItem = cart.products[itemIndex];
-      cart.subPrice -= productItem.quantity * productItem.price;
-      productItem.quantity = quantity;
-      cart.subPrice += productItem.quantity * productItem.price;
+    const userId = req.params.userId;
+    const productId = req.params.productId;
+    const quantity = req.body.quantity;
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
     }
-    updatedCart = await cart.save();
-    return res.status(201).json(updatedCart);
+
+    let cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      cart = await Cart.create({ userId, products: [] });
+    }
+
+    // Check if the product already exists in the cart
+    const existingProductIndex = cart.products.findIndex(
+      (item) => item.productId.toString() == productId
+    );
+
+    if (existingProductIndex != -1) {
+      // Increase the quantity if the product already exists
+      cart.products[existingProductIndex].quantity += quantity;
+    } else {
+      // Add new product to cart
+      const newProduct = {
+        productId: product._id,
+        name: product.title,
+        image: product.photos[0],
+        quantity: quantity,
+        price: product.price,
+        product: product,
+      };
+      cart.products.push(newProduct);
+    }
+
+    // Calculate the subtotal price of the cart
+    cart.subPrice = cart.products.reduce((acc, item) => {
+      return acc + item.price * item.quantity;
+    }, 0);
+
+    await cart.save();
+    return res.status(200).json(cart);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Route: PUT /api/cart/decrease-quantity/:productId
+// Description: Decrease quantity of product in cart
+exports.decreaseQuantity = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const productId = req.params.productId;
+
+    let cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+
+    // Find the product in the cart
+    const productIndex = cart.products.findIndex(
+      (item) => item.productId.toString() === productId
+    );
+
+    if (productIndex == -1) {
+      return res.status(404).json({ message: "Product not found in cart" });
+    }
+
+    const product = cart.products[productIndex];
+
+    if (product.quantity == 1) {
+      // Remove the product if the quantity is 1
+      cart.products.splice(productIndex, 1);
+    } else {
+      // Decrease the quantity of the product by 1
+      cart.products[productIndex].quantity -= 1;
+    }
+
+    // Calculate the subtotal price of the cart
+    cart.subPrice = cart.products.reduce((acc, item) => {
+      return acc + item.price * item.quantity;
+    }, 0);
+
+    await cart.save();
+    return res.status(200).json(cart);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Route: DELETE /api/cart/remove-from-cart/:productId
+// Description: Remove product from cart
+exports.removeProductFromCart = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const productId = req.params.productId;
+    const cart = await Cart.findOne({ userId: userId });
+
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+
+    // Find the index of the product to remove
+    const productIndex = cart.products.findIndex(
+      (product) => product.productId == productId
+    );
+
+    // If the product is not found, return error
+    if (productIndex == -1) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // Remove the product from the cart
+    const removedProduct = cart.products.splice(productIndex, 1);
+
+    // Recalculate the subPrice of the cart
+    cart.subPrice -= removedProduct[0].price * removedProduct[0].quantity;
+
+    await cart.save();
+
+    return res.status(200).json(cart);
   } catch (err) {
     console.log(err);
     res.status(500).send("Something went wrong");
   }
 };
 
-function myIndexOf(collection, target) {
-  if (!collection) return -1;
-  else {
-    for (var val = 0; val < collection.length; val++) {
-      if (
-        collection[val]._id.toString().replace(/ObjectId\("(.*)"\)/, "$1") ===
-        target
-      ) {
-        return val;
-      }
+// Route: PUT /api/cart/increase-quantity/:productId
+// Description: Increase quantity of product in cart
+exports.increaseQuantity = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const productId = req.params.productId;
+
+    let cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
     }
+
+    // Find the product in the cart
+    const productIndex = cart.products.findIndex(
+      (item) => item.productId.toString() === productId
+    );
+
+    if (productIndex == -1) {
+      return res.status(404).json({ message: "Product not found in cart" });
+    }
+
+    const product = cart.products[productIndex];
+
+    // Increase the quantity of the product by 1
+    cart.products[productIndex].quantity += 1;
+
+    // Calculate the subtotal price of the cart
+    cart.subPrice = cart.products.reduce((acc, item) => {
+      return acc + item.price * item.quantity;
+    }, 0);
+
+    await cart.save();
+    return res.status(200).json(cart);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
   }
-  // return -1;
-}
+};
+
+// Route: PUT /api/cart/change-quantity/:productId
+// Description: Change quantity of product in cart
+exports.changeQuantity = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const productId = req.params.productId;
+    const { quantity } = req.body; // Lấy giá trị số lượng từ request body
+
+    let cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+
+    // Tìm sản phẩm trong giỏ hàng dựa trên id
+    const productIndex = cart.products.findIndex(
+      (item) => item.productId.toString() == productId
+    );
+
+    if (productIndex == -1) {
+      return res.status(404).json({ message: "Product not found in cart" });
+    }
+
+    // Thay đổi số lượng sản phẩm dựa trên giá trị nhập vào từ client
+    cart.products[productIndex].quantity = quantity;
+
+    // Tính toán lại giá tiền của giỏ hàng
+    cart.subPrice = cart.products.reduce((acc, item) => {
+      return acc + item.price * item.quantity;
+    }, 0);
+
+    await cart.save();
+    return res.status(200).json(cart);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};

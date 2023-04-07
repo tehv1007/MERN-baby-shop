@@ -39,7 +39,7 @@ router.get(
     const cart = await Cart.findOne({ userId });
 
     if (!cart) {
-      const userCart = await new Cart({
+      await new Cart({
         userId,
         products: [],
         subPrice: 0,
@@ -74,7 +74,7 @@ router.get(
     const cart = await Cart.findOne({ userId });
 
     if (!cart) {
-      const userCart = await new Cart({
+      await new Cart({
         userId,
         products: [],
         subPrice: 0,

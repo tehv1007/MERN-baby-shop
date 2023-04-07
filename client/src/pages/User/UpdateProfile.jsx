@@ -33,7 +33,7 @@ const UpdateProfile = ({ user, setUser }) => {
     resolver: yupResolver(updateProfileSchema),
   });
 
-  const mutation = updateProfile(reset);
+  const mutation = updateProfile(reset, user);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];

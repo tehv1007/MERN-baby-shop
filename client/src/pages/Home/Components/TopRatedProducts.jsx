@@ -24,7 +24,7 @@ const TopRatedProducts = ({ user }) => {
           <div className="text-center lg:flex items-center justify-center lg:gap-20">
             <div className=" mb-4">
               <h3 className="text-[#212529] text-lg font-bold mb-4 lg:text-4xl">
-                TopRated Products
+                Top Rated Products
               </h3>
               <p className="text-xs lg:text-lg">
                 Interesting Features Is Rich And Colorful, Each Button To Bring

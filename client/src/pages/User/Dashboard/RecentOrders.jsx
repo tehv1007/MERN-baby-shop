@@ -1,18 +1,17 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
 import formatDate from "../../../services/formatDate";
 import NoOrder from "./NoOrder";
+import { useQuery } from "@tanstack/react-query";
+import Progress from "../../../components/common/Progress";
 
 const RecentOrders = ({ user }) => {
-  const [orders, setOrders] = useState([]);
+  const { data: orders, isLoading } = useQuery({
+    queryKey: ["orders"],
+    queryFn: () => axios.get(`/orders/${user._id}/recent-orders`),
+    select: (res) => res.data,
+  });
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      const res = await axios.get(`/orders/${user._id}/recent-orders`);
-      setOrders(res.data);
-    };
-    fetchOrders();
-  }, []);
+  if (isLoading) return <Progress />;
 
   return (
     <div className="max-w-screen-2xl mx-auto rounded-md">

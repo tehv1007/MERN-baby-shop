@@ -1,18 +1,23 @@
-import { useEffect, useState } from "react";
 import MinusIcon from "../../components/common/icons/MinusIcon";
 import PlusIcon from "../../components/common/icons/PlusIcon";
-import { removeCartItem, updateCartItem } from "../../hooks/useCart";
-import { removeItem } from "../../services/cartService";
+import {
+  decreaseQuantity,
+  increaseQuantity,
+  quantityChange,
+  removeCartItem,
+} from "../../hooks/useCart";
 
 const CartItem = ({ product, user }) => {
-  const [quantity, setQuantity] = useState(product.quantity);
+  const mutation = quantityChange(user, product);
 
-  const deleteItem = removeCartItem(user);
-  const updateItems = updateCartItem(user);
+  const handleQuantityChange = (event) => {
+    const newQuantity = event.target.value;
+    mutation.mutate(newQuantity);
+  };
 
-  useEffect(() => {
-    quantity > 0 ? updateItems.mutate(product) : deleteItem.mutate(product);
-  }, [quantity]);
+  const handleIncreaseQuantity = increaseQuantity(user, product);
+  const handleDecreaseQuantity = decreaseQuantity(user, product);
+  const handleRemoveProduct = removeCartItem(user, product);
 
   return (
     <>
@@ -52,41 +57,32 @@ const CartItem = ({ product, user }) => {
         </td>
         {/* </div> */}
         <td>
-          <div className="hidden md:flex gap-2 items-center">
-            <div className="flex justify-around items-center border p-1.5 rounded-md w-1/4">
+          <div className="hidden md:flex gap-3 items-center">
+            {/* Quantity input */}
+            <div className="inline-flex items-center border border-gray-200 rounded">
               <button
-                onClick={() => {
-                  setQuantity(quantity - 1);
-                }}
-                className={` ${quantity <= 0 && "opacity-50"}`}
-                disabled={quantity <= 0}
+                onClick={() => handleDecreaseQuantity.mutate()}
+                className="w-full h-10 px-2 leading-10 text-gray-600 transition hover:opacity-75"
               >
                 <MinusIcon />
               </button>
               <input
                 type="number"
                 value={product.quantity}
-                onChange={(e) => {
-                  setQuantity(e.target.value);
-                }}
-                className="text-center w-8"
+                min="1"
+                onChange={(e) => handleQuantityChange(e, product)}
+                className="h-10 w-12 border-transparent text-center"
               />
               <button
-                onClick={() => {
-                  setQuantity(quantity + 1);
-                }}
+                onClick={() => handleIncreaseQuantity.mutate()}
+                className="w-full h-10 px-2 leading-10 text-gray-600 transition hover:opacity-75"
               >
                 <PlusIcon />
               </button>
             </div>
-            <button
-              onClick={() => {
-                if (user) deleteItem.mutate(product);
-                else {
-                  removeItem(product._id);
-                }
-              }}
-            >
+
+            {/* Delete Button */}
+            <button onClick={() => handleRemoveProduct.mutate()}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -104,7 +100,8 @@ const CartItem = ({ product, user }) => {
             </button>
           </div>
         </td>
-        <td className="">${(product.price * quantity).toFixed(2)}</td>
+        {/* <td className="">${(product.price * quantity).toFixed(2)}</td> */}
+        <td className="">${(product.price * product.quantity).toFixed(2)}</td>
       </tr>
     </>
   );

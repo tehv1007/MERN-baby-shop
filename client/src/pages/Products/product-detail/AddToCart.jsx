@@ -25,20 +25,24 @@ const AddToCart = ({ product, user }) => {
       <div className="mt-3">
         {/* quantity */}
         <h5 className="pb-2">Quantity</h5>
-        <div className="flex justify-around border gap-2 p-1.5 rounded-md w-1/5">
+        <div className="inline-flex items-center border border-gray-200 rounded">
           <button
             onClick={() => setQuantity(quantity - 1)}
-            className={` ${quantity <= 0 && "opacity-50"}`}
-            disabled={quantity <= 0}>
+            className="w-full h-10 px-2 leading-10 text-gray-600 transition hover:opacity-75"
+            disabled={quantity <= 0}
+          >
             <MinusIcon />
           </button>
           <input
             type="number"
             value={quantity}
             onChange={handleChange}
-            className="w-10 text-center"
+            className="h-10 w-14 border-transparent text-center"
           />
-          <button onClick={() => setQuantity(quantity + 1)}>
+          <button
+            onClick={() => setQuantity(quantity + 1)}
+            className="w-full h-10 px-2 leading-10 text-gray-600 transition hover:opacity-75"
+          >
             <PlusIcon />
           </button>
         </div>
@@ -50,7 +54,8 @@ const AddToCart = ({ product, user }) => {
           <div>
             <button
               onClick={addToCart}
-              className="block w-full mb-3 text-center rounded-md py-2 bg-slate-700 hover:bg-black hover:cursor-pointer text-white">
+              className="block w-full mb-3 text-center rounded-md py-2 bg-slate-700 hover:bg-black hover:cursor-pointer text-white"
+            >
               <span>Add To Cart</span>
             </button>
             <button
@@ -58,17 +63,19 @@ const AddToCart = ({ product, user }) => {
                 if (!user) navigate("/signin");
                 else {
                   addToCart();
-                  navigate(`/viewcart`);
+                  navigate(`/cart`);
                 }
               }}
-              className="block w-full border border-black mb-3 text-center rounded-md py-2  hover:bg-black hover:cursor-pointer hover:text-white">
+              className="block w-full border border-black mb-3 text-center rounded-md py-2  hover:bg-black hover:cursor-pointer hover:text-white"
+            >
               <span>Buy It Now</span>
             </button>
           </div>
         ) : (
           <button
             disabled
-            className="mb-3 inline-block w-full text-center rounded-md py-2 bg-slate-700 hover:bg-black hover:cursor-pointer text-white">
+            className="mb-3 inline-block w-full text-center rounded-md py-2 bg-slate-700 hover:bg-black hover:cursor-pointer text-white"
+          >
             <p>Out of Stock</p>
           </button>
         )}
