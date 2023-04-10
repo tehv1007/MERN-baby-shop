@@ -74,7 +74,7 @@ exports.getProductsByCategory = async (req, res) => {
 
 // get top 4 rated products
 exports.getTopProducts = async (req, res) => {
-  const topProducts = await Product.find({}).sort({ avgRating: -1 }).limit(4);
+  const topProducts = await Product.find({}).sort({ avgRating: -1 }).limit(8);
   res.json(topProducts);
 };
 
