@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NotFound from "./pages/NotFound/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import ForgotPassword from "./pages/Authentication/ForgotPassword";
@@ -28,48 +28,37 @@ import ChangePassword from "./pages/User/ChangePassword";
 import OrderDetail from "./pages/User/OrderDetail";
 import EmailVerify from "./pages/Authentication/EmailVerify";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import Progress from "./components/common/Progress";
 
-const localUser = JSON.parse(localStorage.getItem("user"));
-const token = JSON.parse(localStorage.getItem("token"));
 getUser();
+const localUser = JSON.parse(localStorage.getItem("user"));
 
 function App() {
-  const [isConnected, setIsconnected] = useState(false);
-  const [user, setUser] = useState(localUser);
+  // const getUser = async () => {
+  //   const res = await axios.get(`/users/find/${localUser._id}`);
+  //   return res.data;
+  // };
 
-  useEffect(() => {
-    // Cập nhật thông tin user mới nhất vào state
-    if (localUser) {
-      const getUser = async () => {
-        const res = await axios.get(`/users/find/${localUser._id}`);
-        setUser(res.data);
-      };
-      getUser();
-    }
-  }, []);
+  // console.log(getUser());
+  const { data: user, isLoading } = useQuery(["user"], async () => {
+    const res = await axios.get(`/users/find/${localUser._id}`);
+    return res.data;
+  });
 
-  useEffect(() => {
-    const checkUserToken = () => {
-      if (typeof window !== "undefined") {
-        if (token) {
-          setIsconnected(true);
-        } else {
-          setIsconnected(false);
-        }
-      }
-    };
-    checkUserToken();
-  }, []);
+  if (isLoading) return <Progress />;
+
+  console.log(user);
 
   return (
     <BrowserRouter>
       <div className="bg-white flex flex-col min-h-screen">
-        <Navbar user={user} isConnected={isConnected} />
+        <Navbar user={user} />
         <Routes>
           <Route
             path="/signin"
             element={
-              <ForceRedirect user={isConnected}>
+              <ForceRedirect user={user}>
                 <Signin />
               </ForceRedirect>
             }
@@ -77,7 +66,7 @@ function App() {
           <Route
             path="/user/dashboard"
             element={
-              <ProtectedRoute user={isConnected}>
+              <ProtectedRoute user={user}>
                 <DashBoard user={user} />
               </ProtectedRoute>
             }
@@ -85,7 +74,7 @@ function App() {
           <Route
             path="/order/:orderId"
             element={
-              <ProtectedRoute user={isConnected}>
+              <ProtectedRoute user={user}>
                 <OrderDetail user={user} />
               </ProtectedRoute>
             }
@@ -93,7 +82,7 @@ function App() {
           <Route
             path="/user/my-orders"
             element={
-              <ProtectedRoute user={isConnected}>
+              <ProtectedRoute user={user}>
                 <MyOrders user={user} />
               </ProtectedRoute>
             }
@@ -101,15 +90,15 @@ function App() {
           <Route
             path="/user/update-profile"
             element={
-              <ProtectedRoute user={isConnected}>
-                <UpdateProfile user={user} setUser={setUser} />
+              <ProtectedRoute user={user}>
+                <UpdateProfile user={user} />
               </ProtectedRoute>
             }
           />
           <Route
             path="/user/change-password"
             element={
-              <ProtectedRoute user={isConnected}>
+              <ProtectedRoute user={user}>
                 <ChangePassword user={user} />
               </ProtectedRoute>
             }

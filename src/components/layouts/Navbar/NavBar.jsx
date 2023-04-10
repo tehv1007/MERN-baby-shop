@@ -9,18 +9,17 @@ import { getTotalQuantity } from "../../../services/cartService";
 import Progress from "../../common/Progress";
 import { getCartItems } from "../../../hooks/useCart";
 
-const Navbar = ({ user, isConnected }) => {
+const Navbar = ({ user }) => {
   let isLoadingState;
   let totalQuantity = 0;
   let items = [];
 
-  if (user) {
-    const { data, isLoading } = getCartItems(user);
-    isLoadingState = isLoading;
-    if (typeof data == "object" && data.data != "null") {
-      items = data?.data?.products;
-      totalQuantity = getTotalQuantity(items);
-    }
+  const { data, isLoading } = getCartItems(user);
+  isLoadingState = isLoading;
+ 
+  if (typeof data == "object" && data.data != "null") {
+    items = data?.data?.products;
+    totalQuantity = getTotalQuantity(items);
   }
 
   return (
@@ -57,7 +56,7 @@ const Navbar = ({ user, isConnected }) => {
           {/* Button */}
           <div className="flex items-center gap-4 pl-2">
             <div className=" items-center">
-              {isConnected ? (
+              {user ? (
                 isLoadingState ? (
                   <Progress />
                 ) : (

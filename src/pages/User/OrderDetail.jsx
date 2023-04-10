@@ -1,39 +1,37 @@
 import { BsCloudDownload, BsPrinter } from "react-icons/bs";
 import Layout from "../../components/layouts/Layout";
 import Invoice from "./Dashboard/Invoice";
-import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
 
 const OrderDetail = () => {
-  const handlePrintInvoice = () => {
-    // Lấy nội dung HTML của invoice
-    const invoiceHtml = document.getElementById("invoice").innerHTML;
+  // const handlePrintInvoice = () => {
+  // Lấy nội dung HTML của invoice
+  //   const invoiceHtml = document.getElementById("invoice").innerHTML;
 
-    html2canvas(invoiceHtml).then((canvas) => {
-      let imgWidth = 208;
-      let imgHeight = (canvas.height * imgWidth) / canvas.width;
-      const imgData = canvas.toDataURL("img/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-      pdf.save("download.pdf");
-    });
-  };
+  //   html2canvas(invoiceHtml).then((canvas) => {
+  //     let imgWidth = 208;
+  //     let imgHeight = (canvas.height * imgWidth) / canvas.width;
+  //     const imgData = canvas.toDataURL("img/png");
+  //     const pdf = new jsPDF("p", "mm", "a4");
+  //     pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+  //     pdf.save("download.pdf");
+  //   });
+  // };
 
-  const handleDownloadInvoice = () => {
-    // Lấy nội dung HTML của invoice
-    const invoiceHtml = document.getElementById("invoice").innerHTML;
+  // const handleDownloadInvoice = () => {
+  //   // Lấy nội dung HTML của invoice
+  //   const invoiceHtml = document.getElementById("invoice").innerHTML;
 
-    // Tạo đối tượng jsPDF mới
-    const doc = new jsPDF();
+  //   // Tạo đối tượng jsPDF mới
+  //   const doc = new jsPDF();
 
-    // Thêm nội dung HTML vào file PDF
-    doc.html(invoiceHtml, {
-      callback: function () {
-        // Tải xuống file PDF
-        doc.save("invoice.pdf");
-      },
-    });
-  };
+  //   // Thêm nội dung HTML vào file PDF
+  //   doc.html(invoiceHtml, {
+  //     callback: function () {
+  //       // Tải xuống file PDF
+  //       doc.save("invoice.pdf");
+  //     },
+  //   });
+  // };
 
   return (
     <Layout>
