@@ -21,12 +21,15 @@ export const cancelModal = (ref) => {
 };
 
 export const changePassword = (reset, user) => {
+  const queryClient = useQueryClient();
+
   const changePassword = useMutation({
     mutationFn: (newPassword) =>
       axios.put(`/users/${user._id}/password`, newPassword),
     onSuccess: () => {
       reset();
       toast.success("Successfully updated password");
+      queryClient.invalidateQueries({ queryKey: ["user"] });
     },
     onError: (err) => {
       toast.error(`Something went wrong: ${err.response.data.message}`);
@@ -37,12 +40,15 @@ export const changePassword = (reset, user) => {
 };
 
 export const updateProfile = (reset, user) => {
+  const queryClient = useQueryClient();
+
   const updateProfile = useMutation({
     mutationFn: (newProfile) =>
       axios.put(`/users/${user._id}/profile`, newProfile),
     onSuccess: () => {
       reset();
       toast.success("Successfully updated profile");
+      queryClient.invalidateQueries({ queryKey: ["user"] });
     },
     onError: (err) => {
       toast.error(`Something went wrong: ${err.response.data.message}`);

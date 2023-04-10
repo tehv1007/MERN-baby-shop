@@ -28,6 +28,7 @@ const EditProduct = () => {
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors, isDirty },
   } = useForm({
     resolver: yupResolver(editProductSchema),
@@ -136,6 +137,7 @@ const EditProduct = () => {
       <ProductForm
         type="edit"
         watch={watch}
+        setValue={setValue}
         onSubmit={handleSubmit(onSubmit)}
         register={register}
         isLoading={mutation.isLoading}

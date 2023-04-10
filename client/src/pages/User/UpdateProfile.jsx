@@ -15,7 +15,7 @@ import {
 import Progress from "../../components/common/Progress";
 import { updateProfile } from "../../hooks/useUser";
 
-const UpdateProfile = ({ user, setUser }) => {
+const UpdateProfile = ({ user }) => {
   const [isFileLoading, setIsFileLoading] = useState(false);
   const [image, setImage] = useState(null);
   const [imageFile, setImageFile] = useState([]);
@@ -85,38 +85,37 @@ const UpdateProfile = ({ user, setUser }) => {
               .split("%2F")
               .pop();
             setIsFileLoading(false);
+            console.log(filename);
 
-            listAll(desertRef)
-              .then((res) => {
-                res.items.forEach((itemRef) => {
-                  // All the items under listRef
-                  // Delete the file
-                  if (itemRef.name != filename)
-                    deleteObject(
-                      ref(storage, `users/${user.username}/${itemRef.name}`)
-                    )
-                      .then(() => {
-                        // File deleted successfully
-                      })
-                      .catch((error) => {
-                        // Uh-oh, an error occurred!
-                        console.log(error);
-                      });
-                });
-              })
-              .catch((error) => {
-                // Uh-oh, an error occurred!
-                console.log(error);
-              });
+            // listAll(desertRef)
+            //   .then((res) => {
+            //     res.items.forEach((itemRef) => {
+            //       // All the items under listRef
+            //       // Delete the file
+            //       if (itemRef.name != filename)
+            //         deleteObject(
+            //           ref(storage, `users/${user.username}/${itemRef.name}`)
+            //         )
+            //           .then(() => {
+            //             // File deleted successfully
+            //           })
+            //           .catch((error) => {
+            //             // Uh-oh, an error occurred!
+            //             console.log(error);
+            //           });
+            //     });
+            //   })
+            //   .catch((error) => {
+            //     // Uh-oh, an error occurred!
+            //     console.log(error);
+            //   });
             console.log("File available at", downloadURL);
             mutation.mutate({ ...data, image: downloadURL });
-            setUser({ ...data, image: downloadURL });
           });
         }
       );
     } else {
       mutation.mutate({ ...data, image: user.image });
-      setUser(data);
     }
   };
 

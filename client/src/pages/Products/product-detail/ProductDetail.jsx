@@ -9,6 +9,7 @@ import CustomerReview from "./CustomerReview";
 import Rating from "../../../components/review/Rating";
 import Reviews from "../../../components/review/Reviews";
 import GlobalSpinner from "../../../components/common/GlobalSpinner";
+import DOMPurify from "dompurify";
 
 const ProductDetail = ({ user }) => {
   const { productId } = useParams();
@@ -68,9 +69,12 @@ const ProductDetail = ({ user }) => {
             </div>
             <div>
               {/* description */}
-              <p className="mb-[10px] font-[2px] text-gray-500">
-                {product.description}
-              </p>
+              <p
+                className="mb-[10px] font-[2px] text-gray-500"
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(product.description),
+                }}
+              ></p>
             </div>
             <div>
               {/* color */}

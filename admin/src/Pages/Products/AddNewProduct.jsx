@@ -22,6 +22,7 @@ const AddNewProduct = () => {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(addProductSchema),
@@ -109,6 +110,7 @@ const AddNewProduct = () => {
   // console.log(urls);
 
   const onSubmit = (data) => {
+    console.log(data);
     mutation.mutate({ ...data, photos: urls });
     setShowPreview(false);
   };
@@ -123,6 +125,7 @@ const AddNewProduct = () => {
         handleChange={handleChange}
         handleSubmit={ImagesHandleSubmit}
         register={register}
+        setValue={setValue}
         images={images}
         isLoading={mutation.isLoading}
         isLoadingImage={isFileUploading}
