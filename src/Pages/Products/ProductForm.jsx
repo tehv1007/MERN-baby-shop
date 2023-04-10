@@ -1,11 +1,15 @@
 import FormRow from "../../components/common/FormRow";
 import FormRowError from "../../components/common/FormRowError";
 import Loader from "../../components/common/Loader";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const ProductForm = (props) => {
   const {
     showPreview,
     onSubmit,
+    watch,
+    setValue,
     handleChange,
     handleSubmit,
     images,
@@ -18,15 +22,21 @@ const ProductForm = (props) => {
     defaultImgs,
   } = props;
 
+  const onEditorStateChange = (editorState) => {
+    setValue("description", editorState);
+  };
+
+  const editorContent = watch("description");
+
   return (
     <div>
       {/* Container */}
       <div className="max-w-screen-md mx-auto px-4">
         {/* Layout */}
         <div className="py-6">
-          <form onSubmit={onSubmit}>
+          <form onSubmit={onSubmit} className="flex flex-col gap-10">
             {/* Fields */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-2 gap-4 mb-10">
               {/* Title */}
               <FormRow label="Title" className="col-span-full">
                 <input
@@ -122,11 +132,13 @@ const ProductForm = (props) => {
 
               {/* Description */}
               <FormRow label="Description" className="col-span-full">
-                <textarea
-                  className="textarea textarea-bordered resize-none h-36"
+                <ReactQuill
+                  className="resize-none h-36 block"
+                  theme="snow"
                   placeholder="Write something here..."
-                  {...register("description")}
-                ></textarea>
+                  value={editorContent}
+                  onChange={onEditorStateChange}
+                />
                 <FormRowError error={errors.description} />
               </FormRow>
             </div>
@@ -134,7 +146,7 @@ const ProductForm = (props) => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="btn btn-primary"
+              className="btn btn-primary max-w-[160px]"
               disabled={images?.length == 0 && (isLoading || !isDirty)}
             >
               <div className="flex items-center gap-2">

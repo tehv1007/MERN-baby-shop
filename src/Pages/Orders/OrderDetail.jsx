@@ -1,40 +1,11 @@
 import { useParams } from "react-router-dom";
 import PageTitle from "../../components/common/PageTitle";
 import Layout from "../../components/layout/Layout";
-import { useRef, useState } from "react";
-import { useReactToPrint } from "react-to-print";
-import { saveAs } from "file-saver";
 import { BsCloudDownload, BsPrinter } from "react-icons/bs";
 import Invoice from "./Invoice";
 
 const OrderDetail = () => {
   const { orderId } = useParams();
-
-  // const invoiceRef = useRef();
-
-  // const handlePrint = useReactToPrint({
-  //   content: () => invoiceRef.current,
-  // });
-
-  // const handleDownload = () => {
-  //   const invoice = invoiceRef.current;
-  //   const pdfBlob = new Blob([invoice.outerHTML], {
-  //     type: "application/pdf",
-  //   });
-  //   saveAs(pdfBlob, `invoice_${orderId}.pdf`);
-  // };
-
-  // function createDownloadLink(orderId) {
-  //   const invoiceData = createInvoiceData(orderId); // Tạo dữ liệu invoice
-  //   const blob = new Blob([invoiceData], { type: "application/pdf" }); // Tạo blob từ dữ liệu invoice
-  //   const url = URL.createObjectURL(blob); // Tạo URL download từ blob
-
-  //   // Tạo link download và trả về
-  //   const downloadLink = document.createElement("a");
-  //   downloadLink.href = url;
-  //   downloadLink.download = `Invoice_${orderId}.pdf`;
-  //   return downloadLink;
-  // }
 
   return (
     <Layout>

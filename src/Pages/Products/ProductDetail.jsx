@@ -6,6 +6,7 @@ import GlobalSpinner from "../../components/common/GlobalSpinner";
 import Layout from "../../components/layout/Layout";
 import PageTitle from "../../components/common/PageTitle";
 import { getProductDetail } from "../../hooks/useProduct";
+import DOMPurify from "dompurify";
 
 const ProductDetail = () => {
   const [imageIndex, setImageIndex] = useState(0);
@@ -66,8 +67,12 @@ const ProductDetail = () => {
 
               {/* description */}
               <div>
-                <p className="mb-[10px] font-[2px] text-gray-500">
-                  {product.description}
+                <p
+                  className="mb-[10px] font-[2px] text-gray-500"
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(product.description),
+                  }}
+                >
                 </p>
               </div>
 
