@@ -101,7 +101,7 @@ function App() {
             }
           />
           <Route path="/" element={<Home user={user} />} />
-          <Route path="/mobile-menu" element={<MobileMenu />} />
+          {/* <Route path="/mobile-menu" element={<MobileMenu />} /> */}
           <Route path="/signup" element={<Signup />} />
           <Route path="/signout" element={<Signout />} />
           <Route path="/blog" element={<BlogPage />} />
