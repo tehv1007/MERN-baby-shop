@@ -14,12 +14,14 @@ const Navbar = ({ user }) => {
   let totalQuantity = 0;
   let items = [];
 
-  const { data, isLoading } = getCartItems(user);
-  isLoadingState = isLoading;
- 
-  if (typeof data == "object" && data.data != "null") {
-    items = data?.data?.products;
-    totalQuantity = getTotalQuantity(items);
+  if (user != null) {
+    const { data, isLoading } = getCartItems(user);
+    isLoadingState = isLoading;
+
+    if (typeof data == "object" && data.data != "null") {
+      items = data?.data.products;
+      totalQuantity = getTotalQuantity(items);
+    }
   }
 
   return (
@@ -56,7 +58,7 @@ const Navbar = ({ user }) => {
           {/* Button */}
           <div className="flex items-center gap-4 pl-2">
             <div className=" items-center">
-              {user ? (
+              {user != null ? (
                 isLoadingState ? (
                   <Progress />
                 ) : (

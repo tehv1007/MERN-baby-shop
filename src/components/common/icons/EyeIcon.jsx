@@ -1,3 +1,6 @@
+import React from "react";
+import ProductDetailModal from "../../../views/product-detail/ProductDetailModal";
+
 const EyeIcon = () => {
   return (
     <>

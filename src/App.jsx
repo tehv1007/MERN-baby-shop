@@ -29,26 +29,23 @@ import OrderDetail from "./pages/User/OrderDetail";
 import EmailVerify from "./pages/Authentication/EmailVerify";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import Progress from "./components/common/Progress";
+import GlobalSpinner from "./components/common/GlobalSpinner";
+import MobileMenu from "./components/MobileMenu";
 
 getUser();
 const localUser = JSON.parse(localStorage.getItem("user"));
 
 function App() {
-  // const getUser = async () => {
-  //   const res = await axios.get(`/users/find/${localUser._id}`);
-  //   return res.data;
-  // };
+  let user = null;
+  if (localUser) {
+    const { data, isLoading } = useQuery(["user"], async () => {
+      const res = await axios.get(`/users/find/${localUser._id}`);
+      return res.data;
+    });
 
-  // console.log(getUser());
-  const { data: user, isLoading } = useQuery(["user"], async () => {
-    const res = await axios.get(`/users/find/${localUser._id}`);
-    return res.data;
-  });
-
-  if (isLoading) return <Progress />;
-
-  console.log(user);
+    if (isLoading) return <GlobalSpinner />;
+    user = data;
+  }
 
   return (
     <BrowserRouter>
@@ -104,6 +101,7 @@ function App() {
             }
           />
           <Route path="/" element={<Home user={user} />} />
+          <Route path="/mobile-menu" element={<MobileMenu />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signout" element={<Signout />} />
           <Route path="/blog" element={<BlogPage />} />
@@ -137,7 +135,7 @@ function App() {
 
         <ToastContainer
           position="bottom-right"
-          autoClose={3000}
+          autoClose={5000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick={false}

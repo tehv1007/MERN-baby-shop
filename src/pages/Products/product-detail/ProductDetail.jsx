@@ -9,7 +9,7 @@ import CustomerReview from "./CustomerReview";
 import Rating from "../../../components/review/Rating";
 import Reviews from "../../../components/review/Reviews";
 import GlobalSpinner from "../../../components/common/GlobalSpinner";
-import DOMPurify from "dompurify";
+import RecentViewed from "./RecentViewed";
 
 const ProductDetail = ({ user }) => {
   const { productId } = useParams();
@@ -69,12 +69,9 @@ const ProductDetail = ({ user }) => {
             </div>
             <div>
               {/* description */}
-              <p
-                className="mb-[10px] font-[2px] text-gray-500"
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(product.description),
-                }}
-              ></p>
+              <p className="mb-[10px] font-[2px] text-gray-500">
+                {product.description}
+              </p>
             </div>
             <div>
               {/* color */}
@@ -89,6 +86,8 @@ const ProductDetail = ({ user }) => {
           </div>
         </div>
       </div>
+
+      <RelatedProduct product={product} user={user} />
 
       {/* ========= */}
       <div className=" mt-7" id="reviews">
@@ -136,8 +135,7 @@ const ProductDetail = ({ user }) => {
           </div>
         </div>
       </div>
-      {/* <Reviews productId={productId} /> */}
-      <RelatedProduct product={product} user={user} />
+      <RecentViewed />
     </section>
   );
 };
