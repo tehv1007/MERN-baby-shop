@@ -17,9 +17,10 @@ const MyOrders = ({ user }) => {
   const [page, setPage] = useState(1);
   const [id, setId] = useState("");
 
-  const { data: orders, isLoading } = useQuery(["order"], async () => {
-    const res = await axios.get(`/orders/${user._id}/my-orders`);
-    return res.data;
+  const { data: orders, isLoading } = useQuery({
+    queryKey: ["orders"],
+    queryFn: () => axios.get(`/orders/${user._id}/my-orders`),
+    select: (res) => res.data,
   });
 
   if (isLoading) return <GlobalSpinner />;

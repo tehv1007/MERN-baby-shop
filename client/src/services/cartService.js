@@ -60,14 +60,14 @@ export const addItem = (item, quantity = 1, next = (f) => f) => {
   }
 };
 
-// export const itemTotal = () => {
-//   if (typeof window !== "undefined") {
-//     if (localStorage.getItem("cart")) {
-//       return JSON.parse(localStorage.getItem("cart")).length;
-//     }
-//   }
-//   return 0;
-// };
+export const itemTotal = () => {
+  if (typeof window !== "undefined") {
+    if (localStorage.getItem("cart")) {
+      return JSON.parse(localStorage.getItem("cart")).length;
+    }
+  }
+  return 0;
+};
 
 export const emptyCartLocal = (next) => {
   if (typeof window !== "undefined") {

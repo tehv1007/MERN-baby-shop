@@ -9,6 +9,7 @@ import CustomerReview from "./CustomerReview";
 import Rating from "../../../components/review/Rating";
 import Reviews from "../../../components/review/Reviews";
 import GlobalSpinner from "../../../components/common/GlobalSpinner";
+import RecentViewed from "./RecentViewed";
 import DOMPurify from "dompurify";
 
 const ProductDetail = ({ user }) => {
@@ -78,17 +79,19 @@ const ProductDetail = ({ user }) => {
             </div>
             <div>
               {/* color */}
-              <h5 className="pb-2">Color</h5>
+              {/* <h5 className="pb-2">Color</h5>
               <div className="flex gap-2.5">
                 <button className="rounded-md p-4 shadow-sm border hover:border-black text-xs bg-yellow-200"></button>
                 <button className="rounded-md p-4 shadow-sm border hover:border-black text-xs bg-emerald-700"></button>
                 <button className="rounded-md p-4 shadow-sm border hover:border-black text-xs bg-gray-400"></button>
-              </div>
+              </div> */}
             </div>
             <AddToCart product={product} user={user} />
           </div>
         </div>
       </div>
+
+      <RelatedProduct product={product} user={user} />
 
       {/* ========= */}
       <div className=" mt-7" id="reviews">
@@ -132,12 +135,15 @@ const ProductDetail = ({ user }) => {
             )}
 
             {/* Review list */}
-            <Reviews productId={productId} userId={user?._id} />
+            <Reviews
+              productId={productId}
+              userId={user?._id}
+              setShowForm={setShowForm}
+            />
           </div>
         </div>
       </div>
-      {/* <Reviews productId={productId} /> */}
-      <RelatedProduct product={product} user={user} />
+      <RecentViewed />
     </section>
   );
 };

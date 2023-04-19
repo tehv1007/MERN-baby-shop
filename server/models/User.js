@@ -13,7 +13,6 @@ const userSchema = new Schema(
     facebookId: { type: String },
     googleId: { type: String },
     provider: { type: String },
-    // isAdmin: { type: Boolean, default: false },
     verified: { type: Boolean, default: false },
     image: {
       type: String,

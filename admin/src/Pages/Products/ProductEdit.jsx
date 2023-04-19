@@ -135,20 +135,19 @@ const EditProduct = () => {
     <Layout>
       <PageTitle title="Update Product" />
       <ProductForm
-        type="edit"
         watch={watch}
-        setValue={setValue}
+        showPreview={showPreview}
         onSubmit={handleSubmit(onSubmit)}
+        handleChange={handleChange}
+        handleSubmit={ImagesHandleSubmit}
         register={register}
+        setValue={setValue}
+        images={images}
         isLoading={mutation.isLoading}
+        isLoadingImage={isFileUploading}
         errors={errors}
         btnLabel="Update Product"
         isDirty={isDirty}
-        showPreview={showPreview}
-        handleChange={handleChange}
-        handleSubmit={ImagesHandleSubmit}
-        images={images}
-        isLoadingImage={isFileUploading}
         defaultImgs={data?.data.photos || []}
       />
     </Layout>

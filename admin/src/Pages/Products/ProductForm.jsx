@@ -87,10 +87,8 @@ const ProductForm = (props) => {
                   <input
                     type="file"
                     multiple
-                    // required
                     onChange={handleChange}
                     className="file-input file-input-bordered w-full"
-                    // {...register("image")}
                   />
                   <button
                     onClick={handleSubmit}

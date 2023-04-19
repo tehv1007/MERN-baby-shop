@@ -14,6 +14,7 @@ import {
 } from "firebase/storage";
 import Progress from "../../components/common/Progress";
 import { updateProfile } from "../../hooks/useUser";
+import UploadIcon from "../../components/common/icons/UploadIcon";
 
 const UpdateProfile = ({ user }) => {
   const [isFileLoading, setIsFileLoading] = useState(false);
@@ -141,7 +142,6 @@ const UpdateProfile = ({ user }) => {
                 <div>
                   <label
                     className="block text-gray-500 font-medium text-sm leading-none mb-2"
-                    // htmlFor="file-upload"
                   >
                     Photo
                     <div className="mt-1 flex items-center">
@@ -161,23 +161,7 @@ const UpdateProfile = ({ user }) => {
                             id="file-upload"
                           />
                           <span className="mx-auto flex justify-center">
-                            <svg
-                              stroke="currentColor"
-                              fill="none"
-                              strokeWidth={2}
-                              viewBox="0 0 24 24"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="text-3xl text-emerald-500"
-                              height="1em"
-                              width="1em"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <polyline points="16 16 12 12 8 16" />
-                              <line x1={12} y1={12} x2={12} y2={21} />
-                              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
-                              <polyline points="16 16 12 12 8 16" />
-                            </svg>
+                            <UploadIcon />
                           </span>
                           <p className="text-sm mt-2">Drag your image here</p>
                           <em className="text-xs text-gray-400">
