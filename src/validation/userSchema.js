@@ -28,3 +28,10 @@ export const changePasswordSchema = yup
       .required(),
   })
   .required();
+
+export const reviewValidate = yup
+  .object({
+    title: yup.string().required("Title is required"),
+    content: yup.string().required("You need write something"),
+  })
+  .required();

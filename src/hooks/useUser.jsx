@@ -89,3 +89,33 @@ export const addReview = (
 
   return addReview;
 };
+export const editReview = (
+  reviewId,
+  productId,
+  reset,
+  setHoverValue,
+  setCurrentValue,
+  setShowForm
+) => {
+  const queryClient = useQueryClient();
+  const editReview = useMutation({
+    mutationFn: (updatedReview) =>
+      axios.put(`/reviews/${productId}/${reviewId}`, updatedReview),
+    onSuccess: () => {
+      // setShowForm(false);
+      toast.success("Successfully updated your review");
+      queryClient.invalidateQueries({
+        queryKey: ["reviews"],
+      });
+    },
+
+    onError: (error) => {
+      reset();
+      setHoverValue(0);
+      setCurrentValue(0);
+      toast.error(error.response.data);
+    },
+  });
+
+  return editReview;
+};

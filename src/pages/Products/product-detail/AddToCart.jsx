@@ -24,7 +24,7 @@ const AddToCart = ({ product, user }) => {
     <>
       <div className="mt-3">
         {/* quantity */}
-        <h5 className="pb-2">Quantity</h5>
+        <h5 className="pb-2 font-bold">Quantity</h5>
         <div className="inline-flex items-center border border-gray-200 rounded">
           <button
             onClick={() => setQuantity(quantity - 1)}

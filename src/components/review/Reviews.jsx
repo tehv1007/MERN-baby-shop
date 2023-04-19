@@ -1,8 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import RatingItem from "./RatingItem";
+import { useState } from "react";
+import EditReview from "../../pages/Products/product-detail/EditReview";
+import formatDate from "../../services/formatDate";
 
 export default function Reviews({ productId, userId }) {
+  const [showForm, setShowForm] = useState(false);
+  const [review, setReview] = useState("");
+
+  // Get reviews
   let reviews;
   const { data } = useQuery({
     queryKey: ["reviews", productId],
@@ -11,17 +18,6 @@ export default function Reviews({ productId, userId }) {
 
   if (!data) reviews = [];
   else reviews = data.data.reviews;
-
-  const formatDate = (date) => {
-    // Parse the ISO string into a Date object
-    const formattedDate = new Date(date);
-
-    // Format the date string using the user's locale settings
-    const formattedDateString = formattedDate.toLocaleString("en-GB");
-    return formattedDateString;
-  };
-
-  const handleEditClick = () => {};
 
   return (
     <div className="container">
@@ -59,7 +55,10 @@ export default function Reviews({ productId, userId }) {
               {review.userId == userId && review.canEdit && (
                 <button
                   className="edit-button border rounded-md mt-2 px-4 bg-orange-400 hover:bg-orange-100"
-                  onClick={handleEditClick}
+                  onClick={() => {
+                    setShowForm(!showForm);
+                    setReview(review);
+                  }}
                 >
                   Edit
                 </button>
@@ -68,6 +67,14 @@ export default function Reviews({ productId, userId }) {
           </div>
         ))}
       </div>
+
+      {showForm && (
+        <EditReview
+          review={review}
+          productId={productId}
+          setShowForm={setShowForm}
+        />
+      )}
     </div>
   );
 }

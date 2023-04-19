@@ -10,6 +10,7 @@ import Rating from "../../../components/review/Rating";
 import Reviews from "../../../components/review/Reviews";
 import GlobalSpinner from "../../../components/common/GlobalSpinner";
 import RecentViewed from "./RecentViewed";
+import DOMPurify from "dompurify";
 
 const ProductDetail = ({ user }) => {
   const { productId } = useParams();
@@ -69,18 +70,21 @@ const ProductDetail = ({ user }) => {
             </div>
             <div>
               {/* description */}
-              <p className="mb-[10px] font-[2px] text-gray-500">
-                {product.description}
-              </p>
+              <p
+                className="mb-[10px] font-[2px] text-gray-500"
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(product.description),
+                }}
+              ></p>
             </div>
             <div>
               {/* color */}
-              <h5 className="pb-2">Color</h5>
+              {/* <h5 className="pb-2">Color</h5>
               <div className="flex gap-2.5">
                 <button className="rounded-md p-4 shadow-sm border hover:border-black text-xs bg-yellow-200"></button>
                 <button className="rounded-md p-4 shadow-sm border hover:border-black text-xs bg-emerald-700"></button>
                 <button className="rounded-md p-4 shadow-sm border hover:border-black text-xs bg-gray-400"></button>
-              </div>
+              </div> */}
             </div>
             <AddToCart product={product} user={user} />
           </div>
@@ -131,7 +135,11 @@ const ProductDetail = ({ user }) => {
             )}
 
             {/* Review list */}
-            <Reviews productId={productId} userId={user?._id} />
+            <Reviews
+              productId={productId}
+              userId={user?._id}
+              setShowForm={setShowForm}
+            />
           </div>
         </div>
       </div>

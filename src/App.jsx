@@ -1,5 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NotFound from "./pages/NotFound/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import ForgotPassword from "./pages/Authentication/ForgotPassword";
@@ -30,7 +29,6 @@ import EmailVerify from "./pages/Authentication/EmailVerify";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import GlobalSpinner from "./components/common/GlobalSpinner";
-import MobileMenu from "./components/MobileMenu";
 
 getUser();
 const localUser = JSON.parse(localStorage.getItem("user"));

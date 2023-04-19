@@ -12,14 +12,6 @@ import CancelModal from "./Dashboard/CancelModal";
 import { useQuery } from "@tanstack/react-query";
 import GlobalSpinner from "../../components/common/GlobalSpinner";
 
-const TableHeadItem = ({ title }) => {
-  return (
-    <th className="text-left text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">
-      {title}
-    </th>
-  );
-};
-
 const MyOrders = ({ user }) => {
   const ITEMS_PER_PAGE = 10;
   const [page, setPage] = useState(1);
