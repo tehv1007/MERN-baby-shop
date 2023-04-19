@@ -29,7 +29,6 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/"> */}
         <Route
           path="/"
           element={
@@ -134,7 +133,6 @@ const App = () => {
             </RequireAuth>
           }
         />
-        {/* </Route> */}
         <Route
           path="/login"
           element={
@@ -147,7 +145,7 @@ const App = () => {
       </Routes>
       <ToastContainer
         position="bottom-right"
-        autoClose={1000}
+        autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick={false}
