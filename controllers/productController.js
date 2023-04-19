@@ -168,3 +168,39 @@ exports.getAllProducts = async (req, res) => {
     res.status(500).json({ error: true, message: "Internal Server Error" });
   }
 };
+
+exports.setRecentlyViewedProducts = async (req, res, next) => {
+  try {
+    const productId = req.params.productId; // hoặc lấy productId từ query, body tùy theo route
+    if (productId) {
+      let recentlyViewedProducts = req.cookies.recentlyViewedProducts || [];
+      if (!recentlyViewedProducts.includes(productId)) {
+        if (recentlyViewedProducts.length >= 6) {
+          recentlyViewedProducts.pop(); // nếu số lượng sản phẩm vượt quá 6 thì xóa sản phẩm cũ nhất
+        }
+        recentlyViewedProducts.unshift(productId); // thêm sản phẩm mới vào đầu mảng
+        res.cookie("recentlyViewedProducts", recentlyViewedProducts);
+      }
+    }
+    next();
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+
+// Route: GET /api/recently-viewed-products
+// Description: Get recently viewed products
+exports.getRecentlyViewedProducts = async (req, res) => {
+  try {
+    let recentlyViewedProducts = req.cookies.recentlyViewedProducts || [];
+    // Lấy danh sách sản phẩm dựa vào recentlyViewedProducts
+    const products = await Product.find({ _id: { $in: recentlyViewedProducts } });
+    return res.status(200).json(products);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+

@@ -2,7 +2,7 @@ const Review = require("../models/Review");
 const Product = require("../models/Product");
 
 // Get all reviews at one product
-exports.getReviewById = async (req, res) => {
+exports.getReviewByProductId = async (req, res) => {
   try {
     const reviews = await Review.find({ productId: req.params.productId }).sort(
       {
@@ -49,11 +49,9 @@ exports.deleteReview = async (req, res) => {
 
 // Edit review
 exports.editReview = async (req, res) => {
-  const id = req.params.reviewId;
-
   try {
     // Find the review in the database
-    const review = await Review.findById(id);
+    const review = await Review.findById(req.params.reviewId);
 
     if (!review) {
       return res.status(404).json({ message: "Review not found" });
@@ -69,7 +67,7 @@ exports.editReview = async (req, res) => {
 
     // Update the review
     review.rating = req.body.rating;
-    review.content = req.body.content;
+    review.review = req.body.content;
     const updatedReview = await review.save();
     res.json(updatedReview);
   } catch (err) {
@@ -108,3 +106,26 @@ exports.addReviewProduct = async (req, res) => {
     res.status(404).send({ message: "Product Not Found" });
   }
 };
+
+
+// API để lấy review bởi reviewId
+exports.getReviewById = async (req, res) => {
+  try {
+    // Lấy reviewId từ req.params
+    const reviewId = req.params.reviewId;
+
+    // Truy vấn trong Review model để lấy thông tin review đó
+    const review = await Review.findById(reviewId);
+
+    // Nếu không tìm thấy review với reviewId đó, trả về lỗi 404 Not Found
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    // Trả về thông tin review
+    res.json(review);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+}

@@ -80,7 +80,7 @@ exports.getCartByUser = async (req, res) => {
   }
 };
 
-// Route: POST /api/cart/add-to-cart/:productId
+// Route: POST /carts/add-to-cart/:productId
 // Description: Add product to cart
 exports.addToCart = async (req, res) => {
   try {
@@ -133,7 +133,7 @@ exports.addToCart = async (req, res) => {
   }
 };
 
-// Route: PUT /api/cart/decrease-quantity/:productId
+// Route: PUT /carts/decrease-quantity/:productId
 // Description: Decrease quantity of product in cart
 exports.decreaseQuantity = async (req, res) => {
   try {
@@ -178,7 +178,7 @@ exports.decreaseQuantity = async (req, res) => {
   }
 };
 
-// Route: DELETE /api/cart/remove-from-cart/:productId
+// Route: DELETE /carts/remove-from-cart/:productId
 // Description: Remove product from cart
 exports.removeProductFromCart = async (req, res) => {
   try {
@@ -215,7 +215,7 @@ exports.removeProductFromCart = async (req, res) => {
   }
 };
 
-// Route: PUT /api/cart/increase-quantity/:productId
+// Route: PUT /carts/increase-quantity/:productId
 // Description: Increase quantity of product in cart
 exports.increaseQuantity = async (req, res) => {
   try {
@@ -255,7 +255,7 @@ exports.increaseQuantity = async (req, res) => {
   }
 };
 
-// Route: PUT /api/cart/change-quantity/:productId
+// Route: PUT /carts/change-quantity/:productId
 // Description: Change quantity of product in cart
 exports.changeQuantity = async (req, res) => {
   try {

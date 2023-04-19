@@ -4,8 +4,6 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const passport = require("passport");
-// const { Server } = require("socket.io");
-// const http = require("http");
 
 const authRoutes = require("./routes/auth");
 const usersRoutes = require("./routes/users");

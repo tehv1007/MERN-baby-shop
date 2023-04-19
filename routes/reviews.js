@@ -4,11 +4,14 @@ const {
   deleteReview,
   editReview,
   addReviewProduct,
+  getReviewByProductId,
 } = require("../controllers/reviewController");
 
 router.post("/:productId/:userId", addReviewProduct);
 
-router.get("/:productId", getReviewById);
+router.get("/:productId", getReviewByProductId);
+
+router.get("/:productId/:reviewId", getReviewById);
 
 router.delete("/:productId/:reviewId", deleteReview);
 

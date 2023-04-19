@@ -6,6 +6,8 @@ const {
   getCategories,
   getProductsByCategory,
   getTopProducts,
+  getRecentlyViewedProducts,
+  setRecentlyViewedProducts,
 } = require("../controllers/productController");
 
 // GET all products
@@ -15,7 +17,7 @@ router.get("/", getProductsByCategory);
 router.get("/rated", getTopProducts);
 
 // GET product by id
-router.get("/:productId", getProductById);
+router.get("/:productId", setRecentlyViewedProducts, getProductById);
 
 // Search product
 router.get("/search", searchProduct);
@@ -25,5 +27,8 @@ router.get("/categories", getCategories);
 
 // Get related products
 router.get("/related/:category/:productId", listRelated);
+
+// Get recent viewed products
+router.get("/recently-viewed-products", getRecentlyViewedProducts);
 
 module.exports = router;

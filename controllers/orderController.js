@@ -1,6 +1,5 @@
 const Order = require("../models/Order");
 const User = require("../models/User");
-const Cart = require("../models/Cart");
 const moment = require("moment");
 
 //GET ALL orders
