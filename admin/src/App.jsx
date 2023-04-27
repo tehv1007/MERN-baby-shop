@@ -1,4 +1,10 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+} from "react-router-dom";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import Products from "./Pages/Products/Products";
 import Users from "./Pages/Users/Users";
@@ -18,121 +24,36 @@ import Admin from "./Pages/Admin/Admin";
 import AddNew from "./Pages/Admin/AddNew";
 import Login from "./Pages/Login/Login";
 import ForceRedirect from "./components/auth/ForceRedirect";
+import AddCategory from "./Pages/Category/AddCategory";
+import EditCategory from "./Pages/Category/EditCategory";
 
 const App = () => {
   const { currentUser } = useContext(AuthContext);
 
-  const RequireAuth = ({ children }) => {
-    return currentUser ? children : <Navigate to="/login" />;
+  const RequireAuth = () => {
+    return currentUser ? <Outlet /> : <Navigate to="/login" />;
   };
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <RequireAuth>
-              <Dashboard />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/products"
-          element={
-            <RequireAuth>
-              <Products />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="products/new"
-          element={
-            <RequireAuth>
-              <AddNewProduct />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="products/:productId/edit"
-          element={
-            <RequireAuth>
-              <ProductEdit />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="products/:productId"
-          element={
-            <RequireAuth>
-              <ProductDetail />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/customers"
-          element={
-            <RequireAuth>
-              <Users />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/admin"
-          element={
-            <RequireAuth>
-              <Admin />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/admin/new"
-          element={
-            <RequireAuth>
-              <AddNew />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/orders"
-          element={
-            <RequireAuth>
-              <Orders />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/orders/:orderId"
-          element={
-            <RequireAuth>
-              <OrderDetail />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/:userId/orders"
-          element={
-            <RequireAuth>
-              <CustomerOrders />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/category"
-          element={
-            <RequireAuth>
-              <Category />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/coupons"
-          element={
-            <RequireAuth>
-              <Coupons />
-            </RequireAuth>
-          }
-        />
+        <Route path="/" element={<RequireAuth />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="products/new" element={<AddNewProduct />} />
+          <Route path="products/:productId/edit" element={<ProductEdit />} />
+          <Route path="products/:productId" element={<ProductDetail />} />
+          <Route path="/customers" element={<Users />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/new" element={<AddNew />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/orders/:orderId" element={<OrderDetail />} />
+          <Route path="/:userId/orders" element={<CustomerOrders />} />
+          <Route path="/category" element={<Category />} />
+          <Route path="/category/new" element={<AddCategory />} />
+          <Route path="/category/:categoryId/edit" element={<EditCategory />} />
+          <Route path="/coupons" element={<Coupons />} />
+        </Route>
         <Route
           path="/login"
           element={

@@ -45,6 +45,7 @@ const Revenue = () => {
       setTodayRevenue(resToday.data.toFixed(2));
       const resThisMonth = await axios.get(`/admin/this-month-revenue`);
       setThisMonthRevenue(resThisMonth.data.toFixed(2));
+      setIsLoading(false);
     };
     fetchData();
   }, []);

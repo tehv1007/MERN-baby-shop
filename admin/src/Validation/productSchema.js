@@ -28,3 +28,9 @@ export const editProductSchema = yup
     description: yup.string().required("This field is required"),
   })
   .required();
+
+export const categorySchema = yup
+  .object({
+    title: yup.string().required("This field is required"),
+  })
+  .required();
