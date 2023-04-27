@@ -31,7 +31,7 @@ const CountItem = ({
             <Progress />
           ) : (
             <p className="text-2xl font-bold leading-none text-gray-600 dark:text-gray-200">
-              orderType
+              {orderType}
             </p>
           )}
         </div>
@@ -46,9 +46,10 @@ const OrderStatus = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const res = await axios.get(`/admin/count-orders`);
       setData(res.data);
-      setIsLoading(true);
+      setIsLoading(false);
     };
     fetchData();
   }, []);
