@@ -1,16 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import ImageSlider from "./ImageSlider";
 import axios from "axios";
-import AddToCart from "./AddToCart";
-import RelatedProduct from "./RelatedProduct";
-import CustomerReview from "./CustomerReview";
-import Rating from "../../../components/review/Rating";
-import Reviews from "../../../components/review/Reviews";
-import GlobalSpinner from "../../../components/common/GlobalSpinner";
-import RecentViewed from "./RecentViewed";
 import DOMPurify from "dompurify";
+import ImageSlider from "./Components/ImageSlider";
+import AddToCart from "./Components/AddToCart";
+import RelatedProduct from "./Components/RelatedProduct";
+import CustomerReview from "./Components/CustomerReview";
+import Rating from "../../components/review/Rating";
+import Reviews from "../../components/review/Reviews";
+import RecentViewed from "./Components/RecentViewed";
+import GlobalSpinner from "../../components/common/GlobalSpinner";
+import TabList from "./Components/TabList";
+import Draft from "./Components/Draft";
 
 const ProductDetail = ({ user }) => {
   const { productId } = useParams();
@@ -87,9 +89,13 @@ const ProductDetail = ({ user }) => {
               </div> */}
             </div>
             <AddToCart product={product} user={user} />
+
+            {/* <Draft product={product} /> */}
           </div>
         </div>
       </div>
+
+      <TabList product={product} />
 
       <RelatedProduct product={product} user={user} />
 

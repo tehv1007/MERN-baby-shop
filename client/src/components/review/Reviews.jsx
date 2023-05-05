@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import RatingItem from "./RatingItem";
 import { useState } from "react";
-import EditReview from "../../pages/Products/product-detail/EditReview";
 import formatDate from "../../services/formatDate";
+import EditReview from "../../pages/ProductDetail/Components/EditReview";
 
 export default function Reviews({ productId, userId }) {
   const [showForm, setShowForm] = useState(false);

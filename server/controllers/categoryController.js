@@ -9,7 +9,7 @@ exports.getAllCategories = async (req, res) => {
     return res.status(200).json(categories);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -22,7 +22,7 @@ exports.getCategoryById = async (req, res) => {
     return res.status(200).json(category);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -34,7 +34,7 @@ exports.getAllCategoryNames = async (req, res) => {
     return res.status(200).json(categoryNames.map((c) => c.title));
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -52,7 +52,7 @@ exports.getCategoriesByCollection = async (req, res) => {
     return res.status(200).json(categories.map((c) => c.title));
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -70,7 +70,7 @@ exports.updateCategory = async (req, res) => {
     res.json(category);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -85,7 +85,7 @@ exports.deleteCategory = async (req, res) => {
     res.json({ message: "Category deleted" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -119,7 +119,7 @@ exports.addCategory = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -129,18 +129,18 @@ exports.getProductsByCategoryCollection = async (req, res) => {
   const { collectionName } = req.params;
 
   try {
-    // Tìm các category chứa collectionName
+    // Find categories containing collectionName
     const categories = await Category.find({ collections: collectionName });
 
-    // Lấy ra các id của các category vừa tìm được
+    // Retrieve the ids of the categories just found
     const categoryNames = categories.map((category) => category.title);
 
-    // Tìm các sản phẩm thuộc các category đã tìm được
+    // Find products in the categories found
     const products = await Product.find({ category: { $in: categoryNames } });
 
     res.json(products);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };

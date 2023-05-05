@@ -10,7 +10,7 @@ exports.signup = async (req, res) => {
     let user = await User.findOne({ email: req.body.email });
     if (user)
       return res
-        .status(409)
+        .status(409) //Conflict
         .send({ message: "User with given email already Exist!" });
 
     user = await User.findOne({ username: req.body.username });
@@ -49,7 +49,7 @@ exports.signup = async (req, res) => {
     );
 
     res
-      .status(201)
+      .status(201) // Created a new resource
       .send({ message: "An Email sent to your account please verify" });
   } catch (error) {
     console.log(error);
@@ -61,7 +61,7 @@ exports.signup = async (req, res) => {
 exports.verifyEmail = async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.params.id });
-    if (!user) return res.status(400).send({ message: "Invalid link" });
+    if (!user) return res.status(400).send({ message: "Invalid link" }); // Bad request
 
     const token = await Token.findOne({
       userId: user._id,
@@ -95,7 +95,7 @@ exports.signin = async (req, res) => {
       ],
     });
     if (!user)
-      return res.status(401).send({ message: "Invalid Email or Username" });
+      return res.status(401).send({ message: "Invalid Email or Username" }); //Unauthorized
 
     const validPassword = bcrypt.compare(req.body.password, user.password);
     if (!validPassword)
@@ -121,7 +121,7 @@ exports.signin = async (req, res) => {
 
     if (!user.isActive) {
       return res
-        .status(403)
+        .status(403) //Forbidden
         .send({ message: "Your account has been disabled." });
     }
 

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import GlobalSpinner from "../../../components/common/GlobalSpinner";
-import ProductCard from "../ProductCard";
+import ProductCard from "../../Products/ProductCard";
 
 const RelatedProduct = ({ product, user }) => {
   const { data, isLoading } = useQuery({

@@ -92,7 +92,7 @@ export const ReviewForm = ({
 
       {mutation.isError ? (
         <div className="p-4 text-sm bg-red-600 text-white rounded text-center border my-2 w-[70%]">
-          An error occurred: {mutation.error.response.data}
+          An error occurred: {mutation.error.response.data.message}
         </div>
       ) : null}
     </form>

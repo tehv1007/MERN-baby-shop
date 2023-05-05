@@ -9,7 +9,6 @@ import PostPage from "./pages/Blog/PostPage";
 import BlogPage from "./pages/Blog/BlogPage";
 import Home from "./pages/Home/Home";
 import Products from "./pages/Products/Products";
-import ProductDetail from "./pages/Products/product-detail/ProductDetail";
 import Cart from "./pages/Cart/Cart";
 import OrderShipping from "./pages/CheckOut/OrderShipping";
 import CheckOut from "./pages/CheckOut/CheckOut";
@@ -29,6 +28,7 @@ import EmailVerify from "./pages/Authentication/EmailVerify";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import GlobalSpinner from "./components/common/GlobalSpinner";
+import ProductDetail from "./pages/ProductDetail/ProductDetail";
 
 getUser();
 const localUser = JSON.parse(localStorage.getItem("user"));
