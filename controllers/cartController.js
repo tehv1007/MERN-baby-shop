@@ -10,7 +10,7 @@ exports.addCart = async (req, res) => {
     let cart = await Cart.findOne({ userId });
     let item = await Product.findOne({ _id: productId });
     if (!item) {
-      res.status(404).send("Item not found!");
+      res.status(404).send({ message: "Item not found!" });
     }
     const price = item.price;
     const image = item.photos[0];
@@ -49,7 +49,7 @@ exports.addCart = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(500).send("Something went wrong");
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 
@@ -66,7 +66,7 @@ exports.deleteCart = async (req, res) => {
     return res.status(201).json(updatedCart);
   } catch (err) {
     console.log(err);
-    res.status(500).send("Something went wrong");
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 
@@ -76,7 +76,7 @@ exports.getCartByUser = async (req, res) => {
     const cart = await Cart.findOne({ userId: req.params.userId });
     res.status(200).json(cart);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 
@@ -129,7 +129,7 @@ exports.addToCart = async (req, res) => {
     return res.status(200).json(cart);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -174,7 +174,7 @@ exports.decreaseQuantity = async (req, res) => {
     return res.status(200).json(cart);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -211,7 +211,7 @@ exports.removeProductFromCart = async (req, res) => {
     return res.status(200).json(cart);
   } catch (err) {
     console.log(err);
-    res.status(500).send("Something went wrong");
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 
@@ -251,7 +251,7 @@ exports.increaseQuantity = async (req, res) => {
     return res.status(200).json(cart);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -261,7 +261,7 @@ exports.changeQuantity = async (req, res) => {
   try {
     const userId = req.params.userId;
     const productId = req.params.productId;
-    const { quantity } = req.body; // Lấy giá trị số lượng từ request body
+    const { quantity } = req.body;
 
     let cart = await Cart.findOne({ userId });
 
@@ -269,7 +269,7 @@ exports.changeQuantity = async (req, res) => {
       return res.status(404).json({ message: "Cart not found" });
     }
 
-    // Tìm sản phẩm trong giỏ hàng dựa trên id
+    // Find product in cart based on id
     const productIndex = cart.products.findIndex(
       (item) => item.productId.toString() == productId
     );
@@ -278,10 +278,10 @@ exports.changeQuantity = async (req, res) => {
       return res.status(404).json({ message: "Product not found in cart" });
     }
 
-    // Thay đổi số lượng sản phẩm dựa trên giá trị nhập vào từ client
+    // Change the quantity of products based on the value entered from the client
     cart.products[productIndex].quantity = quantity;
 
-    // Tính toán lại giá tiền của giỏ hàng
+    // Recalculate the price of the cart
     cart.subPrice = cart.products.reduce((acc, item) => {
       return acc + item.price * item.quantity;
     }, 0);
@@ -290,6 +290,6 @@ exports.changeQuantity = async (req, res) => {
     return res.status(200).json(cart);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };

@@ -10,7 +10,8 @@ exports.getAllOrders = async (req, res) => {
     });
     res.status(200).json(orders);
   } catch (err) {
-    res.status(500).json(err);
+    console.error(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -36,7 +37,7 @@ exports.addOrder = async (req, res) => {
     return res.status(201).json(order);
   } catch (err) {
     console.log(err);
-    res.status(500).send("Something went wrong");
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -52,7 +53,7 @@ exports.updateOrder = async (req, res) => {
     );
     res.status(200).json(updatedOrder);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -74,14 +75,14 @@ exports.updateOrderStatus = async (req, res) => {
       { new: true }
     );
 
-    res.json({
+    res.status(200).json({
       success: true,
       message: "Order status updated successfully",
       order: updateOrder,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -89,9 +90,9 @@ exports.updateOrderStatus = async (req, res) => {
 exports.deleteOrder = async (req, res) => {
   try {
     await Order.findByIdAndDelete(req.params.id);
-    res.status(200).json("Order has been deleted...");
+    res.status(200).json({ message: "Order has been deleted..." });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -103,18 +104,23 @@ exports.getOrdersByUser = async (req, res) => {
     });
     res.status(200).json(orders);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
 // GET order by id
 exports.getOrderById = async (req, res) => {
-  const selectedItem = await Order.findById(req.params.orderId);
-  if (!selectedItem)
-    res.json({
-      message: `Product with id '${req.params.orderId}' not found`,
-    });
-  res.json(selectedItem);
+  try {
+    const selectedItem = await Order.findById(req.params.orderId);
+    if (!selectedItem)
+      res.status(404).json({
+        message: `Product with id '${req.params.orderId}' not found`,
+      });
+    res.status(200).json(selectedItem);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
 // Get recent orders
@@ -123,7 +129,8 @@ exports.getRecentOrders = async (req, res) => {
     const orders = await Order.find().sort({ createdAt: -1 }).limit(10);
     res.status(200).json(orders);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -140,7 +147,8 @@ exports.getRecentOrdersByCustomer = async (req, res) => {
       .limit(10);
     res.status(200).json(orders);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -166,7 +174,9 @@ exports.countOrdersByStatus = async (req, res) => {
       cancelledOrders,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    // res.status(500).json({ message: err.message });
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -204,7 +214,8 @@ exports.countOrdersByStatusAndUser = async (req, res) => {
       cancelledOrders,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -226,11 +237,12 @@ exports.getTotalRevenue = async (req, res) => {
     ]);
     res.status(200).json(result[0]);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// Tính doanh thu hôm nay
+// Calculate today's revenue
 exports.getTodayRevenue = async (req, res) => {
   try {
     const start = new Date();
@@ -257,11 +269,12 @@ exports.getTodayRevenue = async (req, res) => {
 
     res.status(200).json(revenue);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// Tính doanh thu tháng này
+// Calculate this month's revenue
 exports.getThisMonthRevenue = async (req, res) => {
   try {
     const today = new Date();
@@ -290,7 +303,7 @@ exports.getThisMonthRevenue = async (req, res) => {
   }
 };
 
-// Top 10 sản phẩm bán chạy nhất
+// Top 10 best selling products
 exports.getTopSellingProducts = async (req, res) => {
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - 30);
@@ -316,11 +329,12 @@ exports.getTopSellingProducts = async (req, res) => {
 
     res.status(200).json(result);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// Get doanh thu hàng tuần
+// Get weekly revenue
 exports.getWeeklySales = async (req, res) => {
   try {
     const weeklySales = await Order.aggregate([
@@ -342,11 +356,12 @@ exports.getWeeklySales = async (req, res) => {
     ]);
     res.json(weeklySales);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// Get  doanh thu mỗi ngày cho 7 ngày gần nhất
+// Get daily revenue for the last 7 days
 exports.getRecentDailyRevenue = async (req, res) => {
   try {
     const sevenDaysAgo = moment().subtract(7, "days").startOf("day").toDate();
@@ -366,7 +381,7 @@ exports.getRecentDailyRevenue = async (req, res) => {
       },
     ]);
 
-    // Nếu không có doanh thu cho các ngày trong tuần trước đó, thêm các giá trị mặc định vào
+    // If there is no sales for the previous weekday, add default values to
     const today = moment().startOf("day");
     for (let i = 0; i < 7; i++) {
       const date = today.clone().subtract(i, "days").format("YYYY-MM-DD");
@@ -384,11 +399,12 @@ exports.getRecentDailyRevenue = async (req, res) => {
 
     res.status(200).json(sortArr);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// Get số đơn hàng mỗi ngày cho 7 ngày gần nhất
+// Get daily order number for the last 7 days
 exports.getRecentDailyOrders = async (req, res) => {
   try {
     const sevenDaysAgo = moment().subtract(7, "days").startOf("day").toDate();
@@ -408,7 +424,7 @@ exports.getRecentDailyOrders = async (req, res) => {
       },
     ]);
 
-    // Nếu không có đơn hàng cho các ngày trong tuần trước đó, thêm các giá trị mặc định vào
+    // If there are no orders for the previous weekdays, add default values to
     const today = moment().startOf("day");
     for (let i = 0; i < 7; i++) {
       const date = today.clone().subtract(i, "days").format("YYYY-MM-DD");
@@ -426,21 +442,22 @@ exports.getRecentDailyOrders = async (req, res) => {
 
     res.status(200).json(sortArr);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// Hủy bỏ đơn hàng
+// Cancel an order
 exports.cancelOrder = async (req, res) => {
   const orderId = req.params.orderId;
 
   try {
-    // Lấy thông tin đơn hàng từ database bằng ID
+    // Get order information from database by ID
     const order = await Order.findById(orderId);
 
-    // Kiểm tra xem đơn hàng đang ở trạng thái "pending" hay không
+    // Check if the order is in "pending" status
     if (order.status === "Pending") {
-      // Cập nhật trạng thái của đơn hàng thành "cancelled"
+      // Update order's status to "cancelled"
       order.status = "Cancelled";
       await order.save();
 
@@ -448,10 +465,11 @@ exports.cancelOrder = async (req, res) => {
     } else {
       res.status(400).json({
         message:
-          "The order is being processed, so it cannot be cancelled. Please contact the store owner.",
+          "The order is being processed, so it cannot be cancelled. Please contact the store owner",
       });
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };

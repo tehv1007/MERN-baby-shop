@@ -71,61 +71,63 @@ exports.editReview = async (req, res) => {
     const updatedReview = await review.save();
     res.json(updatedReview);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    console.log(err);
+    res.status(500).json({ message: "Something went wrong." });
   }
 };
 
 // Add review to a product
 exports.addReviewProduct = async (req, res) => {
-  const productId = req.params.productId;
-  const userId = req.params.userId;
-  const product = await Product.findById(productId);
+  try {
+    const productId = req.params.productId;
+    const userId = req.params.userId;
+    const product = await Product.findById(productId);
 
-  // Check if the user has already reviewed the product
-  const existingReview = await Review.findOne({ userId, productId });
-  if (existingReview) {
-    return res.status(400).send("You have already reviewed this product");
-  }
+    // Check if the user has already reviewed the product
+    const existingReview = await Review.findOne({ userId, productId });
+    if (existingReview) {
+      return res
+        .status(400)
+        .json({ message: "You have already reviewed this product" });
+    }
 
-  if (product) {
-    // Create a new review
-    let review = await Review.create(req.body);
+    if (product) {
+      // Create a new review
+      let review = await Review.create(req.body);
 
-    product.reviews.push(review);
-    product.numReviews = product.reviews.length;
-    product.avgRating =
-      product.reviews.reduce((a, c) => c.rating + a, 0) /
-      product.reviews.length;
+      product.reviews.push(review);
+      product.numReviews = product.reviews.length;
+      product.avgRating =
+        product.reviews.reduce((a, c) => c.rating + a, 0) /
+        product.reviews.length;
 
-    const updatedProduct = await product.save();
-    res.status(201).send({
-      message: "Review Created",
-      review: updatedProduct.reviews[updatedProduct.reviews.length - 1],
-    });
-  } else {
-    res.status(404).send({ message: "Product Not Found" });
+      const updatedProduct = await product.save();
+      res.status(201).json({
+        message: "Review Created",
+        review: updatedProduct.reviews[updatedProduct.reviews.length - 1],
+      });
+    } else {
+      res.status(404).json({ message: "Product Not Found" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Something went wrong." });
   }
 };
 
-
-// API để lấy review bởi reviewId
+// Get review by reviewId
 exports.getReviewById = async (req, res) => {
   try {
-    // Lấy reviewId từ req.params
     const reviewId = req.params.reviewId;
-
-    // Truy vấn trong Review model để lấy thông tin review đó
     const review = await Review.findById(reviewId);
 
-    // Nếu không tìm thấy review với reviewId đó, trả về lỗi 404 Not Found
     if (!review) {
-      return res.status(404).json({ message: 'Review not found' });
+      return res.status(404).json({ message: "Review not found" });
     }
 
-    // Trả về thông tin review
-    res.json(review);
+    res.status(200).json(review);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Something went wrong." });
   }
-}
+};
